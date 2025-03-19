@@ -1,0 +1,26 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+@font-face {
+    font-family: dogica;
+    src: url('/fonts/dogica.ttf');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: dogica;
+    src: url('/fonts/dogicabold.ttf');
+    font-weight: bold;
+}
+
+:root {
+    --popup-x: 0;
+    --popup-y: 0;
+    --popup-bg: #04041f;
+    font-family: dogica, sans-serif;
+    font-size: 1rem;
+}

@@ -2,11 +2,14 @@ import { DIAGONAL_FACTOR } from "../constants";
 import makeGun from "./gun";
 
 export default function makePlayer(k, posVec2) {
-    const player = k.add([
+    const player = k.make([
         k.sprite("player", { anim: "idle" }),
         k.scale(5),
         k.anchor("center"),
-        k.area(),
+        k.area({
+            shape: new k.Rect(k.vec2(0, 10), 10, 10)
+        }),
+        k.body(),
         k.pos(posVec2),
         "player",
         {
@@ -16,18 +19,39 @@ export default function makePlayer(k, posVec2) {
             isDashing: false,
             dashCd: 3,
             dashOnCd: false,
-            dashLength: 400
+            dashLength: 400,
+            onMission: false
         }
     ]);
 
-    makeGun(k, player, { name: "pistol" });
+
+    const crosshair = k.make([
+        k.sprite("crosshair", { anim: "idle" }),
+        k.anchor("center"),
+        k.scale(3),
+        k.pos(k.toWorld(k.mousePos()))
+    ]);
+
+
+    if (player.onMission) {
+        k.setCursor("none");
+        k.add(crosshair);
+        makeGun(k, player, { name: "pistol" });
+    }
+
 
     player.onUpdate(() => {
         const worldMousePos = k.toWorld(k.mousePos());
         player.direction = worldMousePos.sub(player.pos).unit();
+        crosshair.pos = worldMousePos;
 
         // dashing
         if (k.isKeyDown("shift") && !player.isDashing && !player.dashOnCd) {
+            if (!player.directionVector.eq(k.vec2(0))) {
+                if (player.directionVector.x < 0) player.flipX = true;
+                else player.flipX = false;
+            }
+
             player.play("dash");
             player.isDashing = true;
             player.dashOnCd = true;
@@ -71,10 +95,18 @@ export default function makePlayer(k, posVec2) {
             player.flipX = false;
         }
         
-        if (player.directionVector.eq(k.vec2(0)) && !player.isDashing) {
-            player.play("idle");
-        } else if (!player.isDashing && !player.directionVector.eq(k.vec2(0)) && player?.getCurAnim()?.name !== "walk") {
-            player.play("walk");
+        if (!player.isDashing) {
+            if (
+                k.isKeyDown("a") ||
+                k.isKeyDown("d") ||
+                k.isKeyDown("w") ||
+                k.isKeyDown("s")
+            ) {
+                if (!player.onMission && player?.getCurAnim()?.name !== "walk") player.play("walk");
+                else if (player.onMission && player?.getCurAnim()?.name !== "walk2") player.play("walk2");
+            } else {
+                player.play("idle");
+            }
         }
 
         // move same speed diagonally as horizontal and vertically
