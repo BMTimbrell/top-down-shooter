@@ -15,7 +15,7 @@
 }
 
 .content {
-    background-color: #04041fDD;
+    background-color: var(--ui-bg);
     color: white;
     text-align: center;
     text-transform: capitalize;
@@ -25,12 +25,10 @@
     padding: 0.3125em 1.25em;
     border: 1px solid #979797;
     border-radius: 0.25em;
-    /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
-    /* font-weight: bold; */
 }
 
 .key {
-    background-color: var(--popup-bg);
+    background-color: var(--key-bg);
     border: 1px solid white;
     padding: 0.3125em 0.5em;
 }

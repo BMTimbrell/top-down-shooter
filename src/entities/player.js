@@ -20,7 +20,8 @@ export default function makePlayer(k, posVec2) {
             dashCd: 3,
             dashOnCd: false,
             dashLength: 400,
-            onMission: false
+            onMission: false,
+            inDialogue: false
         }
     ]);
 
@@ -44,6 +45,9 @@ export default function makePlayer(k, posVec2) {
         const worldMousePos = k.toWorld(k.mousePos());
         player.direction = worldMousePos.sub(player.pos).unit();
         crosshair.pos = worldMousePos;
+
+        // don't do anything while showing dialogue box
+        if (player.inDialogue) return;
 
         // dashing
         if (k.isKeyDown("shift") && !player.isDashing && !player.dashOnCd) {

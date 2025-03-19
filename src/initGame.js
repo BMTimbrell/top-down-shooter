@@ -1,7 +1,12 @@
 import makeKaplayCtx from './kaplayCtx';
 import makePlayer from './entities/player';
 import { MAP_SCALE } from './constants';
-import { store, isPopupVisibleAtom, popupTextAtom } from './store';
+import { 
+    store, 
+    isPopupVisibleAtom, 
+    popupTextAtom, 
+    dialogueAtom,
+} from './store';
 
 export default function initGame() {
     const k = makeKaplayCtx();
@@ -90,6 +95,7 @@ export default function initGame() {
     k.setBackground(k.Color.fromHex("#131313"));
 
     function scaleToMap(map, entity, { scale = MAP_SCALE, mapChild = false } = {}) {
+        // child of map object has positioning based on map pos
         const startPos = {
             x: !mapChild ? map.pos.x : 0,
             y: !mapChild ? map.pos.y : 0
@@ -164,15 +170,51 @@ export default function initGame() {
                         const name = entity.name.substring(6);
                         
                         player.onCollideUpdate(entity.name, () => {
-                            store.set(isPopupVisibleAtom, true);
-                            store.set(
-                                popupTextAtom, { action: name === "main lobby" ? "Go To" : "Check", name, key: "E" }
-                            );
+                            // show popup if not showing dialogue box
+                            if (!player.inDialogue) {
+                                store.set(isPopupVisibleAtom, true);
+                                store.set(
+                                    popupTextAtom, 
+                                    { action: name === "main lobby" ? "Go To" : "Check", name, key: "E" }
+                                );
+                            }
                             
                             // set position for popup
                             const root = document.documentElement;
                             root.style.setProperty("--popup-x", k.get(name)[0].pos.x);
                             root.style.setProperty("--popup-y", k.get(name)[0].pos.y);
+
+                            // dialogue
+                            if (k.isKeyPressed("e")) {
+                                let description = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
+
+                                if (player.inDialogue) {
+                                    if (store.get(dialogueAtom).skip) {
+                                        store.set(dialogueAtom, prev => ({ ...prev, skip: false }));
+                                        if (store.get(dialogueAtom).index === description.length - 1) {
+                                            store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
+                                            player.inDialogue = false;
+                                        } else {
+                                            store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1}));
+                                        }
+                                    } else {
+                                        store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
+                                    }
+                                } else if (description) {
+                                        player.inDialogue = true;
+
+                                        store.set(dialogueAtom, prev => ({ ...prev, text: description }));
+                                        const dialogue = roomData.layers.find(e => e.name === "dialogue").objects[0];
+                                        const dialoguePos = scaleToMap(map, dialogue);
+        
+                                        root.style.setProperty("--dialogue-x", dialoguePos.x);
+                                        root.style.setProperty("--dialogue-y", dialoguePos.y);
+                                        root.style.setProperty("--dialogue-width", (dialogue.width) * MAP_SCALE);
+        
+                                        store.set(isPopupVisibleAtom, false);
+                                        store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
+                                }
+                            }
                         });
                         
                         player.onCollideEnd((entity.name, () => {

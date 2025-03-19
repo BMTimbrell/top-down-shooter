@@ -145,6 +145,12 @@
                  "height":11.25,
                  "id":46,
                  "name":"check pullup bar",
+                 "properties":[
+                        {
+                         "name":"description",
+                         "type":"string",
+                         "value":"I can do pullups to train my body."
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -156,6 +162,12 @@
                  "height":33.25,
                  "id":47,
                  "name":"check desk",
+                 "properties":[
+                        {
+                         "name":"description",
+                         "type":"string",
+                         "value":"I can read books here when I have the time."
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -167,6 +179,12 @@
                  "height":37.5,
                  "id":48,
                  "name":"check bed",
+                 "properties":[
+                        {
+                         "name":"description",
+                         "type":"string",
+                         "value":"I can sleep here to pass the time.\nBut I don't feel like sleeping right now."
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -273,9 +291,31 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":13,
+         "name":"dialogue",
+         "objects":[
+                {
+                 "height":16,
+                 "id":53,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":128,
+                 "x":16,
+                 "y":112
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":13,
- "nextobjectid":52,
+ "nextlayerid":14,
+ "nextobjectid":55,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
