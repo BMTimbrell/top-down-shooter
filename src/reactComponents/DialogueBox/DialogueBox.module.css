@@ -1,12 +1,15 @@
 .container {
     --padding-block: 0.75em;
-    --line-height: 1.2;
+    --line-height: 1.4;
     position: absolute;
     background-color: var(--ui-bg);
     color: white;
-    top: var(--dialogue-x);
-    left: var(--dialogue-y);
+    width: min(31.25rem, 80%);
+    bottom: 10vh;
+    left: 50vw;
+    translate: -50% 0;
     padding: var(--padding-block) 1em;
+    border: 1px solid #979797;
     line-height: var(--line-height);
-    min-height: calc(2 * 1em * var(--line-height) + (var(--padding-block) * 2));
+    min-height: calc(2 * 1em * var(--line-height) + (var(--padding-block) * 2) + 2px);
 }

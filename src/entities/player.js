@@ -46,6 +46,16 @@ export default function makePlayer(k, posVec2) {
         player.direction = worldMousePos.sub(player.pos).unit();
         crosshair.pos = worldMousePos;
 
+        if (!k.camPos().eq(player.pos)) {
+            k.tween(
+                k.camPos(), 
+                player.pos, 
+                0.2, 
+                newPos => k.camPos(newPos), 
+                k.easings.linear
+            );
+        }
+
         // don't do anything while showing dialogue box
         if (player.inDialogue) return;
 

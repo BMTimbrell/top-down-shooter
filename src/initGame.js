@@ -47,6 +47,7 @@ export default function initGame() {
     });
 
     k.loadSprite("room", "./sprites/room.png");
+    k.loadSprite("main lobby", "./sprites/main-lobby.png");
     k.loadSpriteAtlas("./sprites/Tileset.png", {
         "bed" : {
             x: 240,
@@ -84,7 +85,7 @@ export default function initGame() {
     });
 
     k.loadSpriteAtlas("./sprites/Tileset.png", {
-        "main lobby" : {
+        "door" : {
             x: 256,
             y: 96,
             width: 32,
@@ -106,6 +107,15 @@ export default function initGame() {
         );
     }
 
+    function setCamScale() {
+        if (k.width() < 1000) {
+            k.setCamScale(k.vec2(0.8));
+            return;
+        }
+
+        k.setCamScale(k.vec2(1));
+    }
+
     k.scene("room", async (opt) => {
         
         const roomData = await (await fetch("./data/room.json")).json();
@@ -116,6 +126,8 @@ export default function initGame() {
             k.pos(k.vec2(k.center())),
             k.scale(MAP_SCALE)
         ]);
+
+        setCamScale();
 
         // center offset
         map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
@@ -129,7 +141,7 @@ export default function initGame() {
                         k.add(player);
                     } else {
                         k.add([
-                            k.sprite(entity.name),
+                            k.sprite(entity.name === "main lobby" ? "door" : entity.name),
                             k.scale(MAP_SCALE),
                             k.pos(scaleToMap(map, entity)),
                             entity.name
@@ -138,6 +150,26 @@ export default function initGame() {
                 }
             }
         }
+
+        k.onResize(() => {
+            setCamScale();
+            const oldMapPos = map.pos;
+            map.pos = k.vec2(k.center());
+            // center offset
+            map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
+
+            for (const layer of layers) {
+                if (layer.name === "spawn points") {
+                    for (const entity of layer.objects) {
+                        if (entity.name === "player") {
+                            player.pos = scaleToMap(map, player.pos.sub(oldMapPos).scale(1 / MAP_SCALE));
+                        } else {
+                            k.get(entity.name)[0].pos = scaleToMap(map, entity);
+                        }
+                    }
+                }
+            }
+        });
         
         // draw in order of y coordinate
         k.onUpdate(() => {
@@ -181,8 +213,8 @@ export default function initGame() {
                             
                             // set position for popup
                             const root = document.documentElement;
-                            root.style.setProperty("--popup-x", k.get(name)[0].pos.x);
-                            root.style.setProperty("--popup-y", k.get(name)[0].pos.y);
+                            root.style.setProperty("--popup-x", k.get(name)[0].screenPos().x);
+                            root.style.setProperty("--popup-y", k.get(name)[0].screenPos().y);
 
                             // dialogue
                             if (k.isKeyPressed("e")) {
@@ -204,15 +236,13 @@ export default function initGame() {
                                         player.inDialogue = true;
 
                                         store.set(dialogueAtom, prev => ({ ...prev, text: description }));
-                                        const dialogue = roomData.layers.find(e => e.name === "dialogue").objects[0];
-                                        const dialoguePos = scaleToMap(map, dialogue);
-        
-                                        root.style.setProperty("--dialogue-x", dialoguePos.x);
-                                        root.style.setProperty("--dialogue-y", dialoguePos.y);
-                                        root.style.setProperty("--dialogue-width", (dialogue.width) * MAP_SCALE);
-        
                                         store.set(isPopupVisibleAtom, false);
                                         store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
+                                } else if (name === "main lobby") {
+                                    k.shake();
+                                    k.wait(1, () => {
+                                        k.go("main lobby");
+                                    });
                                 }
                             }
                         });
@@ -226,7 +256,24 @@ export default function initGame() {
         }
     });
 
+    k.scene("main lobby", async () => {
+        setCamScale();
+        k.onResize(() => {
+            setCamScale();
+        });
+        store.set(isPopupVisibleAtom, false);
+
+        const roomData = await (await fetch("./data/main-lobby.json")).json();
+        const layers = roomData.layers;
+        
+        const map = k.add([
+            k.sprite("main lobby"),
+            k.pos(k.vec2(0)),
+            k.scale(MAP_SCALE)
+        ]);
+    });
+
     k.go("room");
 
-    makePlayer(k, k.vec2(k.center()));
+    // makePlayer(k, k.vec2(k.center()));
 }

@@ -1,14 +1,8 @@
 import styles from './DialogueBox.module.css';
 import { useState, useEffect } from 'react';
 
-export default function DialogueBox({ text, dialogue, skipDialogue, index, setDialogue }) {
+export default function DialogueBox({ text, skipDialogue, index, setDialogue }) {
     const [visibleText, setVisibleText] = useState("");
-    const rootStyles = getComputedStyle(document.documentElement);
-    const pos = {
-        x: parseInt(rootStyles.getPropertyValue("--dialogue-x")),
-        y: parseInt(rootStyles.getPropertyValue("--dialogue-y"))
-    };
-    const width = parseInt(rootStyles.getPropertyValue("--dialogue-width"));
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -33,7 +27,7 @@ export default function DialogueBox({ text, dialogue, skipDialogue, index, setDi
     }, [index]);
 
     return (
-        <div className={styles.container} style={{ top: pos.y, left: pos.x, width }}>
+        <div className={styles.container}>
             {skipDialogue ?
                 text[index] :
                 visibleText

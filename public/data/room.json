@@ -149,7 +149,7 @@
                         {
                          "name":"description",
                          "type":"string",
-                         "value":"I can do pullups to train my body."
+                         "value":"I can do pullups to train my body.\nBut now's not the time for working out."
                         }],
                  "rotation":0,
                  "type":"",
@@ -183,7 +183,7 @@
                         {
                          "name":"description",
                          "type":"string",
-                         "value":"I can sleep here to pass the time.\nBut I don't feel like sleeping right now."
+                         "value":"I can sleep here to pass the time.\nBut now's not the time for sleeping."
                         }],
                  "rotation":0,
                  "type":"",

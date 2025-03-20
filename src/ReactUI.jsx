@@ -12,7 +12,6 @@ export default function ReactUI() {
         <>
             {isPopupVisible && <Popup text={popupText} />}
             {dialogue.visible && <DialogueBox
-                dialogue={dialogue}
                 text={dialogue.text}
                 index={dialogue.index}
                 skipDialogue={dialogue.skip}
