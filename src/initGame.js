@@ -95,6 +95,21 @@ export default function initGame() {
 
     k.setBackground(k.Color.fromHex("#131313"));
 
+    function makeMap(name) {
+        const map = k.add([
+            k.sprite(name),
+            k.pos(k.vec2(k.center())),
+            k.scale(MAP_SCALE)
+        ]);
+
+        setCamScale();
+
+        // center offset
+        map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
+
+        return map;
+    }
+
     function scaleToMap(map, entity, { scale = MAP_SCALE, mapChild = false } = {}) {
         // child of map object has positioning based on map pos
         const startPos = {
@@ -107,32 +122,7 @@ export default function initGame() {
         );
     }
 
-    function setCamScale() {
-        if (k.width() < 1000) {
-            k.setCamScale(k.vec2(0.8));
-            return;
-        }
-
-        k.setCamScale(k.vec2(1));
-    }
-
-    k.scene("room", async (opt) => {
-        
-        const roomData = await (await fetch("./data/room.json")).json();
-        const layers = roomData.layers;
-        
-        const map = k.add([
-            k.sprite("room"),
-            k.pos(k.vec2(k.center())),
-            k.scale(MAP_SCALE)
-        ]);
-
-        setCamScale();
-
-        // center offset
-        map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
-
-        const player = makePlayer(k, k.vec2(0));
+    function spawnObjects(map, { layers, player, doors }) {
         for (const layer of layers) {
             if (layer.name === "spawn points") {
                 for (const entity of layer.objects) {
@@ -141,7 +131,7 @@ export default function initGame() {
                         k.add(player);
                     } else {
                         k.add([
-                            k.sprite(entity.name === "main lobby" ? "door" : entity.name),
+                            k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
                             k.scale(MAP_SCALE),
                             k.pos(scaleToMap(map, entity)),
                             entity.name
@@ -170,93 +160,126 @@ export default function initGame() {
                 }
             }
         });
-        
-        // draw in order of y coordinate
+    }
+
+    function makeBoundaries(map, layer) {
+        for (const boundary of layer.objects) {
+            map.add([
+                k.area({
+                    shape: new k.Rect(k.vec2(0), boundary.width, boundary.height)
+                }),
+                k.body({ isStatic: true }),
+                k.pos(scaleToMap(map, boundary, { scale: 1, mapChild: true })),
+                boundary.name
+            ]);
+        }
+    }
+
+    function makeObjectInteractions(map, { layer, player, doors}) {
+        for (const entity of layer.objects) {
+            if (entity.name) {
+                map.add([
+                    k.area({
+                        shape: new k.Rect(k.vec2(0), entity.width, entity.height)
+                    }),
+                    k.pos(scaleToMap(map, entity, { scale: 1, mapChild: true })),
+                    entity.name
+                ]);
+    
+                const name = entity.name.substring(6);
+                
+                player.onCollideUpdate(entity.name, () => {
+                    // show popup if not showing dialogue box
+                    if (!player.inDialogue) {
+                        store.set(isPopupVisibleAtom, true);
+                        store.set(
+                            popupTextAtom, 
+                            { action: doors.some(e => e === name) ? "Go To" : "Check", name, key: "E" }
+                        );
+                    }
+                    
+                    // set position for popup
+                    const root = document.documentElement;
+                    root.style.setProperty("--popup-x", k.get(name)[0].screenPos().x);
+                    root.style.setProperty("--popup-y", k.get(name)[0].screenPos().y);
+    
+                    // dialogue
+                    if (k.isKeyPressed("e")) {
+                        let description = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
+    
+                        if (player.inDialogue) {
+                            if (store.get(dialogueAtom).skip) {
+                                store.set(dialogueAtom, prev => ({ ...prev, skip: false }));
+                                if (store.get(dialogueAtom).index === description.length - 1) {
+                                    store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
+                                    player.inDialogue = false;
+                                } else {
+                                    store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1}));
+                                }
+                            } else {
+                                store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
+                            }
+                        } else if (description) {
+                                player.inDialogue = true;
+    
+                                store.set(dialogueAtom, prev => ({ ...prev, text: description }));
+                                store.set(isPopupVisibleAtom, false);
+                                store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
+                        } else if (doors.some(e => e === name)) {
+                            k.shake();
+                            k.wait(1, () => {
+                                k.go(name, player);
+                            });
+                        }
+                    }
+                });
+                
+                player.onCollideEnd((entity.name, () => {
+                    store.set(isPopupVisibleAtom, false);
+                }));
+            }
+        }
+    }
+
+    function orderByY() {
         k.onUpdate(() => {
             k.get("*").filter(e => Object.hasOwn(e, "pos")).toSorted((a, b) => a.pos.y - b.pos.y).forEach((e, index) => e.z = index + 1);
         });
+    }
+
+    function setCamScale() {
+        if (k.width() < 1000) {
+            k.setCamScale(k.vec2(0.8));
+            return;
+        }
+
+        k.setCamScale(k.vec2(1));
+    }
+
+    k.scene("room", async (opt) => {
+        
+        const roomData = await (await fetch("./data/room.json")).json();
+        const layers = roomData.layers;
+        
+        const map = makeMap("room");
+
+        const player = makePlayer(k, k.vec2(0));
+
+        spawnObjects(map, { layers, player, doors: ["main lobby"] });
+        
+        // draw in order of y coordinate
+        orderByY();
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {
-                for (const boundary of layer.objects) {
-                    map.add([
-                        k.area({
-                            shape: new k.Rect(k.vec2(0), boundary.width, boundary.height)
-                        }),
-                        k.body({ isStatic: true }),
-                        k.pos(scaleToMap(map, boundary, { scale: 1, mapChild: true })),
-                        boundary.name
-                    ]);
-                }
+                makeBoundaries(map, layer);
             } else if (layer.name === "entity interactions") {
-                for (const entity of layer.objects) {
-                    if (entity.name) {
-                        map.add([
-                            k.area({
-                                shape: new k.Rect(k.vec2(0), entity.width, entity.height)
-                            }),
-                            k.pos(scaleToMap(map, entity, { scale: 1, mapChild: true })),
-                            entity.name
-                        ]);
-
-                        const name = entity.name.substring(6);
-                        
-                        player.onCollideUpdate(entity.name, () => {
-                            // show popup if not showing dialogue box
-                            if (!player.inDialogue) {
-                                store.set(isPopupVisibleAtom, true);
-                                store.set(
-                                    popupTextAtom, 
-                                    { action: name === "main lobby" ? "Go To" : "Check", name, key: "E" }
-                                );
-                            }
-                            
-                            // set position for popup
-                            const root = document.documentElement;
-                            root.style.setProperty("--popup-x", k.get(name)[0].screenPos().x);
-                            root.style.setProperty("--popup-y", k.get(name)[0].screenPos().y);
-
-                            // dialogue
-                            if (k.isKeyPressed("e")) {
-                                let description = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
-
-                                if (player.inDialogue) {
-                                    if (store.get(dialogueAtom).skip) {
-                                        store.set(dialogueAtom, prev => ({ ...prev, skip: false }));
-                                        if (store.get(dialogueAtom).index === description.length - 1) {
-                                            store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
-                                            player.inDialogue = false;
-                                        } else {
-                                            store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1}));
-                                        }
-                                    } else {
-                                        store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
-                                    }
-                                } else if (description) {
-                                        player.inDialogue = true;
-
-                                        store.set(dialogueAtom, prev => ({ ...prev, text: description }));
-                                        store.set(isPopupVisibleAtom, false);
-                                        store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
-                                } else if (name === "main lobby") {
-                                    k.shake();
-                                    k.wait(1, () => {
-                                        k.go("main lobby");
-                                    });
-                                }
-                            }
-                        });
-                        
-                        player.onCollideEnd((entity.name, () => {
-                            store.set(isPopupVisibleAtom, false);
-                        }));
-                    }
-                }
+                makeObjectInteractions(map, { layer, player, doors: ["main lobby"] });
             }
         }
     });
 
-    k.scene("main lobby", async () => {
+    k.scene("main lobby", async player => {
         setCamScale();
         k.onResize(() => {
             setCamScale();
@@ -266,11 +289,12 @@ export default function initGame() {
         const roomData = await (await fetch("./data/main-lobby.json")).json();
         const layers = roomData.layers;
         
-        const map = k.add([
-            k.sprite("main lobby"),
-            k.pos(k.vec2(0)),
-            k.scale(MAP_SCALE)
-        ]);
+        const map = makeMap("main lobby");
+
+        player.pos = k.vec2(0);
+
+        k.add(player);
+
     });
 
     k.go("room");
