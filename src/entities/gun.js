@@ -1,29 +1,37 @@
 import makeProjectile from "./projectile";
+import { GUN_OFFSET, GUNS } from "../constants";
 
-export default function makeGun(k, player, { name }) {
-    const gun = player.add([
+export default function makeGun(k, player, name) {
+
+
+    const gun = k.add([
         k.sprite(name, { anim: "idle" }),
         k.anchor("center"),
-        k.pos(0, 10),
-        k.scale(0.5),
+        k.pos(player.pos.x, player.pos.y + GUN_OFFSET),
+        k.scale(3),
         k.rotate(0),
         name,
         {
             direction: k.vec2(0),
-            fireTrigger: true
+            fireTrigger: true,
+            damage: GUNS[name].damage,
+            firingInterval: GUNS[name].firingInterval
         }
     ]);
 
     gun.onUpdate(() => {
+        gun.pos = k.vec2(player.pos.x, player.pos.y + GUN_OFFSET);
+        if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval--;
+
         // remove gun while player is dashing
         if (player.isDashing) {
-            gun.unuse("sprite");
+            gun.opacity = 0;
             return;
         }
 
         player.onAnimEnd(anim => {
             if (anim === "dash") {
-                gun.use(k.sprite(name, { anim: "idle" }));
+                gun.opacity = 1;
             }
         });
 
@@ -36,9 +44,9 @@ export default function makeGun(k, player, { name }) {
             gun.flipY = false;
         }
 
-        gun.rotateTo((worldMousePos).angle(gun.worldPos()));
+        gun.rotateTo((worldMousePos).angle(gun.pos));
 
-        if (k.isMouseDown() && gun.getCurAnim().name !== "firing") {
+        if (k.isMouseDown() && gun.getCurAnim().name !== "firing" && gun.firingInterval <= 0) {
             gun.play("firing");
         }
 
@@ -51,10 +59,11 @@ export default function makeGun(k, player, { name }) {
             gun.fireTrigger = true;
         }
 
-        if (!k.isMouseDown() && gun.getCurAnim().name === "firing") {
+        if (gun.getCurAnim().name === "firing") {
             gun.getCurAnim().loop = false;
             gun.onAnimEnd(anim => {
                 if (anim === "firing") {
+                    gun.firingInterval = GUNS[name].firingInterval;
                     gun.play("idle");
                 }
             });

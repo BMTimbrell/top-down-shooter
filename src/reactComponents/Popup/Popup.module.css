@@ -15,7 +15,7 @@
 }
 
 .content {
-    background-color: var(--ui-bg);
+    background-color: var(--ui-transparent-bg);
     color: white;
     text-align: center;
     text-transform: capitalize;
@@ -28,7 +28,7 @@
 }
 
 .key {
-    background-color: var(--key-bg);
+    background-color: var(--ui-bg);
     border: 1px solid white;
     padding: 0.3125em 0.5em;
 }

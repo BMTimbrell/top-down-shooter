@@ -29,7 +29,7 @@
             211, 0, 0, 0, 0, 0, 0, 0, 0, 213,
             211, 0, 0, 0, 0, 0, 0, 0, 0, 213,
             211, 0, 0, 0, 0, 0, 0, 0, 0, 213,
-            211, 0, 0, 0, 0, 0, 0, 0, 0, 213],
+            242, 305, 305, 305, 305, 305, 305, 305, 305, 244],
          "height":8,
          "id":2,
          "name":"Walls",
@@ -127,12 +127,12 @@
                  "type":"",
                  "visible":true,
                  "width":14,
-                 "x":16.5,
-                 "y":99
+                 "x":16,
+                 "y":80
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -172,8 +172,8 @@
                  "type":"",
                  "visible":true,
                  "width":21.25,
-                 "x":16.25,
-                 "y":94.75
+                 "x":16,
+                 "y":80
                 }, 
                 {
                  "height":37.5,
@@ -205,7 +205,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -236,7 +236,7 @@
                  "visible":true,
                  "width":0,
                  "x":16,
-                 "y":96
+                 "y":80
                 }, 
                 {
                  "height":0,
@@ -272,7 +272,7 @@
                  "visible":true,
                  "width":0,
                  "x":32,
-                 "y":96
+                 "y":80
                 }, 
                 {
                  "height":0,
@@ -288,7 +288,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }],
@@ -310,6 +310,19 @@
         {
          "firstgid":65,
          "source":"..\/..\/..\/Hotel-Laboratory-Sprites\/Tileset2.tsj"
+        }, 
+        {
+         "columns":1,
+         "firstgid":561,
+         "image":"..\/..\/..\/Hotel-Laboratory-Sprites\/ConsoleSprite\/Console2.png",
+         "imageheight":11,
+         "imagewidth":9,
+         "margin":0,
+         "name":"Console2",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":11,
+         "tilewidth":9
         }],
  "tilewidth":16,
  "type":"map",

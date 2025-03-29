@@ -1,0 +1,7 @@
+.exp-bar {
+    border: 1px solid white;
+    border-radius: 0.25rem;
+    padding: 2px;
+    text-align: center;
+    min-width: 6.25rem;
+}

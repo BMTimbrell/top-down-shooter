@@ -1,22 +1,35 @@
 import Popup from './reactComponents/Popup/Popup';
 import DialogueBox from './reactComponents/DialogueBox/DialogueBox';
-import { dialogueAtom, isPopupVisibleAtom, popupTextAtom } from './store';
+import MainMenu from './reactComponents/MainMenu/MainMenu';
+import GameInfo from './reactComponents/GameInfo/GameInfo';
+import { dialogueAtom, popupAtom, menuAtom } from './store';
 import { useAtom } from 'jotai';
 
 export default function ReactUI() {
-    const [isPopupVisible] = useAtom(isPopupVisibleAtom);
-    const [popupText] = useAtom(popupTextAtom);
+    const [popup] = useAtom(popupAtom);
     const [dialogue, setDialogue] = useAtom(dialogueAtom);
+    const [menu] = useAtom(menuAtom);
 
     return (
         <>
-            {isPopupVisible && <Popup text={popupText} />}
-            {dialogue.visible && <DialogueBox
-                text={dialogue.text}
-                index={dialogue.index}
-                skipDialogue={dialogue.skip}
-                setDialogue={setDialogue}
-             />}
+            <GameInfo />
+
+            {popup.visible && <Popup text={popup.text} pos={popup.pos} />}
+
+            {dialogue.visible && 
+                <DialogueBox
+                    text={dialogue.text}
+                    index={dialogue.index}
+                    skipDialogue={dialogue.skip}
+                    setDialogue={setDialogue}
+                />
+             }
+
+             {menu.visible && 
+                <MainMenu
+                    buttons={menu.buttons}
+                />
+            }
         </>
     );
 }

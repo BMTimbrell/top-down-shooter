@@ -1,16 +1,24 @@
 import makeKaplayCtx from './kaplayCtx';
 import makePlayer from './entities/player';
-import { MAP_SCALE } from './constants';
-import { 
-    store, 
-    isPopupVisibleAtom, 
-    popupTextAtom, 
-    dialogueAtom,
-} from './store';
+
+import {
+    makeMap,
+    spawnObjects,
+    makeBoundaries,
+    makeObjectInteractions,
+    orderByY
+} from './utils';
+
+import { GUNS } from './constants';
+
+import { menuAtom, playerInfoAtom, store } from "./store";
 
 export default function initGame() {
+    // focus back on canvas when clicking on html elements
+    window.addEventListener("click", () => document.getElementById('game').focus());
+
     const k = makeKaplayCtx();
-    k.loadSprite("player", "./sprites/player2.png", {
+    k.loadSprite("player", "./sprites/player.png", {
         sliceX: 8,
         sliceY: 30,
         anims: {
@@ -26,7 +34,16 @@ export default function initGame() {
         sliceY: 25,
         anims: {
             "idle": 0,
-            "firing": { from: 0, to: 2, loop: true }
+            "firing": { from: 0, to: 2, loop: true, speed: GUNS["pistol"].animSpeed }
+        }
+    });
+
+    k.loadSprite("smg", "./sprites/weapons1.png", {
+        sliceX: 8,
+        sliceY: 25,
+        anims: {
+            "idle": 88,
+            "firing": { from: 88, to: 90, loop: true, speed: GUNS["smg"].animSpeed }
         }
     });
 
@@ -95,209 +112,148 @@ export default function initGame() {
 
     k.setBackground(k.Color.fromHex("#131313"));
 
-    function makeMap(name) {
-        const map = k.add([
-            k.sprite(name),
-            k.pos(k.vec2(k.center())),
-            k.scale(MAP_SCALE)
-        ]);
-
-        setCamScale();
-
-        // center offset
-        map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
-
-        return map;
-    }
-
-    function scaleToMap(map, entity, { scale = MAP_SCALE, mapChild = false } = {}) {
-        // child of map object has positioning based on map pos
-        const startPos = {
-            x: !mapChild ? map.pos.x : 0,
-            y: !mapChild ? map.pos.y : 0
-        }
-        return k.vec2(
-            startPos.x + (entity.x * scale), 
-            startPos.y + (entity.y * scale)
-        );
-    }
-
-    function spawnObjects(map, { layers, player, doors }) {
-        for (const layer of layers) {
-            if (layer.name === "spawn points") {
-                for (const entity of layer.objects) {
-                    if (entity.name === "player") {
-                        player.pos = scaleToMap(map, entity);
-                        k.add(player);
-                    } else {
-                        k.add([
-                            k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
-                            k.scale(MAP_SCALE),
-                            k.pos(scaleToMap(map, entity)),
-                            entity.name
-                        ]);
-                    }     
-                }
-            }
-        }
-
-        k.onResize(() => {
-            setCamScale();
-            const oldMapPos = map.pos;
-            map.pos = k.vec2(k.center());
-            // center offset
-            map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
-
-            for (const layer of layers) {
-                if (layer.name === "spawn points") {
-                    for (const entity of layer.objects) {
-                        if (entity.name === "player") {
-                            player.pos = scaleToMap(map, player.pos.sub(oldMapPos).scale(1 / MAP_SCALE));
-                        } else {
-                            k.get(entity.name)[0].pos = scaleToMap(map, entity);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    function makeBoundaries(map, layer) {
-        for (const boundary of layer.objects) {
-            map.add([
-                k.area({
-                    shape: new k.Rect(k.vec2(0), boundary.width, boundary.height)
-                }),
-                k.body({ isStatic: true }),
-                k.pos(scaleToMap(map, boundary, { scale: 1, mapChild: true })),
-                boundary.name
-            ]);
-        }
-    }
-
-    function makeObjectInteractions(map, { layer, player, doors}) {
-        for (const entity of layer.objects) {
-            if (entity.name) {
-                map.add([
-                    k.area({
-                        shape: new k.Rect(k.vec2(0), entity.width, entity.height)
-                    }),
-                    k.pos(scaleToMap(map, entity, { scale: 1, mapChild: true })),
-                    entity.name
-                ]);
-    
-                const name = entity.name.substring(6);
-                
-                player.onCollideUpdate(entity.name, () => {
-                    // show popup if not showing dialogue box
-                    if (!player.inDialogue) {
-                        store.set(isPopupVisibleAtom, true);
-                        store.set(
-                            popupTextAtom, 
-                            { action: doors.some(e => e === name) ? "Go To" : "Check", name, key: "E" }
-                        );
-                    }
-                    
-                    // set position for popup
-                    const root = document.documentElement;
-                    root.style.setProperty("--popup-x", k.get(name)[0].screenPos().x);
-                    root.style.setProperty("--popup-y", k.get(name)[0].screenPos().y);
-    
-                    // dialogue
-                    if (k.isKeyPressed("e")) {
-                        let description = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
-    
-                        if (player.inDialogue) {
-                            if (store.get(dialogueAtom).skip) {
-                                store.set(dialogueAtom, prev => ({ ...prev, skip: false }));
-                                if (store.get(dialogueAtom).index === description.length - 1) {
-                                    store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
-                                    player.inDialogue = false;
-                                } else {
-                                    store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1}));
-                                }
-                            } else {
-                                store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
-                            }
-                        } else if (description) {
-                                player.inDialogue = true;
-    
-                                store.set(dialogueAtom, prev => ({ ...prev, text: description }));
-                                store.set(isPopupVisibleAtom, false);
-                                store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
-                        } else if (doors.some(e => e === name)) {
-                            k.shake();
-                            k.wait(1, () => {
-                                k.go(name, player);
-                            });
-                        }
-                    }
-                });
-                
-                player.onCollideEnd((entity.name, () => {
-                    store.set(isPopupVisibleAtom, false);
-                }));
-            }
-        }
-    }
-
-    function orderByY() {
-        k.onUpdate(() => {
-            k.get("*").filter(e => Object.hasOwn(e, "pos")).toSorted((a, b) => a.pos.y - b.pos.y).forEach((e, index) => e.z = index + 1);
-        });
-    }
-
-    function setCamScale() {
-        if (k.width() < 1000) {
-            k.setCamScale(k.vec2(0.8));
-            return;
-        }
-
-        k.setCamScale(k.vec2(1));
-    }
-
-    k.scene("room", async (opt) => {
-        
+    k.scene("room", async ({ player, gameState }) => {
         const roomData = await (await fetch("./data/room.json")).json();
         const layers = roomData.layers;
         
-        const map = makeMap("room");
+        const map = makeMap(k, "room", gameState);
 
-        const player = makePlayer(k, k.vec2(0));
-
-        spawnObjects(map, { layers, player, doors: ["main lobby"] });
+        spawnObjects(
+            k,
+            map, 
+            { 
+                layers, 
+                player, 
+                firstScene: gameState.firstScene["room"], 
+                doors: ["main lobby"] 
+            });
         
         // draw in order of y coordinate
-        orderByY();
+        orderByY(k);
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {
-                makeBoundaries(map, layer);
+                makeBoundaries(k, map, layer);
             } else if (layer.name === "entity interactions") {
-                makeObjectInteractions(map, { layer, player, doors: ["main lobby"] });
+                makeObjectInteractions(
+                    k,
+                    map, 
+                    { 
+                        layer, 
+                        player, 
+                        gameState, 
+                        doors: ["main lobby"] 
+                    }
+                );
             }
         }
     });
 
-    k.scene("main lobby", async player => {
-        setCamScale();
-        k.onResize(() => {
-            setCamScale();
-        });
-        store.set(isPopupVisibleAtom, false);
+    k.scene("main lobby", async ({ player, gameState }) => {
 
         const roomData = await (await fetch("./data/main-lobby.json")).json();
         const layers = roomData.layers;
         
-        const map = makeMap("main lobby");
+        const map = makeMap(k, "main lobby", gameState);
+        
+        spawnObjects(
+            k,
+            map, 
+            { 
+                layers, 
+                player, 
+                doors: ["room"], 
+                firstScene: gameState.firstScene["main lobby"]
+            }
+        );
+        
+        // draw in order of y coordinate
+        orderByY(k);
 
-        player.pos = k.vec2(0);
-
-        k.add(player);
-
+        for (const layer of layers) {
+            if (layer.name === "boundaries") {
+                makeBoundaries(k, map, layer);
+            } else if (layer.name === "entity interactions") {
+                makeObjectInteractions(
+                    k,
+                    map, 
+                    { 
+                        layer, 
+                        player, 
+                        gameState, 
+                        doors: ["room"] 
+                    }
+                );
+            }
+        }
     });
 
-    k.go("room");
+    const player = makePlayer(k, k.vec2(0));
 
-    // makePlayer(k, k.vec2(k.center()));
+    const gameState = k.make([
+        "gameState",
+        {
+            day: 1,
+            firstScene: {
+                "room": true,
+                "main lobby": true
+            }
+        }
+    ]);
+
+    gameState.onUpdate(() => {
+        if (k.isKeyPressed("escape") && !player.inDialogue) {
+            // set data to show in menu
+            if (!store.get(menuAtom).visible) {
+                store.set(
+                    menuAtom, 
+                    prev => ({
+                         ...prev, 
+                         buttons: [
+                            { name: "Resume", onClick: () => {
+                                store.set(menuAtom, prev => ({ ...prev, visible: false}));
+                                k.query({
+                                    include: "*",
+                                    exclude: "gameState"
+                                }).forEach(e => e.paused = false);
+                            }}, 
+                            { 
+                                name: "Player Info", 
+                                onClick: () => store.set(playerInfoAtom, {
+                                    visible: true,
+                                    data: {
+                                        guns: player.guns, 
+                                        exp: { 
+                                            mind: player.mind, 
+                                            body: player.body, 
+                                            weaponLvl: player.weaponLvl 
+                                        }
+                                    } 
+                                }) 
+                            }, 
+                            { name: "Exit to Main Menu" }
+                        ] 
+                    })
+                );
+            } else {
+                // reset menu after closing
+                store.set(playerInfoAtom, prev => ({
+                    ...prev,
+                    visible: false
+                }));
+            }
+
+            // toggle game pause and menu visibility
+
+            store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible }));
+
+            k.query({
+                include: "*",
+                exclude: "gameState"
+            }).forEach(e => e.paused = store.get(menuAtom).visible);
+        }
+
+    });
+    
+    k.go("room", { player, gameState });
 }

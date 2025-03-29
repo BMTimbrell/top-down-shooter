@@ -8,8 +8,12 @@ export default function makeProjectile(k, gun, { name }) {
         k.area(),
         name,
         k.move(k.toWorld(k.mousePos()).angle(gun.worldPos()), 700),
-        k.offscreen({ destroy: true })
+        k.offscreen({ destroy: true }),
     ]);
+
+    projectile.onCollide("boundary", () => {
+        k.destroy(projectile);
+    });
 
     return projectile;
 }

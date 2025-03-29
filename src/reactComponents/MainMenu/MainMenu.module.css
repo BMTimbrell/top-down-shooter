@@ -1,0 +1,48 @@
+.menu {
+    min-width: min(31.25rem, 100%);
+    background-color: var(--ui-bg);
+    border: 1px solid white;
+    border-radius: 0.25rem;
+    padding: 2rem 1.5rem;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 99999;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    user-select: none;
+}
+
+.button-container {
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    max-width: min(18.75rem, 100%);
+}
+
+.player-info h1 {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 1.5rem;
+}
+
+.player-info h2 {
+    font-size: 1.25rem;
+    margin-block: 1em;
+}
+
+.player-info ul {
+    max-width: min(15rem, 100%);
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+.player-info li {
+    display: flex;
+    justify-content: space-between;
+}

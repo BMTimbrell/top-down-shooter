@@ -1,7 +1,9 @@
 import { DIAGONAL_FACTOR } from "../constants";
-import makeGun from "./gun";
+import { GUNS } from '../constants';
 
 export default function makePlayer(k, posVec2) {
+    // const gunData = await (await fetch("./data/gun.json")).json();
+
     const player = k.make([
         k.sprite("player", { anim: "idle" }),
         k.scale(5),
@@ -21,46 +23,35 @@ export default function makePlayer(k, posVec2) {
             dashOnCd: false,
             dashLength: 400,
             onMission: false,
-            inDialogue: false
+            inDialogue: false,
+            guns: [{ name: "pistol", ...GUNS.pistol }, { name: "smg", ...GUNS.smg }],
+            mind: { level: 1, exp: 25, maxExp: 50 },
+            body: { level: 1, exp: 5, maxExp: 50 },
+            weaponLvl: { level: 1, exp: 0, maxExp: 50 },
+            maxHealth: 3,
+            health: 3
         }
     ]);
-
-
-    const crosshair = k.make([
-        k.sprite("crosshair", { anim: "idle" }),
-        k.anchor("center"),
-        k.scale(3),
-        k.pos(k.toWorld(k.mousePos()))
-    ]);
-
-
-    if (player.onMission) {
-        k.setCursor("none");
-        k.add(crosshair);
-        makeGun(k, player, { name: "pistol" });
-    }
-
 
     player.onUpdate(() => {
         const worldMousePos = k.toWorld(k.mousePos());
         player.direction = worldMousePos.sub(player.pos).unit();
-        crosshair.pos = worldMousePos;
 
-        if (!k.camPos().eq(player.pos)) {
+        if (!k.getCamPos().eq(player.pos)) {
             k.tween(
-                k.camPos(), 
+                k.getCamPos(), 
                 player.pos, 
                 0.2, 
-                newPos => k.camPos(newPos), 
+                newPos => k.setCamPos(newPos), 
                 k.easings.linear
             );
         }
 
         // don't do anything while showing dialogue box
         if (player.inDialogue) return;
-
+ 
         // dashing
-        if (k.isKeyDown("shift") && !player.isDashing && !player.dashOnCd) {
+        if (k.isMouseDown("right") && !player.isDashing && !player.dashOnCd) {
             if (!player.directionVector.eq(k.vec2(0))) {
                 if (player.directionVector.x < 0) player.flipX = true;
                 else player.flipX = false;

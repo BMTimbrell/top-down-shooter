@@ -1,14 +1,15 @@
 .container {
-    --padding-block: 0.75em;
+    --padding-block: 1em;
+    --padding-inline: 1em;
     --line-height: 1.4;
     position: absolute;
-    background-color: var(--ui-bg);
+    background-color: var(--ui-transparent-bg);
     color: white;
     width: min(31.25rem, 80%);
     bottom: 10vh;
     left: 50vw;
     translate: -50% 0;
-    padding: var(--padding-block) 1em;
+    padding: var(--padding-block) var(--padding-inline);
     border: 1px solid #979797;
     line-height: var(--line-height);
     min-height: calc(2 * 1em * var(--line-height) + (var(--padding-block) * 2) + 2px);
@@ -17,8 +18,81 @@
     user-select: none;
 }
 
-.arrow {
+.ellipsis {
     position: absolute;
-    right: 0.5em;
-    bottom: 0.5em;
+    right: 0.25em;
+    bottom: 0.25em;
+}
+
+.ellipsis * {
+    opacity: 0;
+    font-size: 1.25rem;
+}
+
+.ellipsis :first-child {
+    animation: show-first 1.5s infinite;
+    margin-right: -0.5em;
+}
+
+.ellipsis :nth-child(2) {
+    animation: show-second 1.5s infinite;
+    margin-right: -0.5em;
+}
+
+.ellipsis :last-child {
+    animation: show-third 1.5s infinite;
+}
+
+@keyframes show-first {
+    0% {
+        opacity: 0;
+    }
+
+    9% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes show-second {
+    0% {
+        opacity: 0;
+    }
+
+    49% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes show-third {
+    0% {
+        opacity: 0;
+    }
+
+    74% {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

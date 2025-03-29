@@ -32,7 +32,11 @@ export default function DialogueBox({ text, skipDialogue, index, setDialogue }) 
                 text[index] :
                 visibleText
             }
-            {index < text.length - 1 && <div className={styles.arrow}>&gt;</div>}
+            {index < text.length - 1 && (
+                <div className={styles.ellipsis}>
+                    <span>.</span><span>.</span><span>.</span>
+                </div>
+            )}
         </div>
     );
 }

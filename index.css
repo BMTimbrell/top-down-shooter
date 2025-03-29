@@ -18,10 +18,10 @@
 }
 
 :root {
-    --popup-x: 0;
-    --popup-y: 0;
-    --ui-bg: #04041fEE;
-    --key-bg: #04041f;
+    --ui-transparent-bg: #04041fEE;
+    --ui-bg: #04041f;
+    --green: #226d18;
+    --primary-hover: #dddddd;
     font-family: dogica, sans-serif;
     font-size: 1rem;
 }
