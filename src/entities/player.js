@@ -27,9 +27,7 @@ export default function makePlayer(k, posVec2) {
             guns: [{ name: "pistol", ...GUNS.pistol }, { name: "smg", ...GUNS.smg }],
             mind: { level: 1, exp: 25, maxExp: 50 },
             body: { level: 1, exp: 5, maxExp: 50 },
-            weaponLvl: { level: 1, exp: 0, maxExp: 50 },
-            maxHealth: 3,
-            health: 3
+            weaponLvl: { level: 1, exp: 0, maxExp: 50 }
         }
     ]);
 

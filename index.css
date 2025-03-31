@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     font: inherit;
+    image-rendering: pixelated;
 }
 
 @font-face {

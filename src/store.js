@@ -40,12 +40,14 @@ export const playerInfoAtom = atom({
 
 export const gameInfoAtom = atom({
     day: 1,
+    time: 1,
     playerOnMission: false,
     hp: {
         health: 3,
         maxHealth: 3
     },
-    gun: {}
+    gun: {},
+    gold: 0
 });
 
 export const store = createStore();
