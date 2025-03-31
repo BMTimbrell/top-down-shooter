@@ -13,7 +13,7 @@ export default function GameInfo() {
     for (let i = 0; i < gameInfo.hp.maxHealth; i++) {
         if (healthCount > 0) hearts.push(1);
         else hearts.push(0);
-        --healthCount;
+        healthCount--;
     }
 
     return (
@@ -34,7 +34,6 @@ export default function GameInfo() {
                 <img src="./sprites/coin2.png" />
                 {gameInfo.gold}
             </div>
-            
         </div>
     );
 }

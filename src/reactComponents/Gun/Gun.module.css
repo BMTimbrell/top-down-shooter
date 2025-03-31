@@ -3,6 +3,7 @@
     height: 96px; 
     background-image: url(sprites/weapons1.png);
     background-size: 768px 2400px;
+    background-position: var(--sprite-pos-x) var(--sprite-pos-y);
     border: 1px solid transparent;
     border-radius: 0.25rem;
 }

@@ -30,7 +30,10 @@ export default function Gun({ name, spritePos, damage, firingInterval, animSpeed
             <div
                 onMouseMove={showInfo}
                 onMouseLeave={() => setShowPopup(false)} 
-                style={{ backgroundPosition: `${spritePos.x}px ${spritePos.y}px` }} 
+                style={{ 
+                    "--sprite-pos-x": `${spritePos.x}px`, 
+                    "--sprite-pos-y": `${spritePos.y}px` 
+                }} 
                 className={styles.gun}
             >
             </div>

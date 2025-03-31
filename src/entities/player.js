@@ -1,8 +1,8 @@
 import { DIAGONAL_FACTOR } from "../constants";
 import { GUNS } from '../constants';
+import { gameInfoAtom, store } from "../store";
 
 export default function makePlayer(k, posVec2) {
-    // const gunData = await (await fetch("./data/gun.json")).json();
 
     const player = k.make([
         k.sprite("player", { anim: "idle" }),
@@ -13,6 +13,7 @@ export default function makePlayer(k, posVec2) {
         }),
         k.body(),
         k.pos(posVec2),
+        k.timer(),
         "player",
         {
             speed: 200,
@@ -31,23 +32,55 @@ export default function makePlayer(k, posVec2) {
         }
     ]);
 
+
+    function setOnMission(onMission = false) {
+        if (onMission) {
+            player.onMission = true;
+            store.set(gameInfoAtom, prev => ({ ...prev, onMission: true }));
+        }
+    }
+
+    function setPlayerDashing(isDashing) {
+        if (isDashing) {
+            player.play("dash");
+            player.isDashing = true;
+            player.dashOnCd = true;
+            store.set(gameInfoAtom, prev => ({ ...prev, playerInfo: { ...prev.playerInfo, dashCd: 0 }}));
+
+            player.wait(player.dashCd, () => {
+                player.dashOnCd = false;
+            });
+
+            // every 0.1s update cd progress
+            const interval = 0.1;
+            player.loop(interval, () => {
+                store.set(gameInfoAtom, prev => ({ ...prev, playerInfo: { ...prev.playerInfo, dashCd: prev.playerInfo.dashCd + interval / player.dashCd }}));
+            }, player.dashCd / interval);
+        }
+    }
+
+    player.use({ setOnMission });
+    player.use({ setPlayerDashing });
+
+    player.setOnMission();
+
     player.onUpdate(() => {
         const worldMousePos = k.toWorld(k.mousePos());
         player.direction = worldMousePos.sub(player.pos).unit();
 
         if (!k.getCamPos().eq(player.pos)) {
             k.tween(
-                k.getCamPos(), 
-                player.pos, 
-                0.2, 
-                newPos => k.setCamPos(newPos), 
+                k.getCamPos(),
+                player.pos,
+                0.2,
+                newPos => k.setCamPos(newPos),
                 k.easings.linear
             );
         }
 
         // don't do anything while showing dialogue box
         if (player.inDialogue) return;
- 
+
         // dashing
         if (k.isMouseDown("right") && !player.isDashing && !player.dashOnCd) {
             if (!player.directionVector.eq(k.vec2(0))) {
@@ -55,12 +88,7 @@ export default function makePlayer(k, posVec2) {
                 else player.flipX = false;
             }
 
-            player.play("dash");
-            player.isDashing = true;
-            player.dashOnCd = true;
-            k.wait(player.dashCd, () => {
-                player.dashOnCd = false;
-            });               
+            player.setPlayerDashing(true);
         }
 
         if (player.isDashing) {
@@ -97,7 +125,7 @@ export default function makePlayer(k, posVec2) {
         } else {
             player.flipX = false;
         }
-        
+
         if (!player.isDashing) {
             if (
                 k.isKeyDown("a") ||

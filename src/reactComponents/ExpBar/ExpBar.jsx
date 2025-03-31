@@ -8,7 +8,7 @@ export default function ExpBar({ stat }) {
     return (
         <div 
             className={styles["exp-bar"]} 
-            style={{ background: `linear-gradient(to right, var(--green) ${statPercent}%, var(--ui-bg) ${statPercent}%)` }}
+            style={{ '--stat-percent': `${statPercent}%` }}
             onMouseEnter={() => setShowFraction(true)}
             onMouseLeave={() => setShowFraction(false)}
         >

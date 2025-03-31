@@ -2,6 +2,7 @@ import Popup from './reactComponents/Popup/Popup';
 import DialogueBox from './reactComponents/DialogueBox/DialogueBox';
 import MainMenu from './reactComponents/MainMenu/MainMenu';
 import GameInfo from './reactComponents/GameInfo/GameInfo';
+import PlayerInfo from './reactComponents/PlayerInfo/PlayerInfo';
 import { dialogueAtom, popupAtom, menuAtom } from './store';
 import { useAtom } from 'jotai';
 
@@ -30,6 +31,8 @@ export default function ReactUI() {
                     buttons={menu.buttons}
                 />
             }
+
+            <PlayerInfo />
         </>
     );
 }

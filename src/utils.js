@@ -54,7 +54,7 @@ export function spawnObjects(k, map, { layers, player, firstScene, doors }) {
                     const pos = firstScene || map.tags[1] !== "room" ? entity : k.vec2(entity.x, entity.y - 40);
                     player.pos = scaleToMap(k, map, pos);
                     k.add(player);
-                    player.dashOnCd = false;
+                    // player.dashOnCd = false;
                 } else {
                     k.add([
                         k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
