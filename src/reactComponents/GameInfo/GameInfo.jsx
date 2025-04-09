@@ -2,7 +2,6 @@ import { gameInfoAtom, playerInfoAtom } from "../../store";
 import { useAtom } from 'jotai';
 import styles from './GameInfo.module.css';
 import Gun from "../Gun/Gun";
-import { useRef } from "react";
 import GunContainer from "../Gun/GunContainer";
 import ReloadBar from "../ReloadBar/ReloadBar";
 
@@ -26,6 +25,8 @@ export default function GameInfo() {
 
     return (
         <>
+            {gameInfo.reloading && <ReloadBar percent={cooldwns.reload * 100} pos={gameInfo.rBarPos} />}
+
             <div className={styles["top-container"]}>
                 <div className={styles.time}>
                     <div>Day {gameInfo.day}</div>

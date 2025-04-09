@@ -86,6 +86,11 @@ export default function makePlayer(k, posVec2) {
         // reset reload when changing guns
         if (player.reloading) {
             player.reloading = false;
+            store.set(gameInfoAtom, prev => ({
+                ...prev,
+                reloading: false,
+            }));
+
             reloadWait.cancel();
             reloadLoop.cancel();
         }
@@ -152,23 +157,35 @@ export default function makePlayer(k, posVec2) {
     let reloadWait = null;
 
     function reload() {
-        if (player.guns[player.gunIndex].ammo <= 0) return;
+        const gun = player.guns[player.gunIndex];
+        if (gun.ammo <= 0 || gun.clip === gun.clipSize) return;
 
         store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, reload: 0 } }));
+
         player.reloading = true;
+        store.set(gameInfoAtom, prev => ({
+            ...prev,
+            reloading: true,
+        }));
+
         reloadWait = player.wait(player.reloadCd, () => {
-            player.guns[player.gunIndex].clip = Math.min(
-                player.guns[player.gunIndex].ammo,
-                player.guns[player.gunIndex].clipSize
+           gun.clip = Math.min(
+                gun.ammo,
+                gun.clipSize
             );
+
             player.reloading = false;
+            store.set(gameInfoAtom, prev => ({
+                ...prev,
+                reloading: false,
+            }));
 
             store.set(playerInfoAtom, prev => ({
                 ...prev,
                 data: {
                     ...prev.data,
                     guns: player.guns
-                }
+                },
             }));
         });
 
@@ -213,6 +230,16 @@ export default function makePlayer(k, posVec2) {
                 newPos => k.setCamPos(newPos),
                 k.easings.linear
             );
+        }
+
+        if (player.reloading) {
+            store.set(gameInfoAtom, prev => ({
+                ...prev,
+                rBarPos: {
+                    x: player.screenPos().x,
+                    y: player.screenPos().y - 20
+                }
+            }));
         }
 
         // don't do anything while showing dialogue box

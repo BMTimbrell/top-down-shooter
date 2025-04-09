@@ -52,7 +52,12 @@ export const gameInfoAtom = atom({
     },
     onMission: false,
     gunIndex: 0,
-    maxGuns: 3
+    maxGuns: 3,
+    reloading: false,
+    rBarPos: {
+        x: 0,
+        y: 0
+    }
 });
 
 export const store = createStore();

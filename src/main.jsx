@@ -8,11 +8,11 @@ import { store } from "./store";
 const ui = document.getElementById("ui");
 const root = createRoot(ui);
 root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <Provider store={store}>
             <ReactUI />
         </Provider>
-    </React.StrictMode>
+    // </React.StrictMode>
 );
 
 initGame();
