@@ -6,15 +6,17 @@ import { playerInfoAtom } from '../../store';
 import { useAtom } from 'jotai';
 import BackButton from '../Button/BackButton';
 import ExpBar from '../ExpBar/ExpBar';
+import { useRef } from 'react';
 
 export default function MainMenu({ buttons }) {
     const [playerInfo, setPlayerInfo] = useAtom(playerInfoAtom);
+    const menuRef = useRef(null);
     const mind = playerInfo.data.exp.mind;
     const body = playerInfo.data.exp.body;
     const weaponLvl = playerInfo.data.exp.weaponLvl;
 
     return (
-        <div className={styles.menu}>
+        <div ref={menuRef} className={styles.menu}>
             {playerInfo.visible ? (
                 <div className={styles["player-info"]}>
                     <h1>Player Info</h1>
@@ -43,6 +45,7 @@ export default function MainMenu({ buttons }) {
                                 damage={gun.damage}
                                 firingInterval={gun.firingInterval}
                                 animSpeed={gun.animSpeed} 
+                                parentPos={menuRef?.current?.getBoundingClientRect()}
                             />
                         ))}
                     </GunContainer>

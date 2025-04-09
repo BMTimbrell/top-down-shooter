@@ -46,10 +46,13 @@ export const gameInfoAtom = atom({
         maxHealth: 3
     },
     gold: 0,
-    playerInfo: {
-        gun: undefined,
-        dashCd: 1
-    }
+    cooldwns: {
+        dash: 1,
+        reload: 1
+    },
+    onMission: false,
+    gunIndex: 0,
+    maxGuns: 3
 });
 
 export const store = createStore();

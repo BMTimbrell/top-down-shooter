@@ -5,7 +5,9 @@ export default function makeProjectile(k, gun, { name }) {
         k.rotate(k.toWorld(k.mousePos()).angle(gun.worldPos())),
         k.anchor("center"),
         k.scale(2),
-        k.area(),
+        k.area({
+            shape: new k.Rect(k.vec2(0), 10, 10),
+        }),
         name,
         k.move(k.toWorld(k.mousePos()).angle(gun.worldPos()), 700),
         k.offscreen({ destroy: true }),

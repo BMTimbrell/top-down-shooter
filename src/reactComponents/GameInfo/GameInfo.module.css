@@ -1,4 +1,4 @@
-.container {
+.top-container {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -32,19 +32,73 @@
     margin-right: 0.5rem;
 }
 
+.bottom-container {
+    user-select: none;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dash {
+    width: 55px;
+    height: 55px;
+    border: 1px solid white;
+    border-radius: 0.25rem;
+    background: linear-gradient(to top, grey var(--cd-percent), transparent var(--cd-percent));
+}
+
+.dash-icon {
+    width: 100%;
+    opacity: 1;
+}
+
+.gun-card {
+    position: relative;
+    border: 1px solid white;
+    border-radius: 0.25rem;
+    background: #80808063;
+    margin: 1rem;
+    width: 96px;
+    height: 96px;
+}
+
+.active-gun {
+    outline: 5px solid white;
+    font-size: 0.75rem;
+}
+
+.ammo {
+    position: absolute;
+    top: 0.25rem;
+    left: 50%;
+    translate: -50% 0;
+    color: white;
+    background-color: #80808063;
+    padding: 0.25rem 0.1875rem;
+    border-radius: 0.25rem;
+}
+
 /* match cam scale */
 @media (max-width: 62.5em) {
-    .container {
+    .top-container {
         font-size: 1.2rem;
     }
 
-    .container img {
+    .top-container img {
         width: 44px;
         height: 36px;
     }
 
     .money img {
         width: 36px;
+    }
+
+    .dash {
+        width: 44px;
+        height: 44px;
     }
 }
 

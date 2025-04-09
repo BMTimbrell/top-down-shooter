@@ -20,17 +20,17 @@
     text-align: center;
     text-transform: capitalize;
     position: absolute;
-    top: 1.125em;
-    left: 1.87em;
-    padding: 0.3125em 1.25em;
+    top: 1.125rem;
+    left: 1.87rem;
+    padding: 0.3125rem 1.25rem;
     border: 1px solid #979797;
-    border-radius: 0.25em;
+    border-radius: 0.25rem;
 }
 
 .key {
     background-color: var(--ui-bg);
     border: 1px solid white;
-    padding: 0.3125em 0.5em;
+    padding: 0.3125rem 0.5rem;
 }
 
 .action {

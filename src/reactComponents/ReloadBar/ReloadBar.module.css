@@ -1,0 +1,12 @@
+.reload-bar {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    translate: -50% 0;
+    width: 5.625rem;
+    border: 1px solid white;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    text-align: center;
+    background: linear-gradient(to right, var(--green) var(--percent), grey var(--percent));
+}

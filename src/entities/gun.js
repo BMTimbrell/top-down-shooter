@@ -1,8 +1,8 @@
 import makeProjectile from "./projectile";
 import { GUN_OFFSET, GUNS } from "../constants";
 
-export default function makeGun(k, player, name) {
-
+export default function makeGun(k, player, gunObj) {
+    const { name, damage, firingInterval, ammo, clip } = gunObj;
 
     const gun = k.add([
         k.sprite(name, { anim: "idle" }),
@@ -14,12 +14,16 @@ export default function makeGun(k, player, name) {
         {
             direction: k.vec2(0),
             fireTrigger: true,
-            damage: GUNS[name].damage,
-            firingInterval: GUNS[name].firingInterval
+            damage,
+            firingInterval,
+            ammo,
+            clip: gunObj.clip
         }
     ]);
 
     gun.onUpdate(() => {
+        if (player.guns[player.gunIndex] !== gunObj) gun.destroy();
+
         gun.pos = k.vec2(player.pos.x, player.pos.y + GUN_OFFSET);
         if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval--;
 
@@ -46,12 +50,21 @@ export default function makeGun(k, player, name) {
 
         gun.rotateTo((worldMousePos).angle(gun.pos));
 
-        if (k.isMouseDown() && gun.getCurAnim().name !== "firing" && gun.firingInterval <= 0) {
-            gun.play("firing");
+        if (
+            k.isMouseDown() && gun.getCurAnim().name !== "firing" && 
+            gun.firingInterval <= 0 &&
+            !player.reloading
+        ) {
+            if (gunObj.clip <= 0) {
+                player.reload();
+            } else{
+                gun.play("firing");
+            }
         }
 
         if (gun.animFrame === 1 && gun.fireTrigger) {
             makeProjectile(k, gun, { name: "bullet" });
+            player.loseAmmo();
             gun.fireTrigger = false;
         } 
 

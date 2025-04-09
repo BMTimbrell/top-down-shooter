@@ -2,7 +2,7 @@ import styles from './Gun.module.css';
 import Popup from '../Popup/Popup';
 import { useState } from 'react';
 
-export default function Gun({ name, spritePos, damage, firingInterval, animSpeed }) {
+export default function Gun({ name, spritePos, damage, firingInterval, animSpeed, parentPos }) {
     const [showPopup, setShowPopup] = useState(false);
     const [popupPos, setPopupPos] = useState({
         x: 0,
@@ -14,22 +14,28 @@ export default function Gun({ name, spritePos, damage, firingInterval, animSpeed
 
     const showInfo = e => {
         setShowPopup(true);
-        const parent = e.target.parentElement;
-        const offsetTop = parent.getBoundingClientRect().y - 250;
-        const offsetLeft = parent.getBoundingClientRect().x;
+
+        const offsetTop = parentPos.y;
+        const offsetLeft = parentPos.x;
+
+        // stop popup from going off screen
+        const y = (e.clientY - offsetTop) + (
+            e.clientY > document.documentElement.getBoundingClientRect().height - 100 ? -100 : 0
+        ); 
 
         setPopupPos(prev => ({ 
             ...prev,
             x: e.clientX - offsetLeft,
-            y: e.clientY - offsetTop
+            y: y
         }));
+
     };
 
     return (
         <>
             <div
-                onMouseMove={showInfo}
-                onMouseLeave={() => setShowPopup(false)} 
+                onMouseMove={parentPos ? showInfo : undefined}
+                onMouseLeave={parentPos ? () => setShowPopup(false) : undefined} 
                 style={{ 
                     "--sprite-pos-x": `${spritePos.x}px`, 
                     "--sprite-pos-y": `${spritePos.y}px` 

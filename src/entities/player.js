@@ -1,6 +1,7 @@
 import { DIAGONAL_FACTOR } from "../constants";
 import { GUNS } from '../constants';
-import { gameInfoAtom, store } from "../store";
+import { gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
+import makeGun from "./gun";
 
 export default function makePlayer(k, posVec2) {
 
@@ -21,17 +22,33 @@ export default function makePlayer(k, posVec2) {
             directionVector: k.vec2(0),
             isDashing: false,
             dashCd: 3,
+            reloadCd: 2,
             dashOnCd: false,
             dashLength: 400,
             onMission: false,
             inDialogue: false,
-            guns: [{ name: "pistol", ...GUNS.pistol }, { name: "smg", ...GUNS.smg }],
+            reloading: false,
+            guns: [
+                { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
+                { name: "smg", ammo: GUNS.smg.maxAmmo, ...GUNS.smg, clip: GUNS.smg.clipSize },
+                { name: "shotgun", ammo: GUNS.shotgun.maxAmmo, ...GUNS.shotgun, clip: GUNS.shotgun.clipSize }
+            ],
+            gunIndex: 0,
+            maxGuns: 3,
             mind: { level: 1, exp: 25, maxExp: 50 },
             body: { level: 1, exp: 5, maxExp: 50 },
             weaponLvl: { level: 1, exp: 0, maxExp: 50 }
         }
     ]);
 
+    store.set(playerInfoAtom, prev => ({
+        ...prev,
+        data: {
+            ...prev.data,
+            guns: player.guns,
+            gunIndex: player.gunIndex
+        }
+    }));
 
     function setOnMission(onMission = false) {
         if (onMission) {
@@ -45,24 +62,144 @@ export default function makePlayer(k, posVec2) {
             player.play("dash");
             player.isDashing = true;
             player.dashOnCd = true;
-            store.set(gameInfoAtom, prev => ({ ...prev, playerInfo: { ...prev.playerInfo, dashCd: 0 }}));
+            store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, dash: 0 } }));
 
             player.wait(player.dashCd, () => {
                 player.dashOnCd = false;
             });
 
-            // every 0.1s update cd progress
+            // every 0.1s update cd progress for ui
             const interval = 0.1;
             player.loop(interval, () => {
-                store.set(gameInfoAtom, prev => ({ ...prev, playerInfo: { ...prev.playerInfo, dashCd: prev.playerInfo.dashCd + interval / player.dashCd }}));
+                store.set(gameInfoAtom, prev => ({
+                    ...prev,
+                    cooldwns: {
+                        ...prev.cooldwns,
+                        dash: prev.cooldwns.dash + interval / player.dashCd
+                    }
+                }));
             }, player.dashCd / interval);
         }
     }
 
-    player.use({ setOnMission });
-    player.use({ setPlayerDashing });
+    function equipGun(index = 0) {
+        // reset reload when changing guns
+        if (player.reloading) {
+            player.reloading = false;
+            reloadWait.cancel();
+            reloadLoop.cancel();
+        }
 
-    player.setOnMission();
+        if (index >= player.guns.length) index = 0;
+        if (index < 0) index = player.guns.length - 1;
+
+        player.gunIndex = index;
+        const gun = player.guns[index];
+        store.set(
+            gameInfoAtom,
+            prev => ({
+                ...prev,
+                cooldwns: { ...prev.cooldwns, reload: gun.clip / gun.clipSize }
+            })
+        );
+
+        makeGun(k, player, player.guns[index]);
+
+        store.set(gameInfoAtom, prev => ({
+            ...prev,
+            gunIndex: player.gunIndex
+        }));
+    }
+
+    function addGun(gun) {
+        if (player.guns.length < player.maxGuns) {
+            player.guns.push(gun);
+            store.set(playerInfoAtom, prev => ({
+                ...prev,
+                data: {
+                    ...prev.data,
+                    guns: player.guns
+                }
+            }));
+            return gun;
+        }
+
+        return null;
+    }
+
+    function loseAmmo() {
+        const gun = player.guns[player.gunIndex];
+        gun.ammo--;
+        gun.clip--;
+        store.set(playerInfoAtom, prev => ({
+            ...prev,
+            data: {
+                ...prev.data,
+                guns: player.guns
+            }
+        }));
+
+        store.set(
+            gameInfoAtom,
+            prev => ({
+                ...prev,
+                cooldwns: { ...prev.cooldwns, reload: gun.clip / gun.clipSize }
+            })
+        );
+    }
+
+    let reloadLoop = null;
+    let reloadWait = null;
+
+    function reload() {
+        if (player.guns[player.gunIndex].ammo <= 0) return;
+
+        store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, reload: 0 } }));
+        player.reloading = true;
+        reloadWait = player.wait(player.reloadCd, () => {
+            player.guns[player.gunIndex].clip = Math.min(
+                player.guns[player.gunIndex].ammo,
+                player.guns[player.gunIndex].clipSize
+            );
+            player.reloading = false;
+
+            store.set(playerInfoAtom, prev => ({
+                ...prev,
+                data: {
+                    ...prev.data,
+                    guns: player.guns
+                }
+            }));
+        });
+
+        // every 0.1s update cd progress for ui
+        const interval = 0.1;
+        reloadLoop = player.loop(interval, () => {
+            store.set(gameInfoAtom, prev => ({
+                ...prev,
+                cooldwns: {
+                    ...prev.cooldwns,
+                    reload: prev.cooldwns.reload + interval / player.reloadCd
+                }
+            }));
+        }, player.reloadCd / interval);
+
+    }
+
+    player.use({ setOnMission, setPlayerDashing, equipGun, addGun, loseAmmo, reload });
+
+    player.setOnMission(true);
+
+    let mWheel = '';
+
+    document.addEventListener('wheel', event => {
+        if (player.inDialogue || store.get(menuAtom).visible) return;
+        if (event.deltaY > 0) {
+            mWheel = 'down';
+        } else if (event.deltaY < 0) {
+            mWheel = 'up';
+        }
+    });
 
     player.onUpdate(() => {
         const worldMousePos = k.toWorld(k.mousePos());
@@ -110,6 +247,26 @@ export default function makePlayer(k, posVec2) {
                 player.isDashing = false;
             });
             return;
+        }
+
+        // change weapon
+        if (k.isKeyPressed(['1', '2', '3', '4', '5'])) {
+            const keyDown = k.isKeyPressed('1') ? 1 :
+                k.isKeyPressed('2') ? 2 :
+                    k.isKeyPressed('3') ? 3 :
+                        k.isKeyPressed('4') ? 4 : 5;
+            player.equipGun(keyDown - 1);
+        }
+        if (mWheel === 'down') {
+            player.equipGun(player.gunIndex + 1);
+        } else if (mWheel === 'up') {
+            player.equipGun(player.gunIndex - 1);
+        }
+        mWheel = '';
+
+        // reload
+        if (k.isKeyPressed("r")) {
+            player.reload();
         }
 
         // movement

@@ -13,6 +13,8 @@ export const GUNS = {
         damage: 1,
         firingInterval: 5,
         animSpeed: 10,
+        maxAmmo: 300,
+        clipSize: 8,
         spritePos: { x: 0, y: 0 }
     },
 
@@ -20,6 +22,17 @@ export const GUNS = {
         damage: 1,
         firingInterval: 0,
         animSpeed: 20,
-        spritePos: { x: 0, y: 1344 }
-    }
+        maxAmmo: 200,
+        clipSize: 10,
+        spritePos: { x: 0, y: 2400 }
+    },
+
+    shotgun: {
+        damage: 2,
+        firingInterval: 5,
+        animSpeed: 10,
+        clipSize: 5,
+        maxAmmo: 150,
+        spritePos: { x: 0, y: 960 }
+    },
 };

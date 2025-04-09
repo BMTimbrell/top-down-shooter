@@ -25,4 +25,5 @@
     --primary-hover: #dddddd;
     font-family: dogica, sans-serif;
     font-size: 1rem;
+    overflow: hidden;
 }

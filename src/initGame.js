@@ -1,16 +1,6 @@
 import makeKaplayCtx from './kaplayCtx';
 import makePlayer from './entities/player';
-
-import {
-    makeMap,
-    spawnObjects,
-    makeBoundaries,
-    makeObjectInteractions,
-    orderByY
-} from './utils';
-
 import loadAssets from './loadAssets';
-
 import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
 
@@ -87,15 +77,13 @@ export default function initGame() {
             }
 
             // toggle game pause and menu visibility
-
             store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible }));
 
             k.query({
                 include: "*",
-                exclude: "gameState"
+                exclude: ["gameState"]
             }).forEach(e => e.paused = store.get(menuAtom).visible);
         }
-
     });
     
     k.go("room", { player, gameState });

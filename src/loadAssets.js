@@ -12,21 +12,30 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSprite("pistol", "./sprites/weapons1.png", {
+    k.loadSprite("pistol", "./sprites/weapons.png", {
         sliceX: 8,
-        sliceY: 25,
+        sliceY: 36,
         anims: {
             "idle": 0,
             "firing": { from: 0, to: 2, loop: true, speed: GUNS["pistol"].animSpeed }
         }
     });
 
-    k.loadSprite("smg", "./sprites/weapons1.png", {
+    k.loadSprite("smg", "./sprites/weapons.png", {
         sliceX: 8,
-        sliceY: 25,
+        sliceY: 36,
         anims: {
             "idle": 88,
             "firing": { from: 88, to: 90, loop: true, speed: GUNS["smg"].animSpeed }
+        }
+    });
+
+    k.loadSprite("shotgun", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 208,
+            "firing": { from: 208, to: 215, loop: true, speed: GUNS["shotgun"].animSpeed }
         }
     });
 
