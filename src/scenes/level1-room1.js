@@ -6,13 +6,15 @@ import {
     orderByY
 } from '../utils';
 
-export default function mainLobby(k) {
-    k.scene("main lobby", async ({ player, gameState }) => {
+export default function level1Room1(k) {
+    k.scene("1-1", async ({ player, gameState }) => {
 
-        const roomData = await (await fetch("./data/main-lobby.json")).json();
+        player.setOnMission(true);
+
+        const roomData = await (await fetch("./data/level1-room1.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "main lobby", { layers, gameState });
+        const map = makeMap(k, "1-1", { layers, gameState });
 
         spawnObjects(
             k,
@@ -20,12 +22,11 @@ export default function mainLobby(k) {
             {
                 layers,
                 player,
-                doors: ["room"],
-                firstScene: gameState.firstScene["main lobby"],
+                firstScene: gameState.firstScene["1-1"],
                 tileset: {
-                    name: "Tileset",
-                    width: 31,
-                    height: 16
+                    name: "rocky-tileset",
+                    width: 9,
+                    height: 11
                 }
             }
         );
@@ -43,11 +44,11 @@ export default function mainLobby(k) {
                     {
                         layer,
                         player,
-                        gameState,
-                        doors: ["room"]
+                        gameState
                     }
                 );
             }
         }
+
     });
 }

@@ -6,19 +6,21 @@ import {
 import makeGun from "./entities/gun";
 import { MAP_SCALE } from './constants';
 
-export function makeMap(k, name, gameState) {
+export function makeMap(k, name, { layers, gameState }) {
     k.add(gameState);
 
     // reset popup
     store.set(popupAtom, prev => ({ ...prev, visible: false }));
+
+    const mapWidth = layers.find(e => e.name === "ground")?.width || 0;
+    const mapHeight = layers.find(e => e.name === "ground")?.height || 0;
     const map = k.add([
-        k.sprite(name),
         k.pos(k.vec2(k.center())),
         k.scale(MAP_SCALE),
         name
     ]);
-
-    setCamScale(k);
+    map.width = mapWidth * MAP_SCALE;
+    map.height = mapHeight * MAP_SCALE;
 
     // center offset
     map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
@@ -38,7 +40,17 @@ export function scaleToMap(k, map, entity, { scale = MAP_SCALE, mapChild = false
     );
 }
 
-export function spawnObjects(k, map, { layers, player, firstScene, doors }) {
+export function spawnObjects(
+    k, 
+    map, 
+    { 
+        layers, 
+        player, 
+        firstScene, 
+        doors = [], 
+        tileset
+    }
+) {
     const crosshair = k.make([
         k.sprite("crosshair", { anim: "idle" }),
         k.anchor("center"),
@@ -48,6 +60,28 @@ export function spawnObjects(k, map, { layers, player, firstScene, doors }) {
     ]);
 
     for (const layer of layers) {
+        if (layer?.data) {
+            layer.data.forEach((e, index) => {
+                if (e === 0) return;
+                const spriteName = layer.name;
+                const pos = { x: index % layer.width * 16, y: Math.floor(index / layer.width) * 16 };
+
+                k.loadSprite(spriteName, `./sprites/${tileset.name}.png`, {
+                    sliceX: tileset.width,
+                    sliceY: tileset.height,
+                    anims: {
+                        "idle": e - 1 // first GID is 1
+                    }
+                });
+                k.add([
+                    k.sprite(spriteName, { anim: "idle" }),
+                    k.scale(MAP_SCALE),
+                    k.pos(scaleToMap(k, map, pos)),
+                    spriteName
+                ]);
+            });
+        }
+
         if (layer.name === "spawn points") {
             for (const entity of layer.objects) {
                 if (entity.name === "player") {
@@ -56,8 +90,6 @@ export function spawnObjects(k, map, { layers, player, firstScene, doors }) {
                     k.add(player);
                 } else {
                     k.add([
-                        k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
-                        k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
                         entity.name
                     ]);
@@ -72,26 +104,6 @@ export function spawnObjects(k, map, { layers, player, firstScene, doors }) {
         makeGun(k, player, player.guns[player.gunIndex]);
         crosshair.onUpdate(() => crosshair.pos = k.toWorld(k.mousePos()));
     }
-
-    k.onResize(() => {
-        setCamScale(k);
-        const oldMapPos = map.pos;
-        map.pos = k.vec2(k.center());
-        // center offset
-        map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
-
-        for (const layer of layers) {
-            if (layer.name === "spawn points") {
-                for (const entity of layer.objects) {
-                    if (entity.name === "player") {
-                        player.pos = scaleToMap(k, map, player.pos.sub(oldMapPos).scale(1 / MAP_SCALE));
-                    } else {
-                        k.get(entity.name)[0].pos = scaleToMap(k, map, entity);
-                    }
-                }
-            }
-        }
-    });
 }
 
 export function makeBoundaries(k, map, layer) {
@@ -170,16 +182,8 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                         const sceneName = k.getSceneName();
                         if (gameState.firstScene[sceneName]) {
                             gameState.firstScene[sceneName] = false;
-                            // screen shake for first door
-                            if (sceneName === "room") {
-                                player.inDialogue = true;
-                                k.shake();
-                                k.wait(1, () => {
-                                    player.inDialogue = false;
-                                    k.go(name, { player, gameState });
-                                });
-                            } else k.go(name, { player, gameState });
-                        } else k.go(name, { player, gameState });
+                        }
+                        k.go(name, { player, gameState });
                     }
                 }
             });
@@ -193,15 +197,9 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
 
 export function orderByY(k) {
     k.onUpdate(() => {
-        k.get("*").filter(e => Object.hasOwn(e, "pos")).toSorted((a, b) => a.pos.y - b.pos.y).forEach((e, index) => e.z = index + 1);
+        k.query({
+            include: "*",
+            exclude: ["Ground"]
+        }).filter(e => Object.hasOwn(e, "pos")).toSorted((a, b) => a.pos.y - b.pos.y).forEach((e, index) => e.z = index + 1);
     });
-}
-
-export function setCamScale(k) {
-    if (k.width() < 1000) {
-        k.setCamScale(k.vec2(0.8));
-        return;
-    }
-
-    k.setCamScale(k.vec2(1));
 }

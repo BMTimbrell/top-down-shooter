@@ -3,6 +3,7 @@ import makePlayer from './entities/player';
 import loadAssets from './loadAssets';
 import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
+import level1Room1 from './scenes/level1-room1';
 
 import { menuAtom, playerInfoAtom, store } from "./store";
 
@@ -20,6 +21,8 @@ export default function initGame() {
 
     mainLobby(k);
 
+    level1Room1(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = k.make([
@@ -29,7 +32,8 @@ export default function initGame() {
             time: 1,
             firstScene: {
                 "room": true,
-                "main lobby": true
+                "main lobby": true,
+                "1-1": true
             }
         }
     ]);
@@ -86,5 +90,5 @@ export default function initGame() {
         }
     });
     
-    k.go("room", { player, gameState });
+    k.go("1-1", { player, gameState });
 }

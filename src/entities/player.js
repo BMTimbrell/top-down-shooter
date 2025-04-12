@@ -83,6 +83,8 @@ export default function makePlayer(k, posVec2) {
     }
 
     function equipGun(index = 0) {
+        if (!player.onMission) return;
+
         // reset reload when changing guns
         if (player.reloading) {
             player.reloading = false;
@@ -157,6 +159,7 @@ export default function makePlayer(k, posVec2) {
     let reloadWait = null;
 
     function reload() {
+        if (!player.onMission) return;
         const gun = player.guns[player.gunIndex];
         if (gun.ammo <= 0 || gun.clip === gun.clipSize) return;
 
@@ -204,8 +207,6 @@ export default function makePlayer(k, posVec2) {
     }
 
     player.use({ setOnMission, setPlayerDashing, equipGun, addGun, loseAmmo, reload });
-
-    player.setOnMission(true);
 
     let mWheel = '';
 

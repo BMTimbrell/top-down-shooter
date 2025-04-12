@@ -46,50 +46,52 @@ export default function GameInfo() {
                 </div>
             </div>
 
-            <div className={styles["bottom-container"]}>
-                <div className={styles["ability-container"]}>
-                    <div style={{ '--cd-percent': `${cooldwns.dash * 100}%` }} className={styles.dash}>
-                        <img
-                            src="./sprites/dash-icon-4.png"
-                            className={styles["dash-icon"]}
-                            style={{ opacity: cooldwns.dash > 0.98 ? 1 : 0.5 }}
-                        />
-                    </div>
-                </div>
-                
-                <GunContainer>
-                    {guns.map((gun, index) => (
-                        <div 
-                            key={index}
-                            className={`${styles["gun-card"]} ${(index === gameInfo.gunIndex ? styles["active-gun"] : "")}`}
-                        >
-                            {/* Equipped gun */}
-                            {index === gameInfo.gunIndex && (
-                                <>
-                                    <div className={styles.ammo}>
-                                        {`${guns[index].ammo}/${guns[index].maxAmmo}`}
-                                    </div>
-
-                                    <ReloadBar percent={cooldwns.reload * 100} clip={`${gun.clip}/${gun.clipSize}`} />
-                                </>
-                            )}
-
-                            <Gun
-                                spritePos={gun.spritePos}
-                                name={gun.name}
-                                damage={gun.damage}
-                                firingInterval={gun.firingInterval}
-                                animSpeed={gun.animSpeed}
+            {gameInfo.onMission && (
+                <div className={styles["bottom-container"]}>
+                    <div className={styles["ability-container"]}>
+                        <div style={{ '--cd-percent': `${cooldwns.dash * 100}%` }} className={styles.dash}>
+                            <img
+                                src="./sprites/dash-icon-4.png"
+                                className={styles["dash-icon"]}
+                                style={{ opacity: cooldwns.dash > 0.98 ? 1 : 0.5 }}
                             />
                         </div>
-                    ))}
+                    </div>
+                    
+                    <GunContainer>
+                        {guns.map((gun, index) => (
+                            <div 
+                                key={index}
+                                className={`${styles["gun-card"]} ${(index === gameInfo.gunIndex ? styles["active-gun"] : "")}`}
+                            >
+                                {/* Equipped gun */}
+                                {index === gameInfo.gunIndex && (
+                                    <>
+                                        <div className={styles.ammo}>
+                                            {`${guns[index].ammo}/${guns[index].maxAmmo}`}
+                                        </div>
 
-                    {emptySlots.length > 0 && emptySlots.map((_, index) => ( 
-                        <div key={index} className={styles["gun-card"]}>
-                        </div>
-                    ))}
-                </GunContainer>
-            </div>
+                                        <ReloadBar percent={cooldwns.reload * 100} clip={`${gun.clip}/${gun.clipSize}`} />
+                                    </>
+                                )}
+
+                                <Gun
+                                    spritePos={gun.spritePos}
+                                    name={gun.name}
+                                    damage={gun.damage}
+                                    firingInterval={gun.firingInterval}
+                                    animSpeed={gun.animSpeed}
+                                />
+                            </div>
+                        ))}
+
+                        {emptySlots.length > 0 && emptySlots.map((_, index) => ( 
+                            <div key={index} className={styles["gun-card"]}>
+                            </div>
+                        ))}
+                    </GunContainer>
+                </div>
+            )}
         </>
     );
 }

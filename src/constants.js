@@ -29,7 +29,7 @@ export const GUNS = {
 
     shotgun: {
         damage: 2,
-        firingInterval: 5,
+        firingInterval: 0,
         animSpeed: 10,
         clipSize: 5,
         maxAmmo: 150,
