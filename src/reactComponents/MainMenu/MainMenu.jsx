@@ -7,6 +7,7 @@ import { useAtom } from 'jotai';
 import BackButton from '../Button/BackButton';
 import ExpBar from '../ExpBar/ExpBar';
 import { useRef } from 'react';
+import Modal from '../Modal/Modal';
 
 export default function MainMenu({ buttons }) {
     const [playerInfo, setPlayerInfo] = useAtom(playerInfoAtom);
@@ -16,7 +17,7 @@ export default function MainMenu({ buttons }) {
     const weaponLvl = playerInfo.data.exp.weaponLvl;
 
     return (
-        <div ref={menuRef} className={styles.menu}>
+        <Modal ref={menuRef}>
             {playerInfo.visible ? (
                 <div className={styles["player-info"]}>
                     <h1>Player Info</h1>
@@ -61,6 +62,6 @@ export default function MainMenu({ buttons }) {
                     ))}
                 </div>
             )}
-        </div>
+        </Modal>
     );
 }

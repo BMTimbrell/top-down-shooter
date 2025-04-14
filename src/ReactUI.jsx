@@ -2,13 +2,15 @@ import Popup from './reactComponents/Popup/Popup';
 import DialogueBox from './reactComponents/DialogueBox/DialogueBox';
 import MainMenu from './reactComponents/MainMenu/MainMenu';
 import GameInfo from './reactComponents/GameInfo/GameInfo';
-import { dialogueAtom, popupAtom, menuAtom } from './store';
+import InfoBox from './reactComponents/InfoBox/InfoBox';
+import { dialogueAtom, popupAtom, menuAtom, infoBoxAtom } from './store';
 import { useAtom } from 'jotai';
 
 export default function ReactUI() {
     const [popup] = useAtom(popupAtom);
     const [dialogue, setDialogue] = useAtom(dialogueAtom);
     const [menu] = useAtom(menuAtom);
+    const [infoBox] = useAtom(infoBoxAtom);
 
     return (
         <>
@@ -23,6 +25,10 @@ export default function ReactUI() {
                     skipDialogue={dialogue.skip}
                     setDialogue={setDialogue}
                 />
+             }
+
+             {infoBox.visible &&
+                <InfoBox />
              }
 
              {menu.visible && 

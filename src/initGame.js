@@ -3,9 +3,9 @@ import makePlayer from './entities/player';
 import loadAssets from './loadAssets';
 import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
-import level1Room1 from './scenes/level1-room1';
+import level1 from './scenes/level1';
 
-import { menuAtom, playerInfoAtom, store } from "./store";
+import { menuAtom, playerInfoAtom, infoBoxAtom, store } from "./store";
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -21,7 +21,7 @@ export default function initGame() {
 
     mainLobby(k);
 
-    level1Room1(k);
+    level1(k);
 
     const player = makePlayer(k, k.vec2(0));
 
@@ -33,7 +33,7 @@ export default function initGame() {
             firstScene: {
                 "room": true,
                 "main lobby": true,
-                "1-1": true
+                "level1": true
             }
         }
     ]);
@@ -43,33 +43,36 @@ export default function initGame() {
             // set data to show in menu
             if (!store.get(menuAtom).visible) {
                 store.set(
-                    menuAtom, 
+                    menuAtom,
                     prev => ({
-                         ...prev, 
-                         buttons: [
-                            { name: "Resume", onClick: () => {
-                                store.set(menuAtom, prev => ({ ...prev, visible: false}));
-                                k.query({
-                                    include: "*",
-                                    exclude: "gameState"
-                                }).forEach(e => e.paused = false);
-                            }}, 
-                            { 
-                                name: "Player Info", 
+                        ...prev,
+                        buttons: [
+                            {
+                                name: "Resume", 
+                                onClick: () => {
+                                    store.set(menuAtom, prev => ({ ...prev, visible: false }));
+                                    k.query({
+                                        include: "*",
+                                        exclude: "gameState"
+                                    }).forEach(e => e.paused = false);
+                                }
+                            },
+                            {
+                                name: "Player Info",
                                 onClick: () => store.set(playerInfoAtom, {
                                     visible: true,
                                     data: {
-                                        guns: player.guns, 
-                                        exp: { 
-                                            mind: player.mind, 
-                                            body: player.body, 
-                                            weaponLvl: player.weaponLvl 
+                                        guns: player.guns,
+                                        exp: {
+                                            mind: player.mind,
+                                            body: player.body,
+                                            weaponLvl: player.weaponLvl
                                         }
-                                    } 
-                                }) 
-                            }, 
+                                    }
+                                })
+                            },
                             { name: "Exit to Main Menu" }
-                        ] 
+                        ]
                     })
                 );
             } else {
@@ -82,13 +85,21 @@ export default function initGame() {
 
             // toggle game pause and menu visibility
             store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible }));
+        }
 
+        if (store.get(menuAtom).visible || store.get(infoBoxAtom).visible) {
             k.query({
                 include: "*",
                 exclude: ["gameState"]
-            }).forEach(e => e.paused = store.get(menuAtom).visible);
+            }).forEach(e => e.paused = true);
+        } else {
+            k.query({
+                include: "*",
+                exclude: ["gameState"]
+            }).forEach(e => e.paused = false);
         }
+
     });
-    
-    k.go("1-1", { player, gameState });
+
+    k.go("level1", { player, gameState });
 }

@@ -1,4 +1,4 @@
-export default function makeProjectile(k, gun, { name }) {
+export default function makeProjectile(k, gun, { name, lifespan = 1.5 }) {
     const projectile = k.add([
         k.sprite(name, { anim: "idle" }),
         k.pos(gun.worldPos()),
@@ -10,11 +10,23 @@ export default function makeProjectile(k, gun, { name }) {
         }),
         name,
         k.move(k.toWorld(k.mousePos()).angle(gun.worldPos()), 700),
-        k.offscreen({ destroy: true }),
+        k.offscreen({ hide: true }),
+        {
+            lifespan
+        },
+        k.timer()
     ]);
 
-    projectile.onCollide("boundary", () => {
+    projectile.wait(projectile.lifespan, () => {
         k.destroy(projectile);
+    });
+
+    const collisions = ["boulder", "boundary"];
+
+    projectile.onCollide(obj => {
+        if (collisions.some(e => obj.is(e))) {
+            k.destroy(projectile);
+        }
     });
 
     return projectile;

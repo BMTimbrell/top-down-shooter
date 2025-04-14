@@ -1,3 +1,4 @@
+import { infoBoxAtom, store } from '../store';
 import {
     makeMap,
     spawnObjects,
@@ -6,15 +7,15 @@ import {
     orderByY
 } from '../utils';
 
-export default function level1Room1(k) {
-    k.scene("1-1", async ({ player, gameState }) => {
+export default function level1(k) {
+    k.scene("level1", async ({ player, gameState }) => {
 
         player.setOnMission(true);
 
-        const roomData = await (await fetch("./data/level1-room1.json")).json();
+        const roomData = await (await fetch("./data/level1.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "1-1", { layers, gameState });
+        const map = makeMap(k, "level1", { layers, gameState });
 
         spawnObjects(
             k,
@@ -22,7 +23,7 @@ export default function level1Room1(k) {
             {
                 layers,
                 player,
-                firstScene: gameState.firstScene["1-1"],
+                firstScene: gameState.firstScene["level1"],
                 tileset: {
                     name: "rocky-tileset",
                     width: 9,
@@ -49,6 +50,15 @@ export default function level1Room1(k) {
                 );
             }
         }
+
+        k.wait(0.1, () => {
+            store.set(infoBoxAtom, prev => ({
+                ...prev,
+                visible: true,
+                text: "W, A, S, D to move. Left click to shoot."
+            }));
+
+        });
 
     });
 }

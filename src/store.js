@@ -20,10 +20,14 @@ export const dialogueAtom = atom({
     skip: false
 });
 
+export const infoBoxAtom = atom({
+    visible: false,
+    text: ""
+});
+
 export const menuAtom = atom({
     visible: false,
-    buttons: [],
-    
+    buttons: []
 });
 
 export const playerInfoAtom = atom({

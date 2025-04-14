@@ -56,9 +56,9 @@ export default function loadAssets(k) {
     });
 
     // maps
-    k.loadSprite("room", "./sprites/room.png");
-    k.loadSprite("main lobby", "./sprites/main-lobby.png");
-    k.loadSprite("1-1", "./sprites/level1-room1.png");
+    // k.loadSprite("room", "./sprites/room.png");
+    // k.loadSprite("main lobby", "./sprites/main-lobby.png");
+    // k.loadSprite("1-1", "./sprites/level1-room1.png");
 
     k.loadSpriteAtlas("./sprites/Tileset.png", {
         "bed": {
@@ -107,8 +107,8 @@ export default function loadAssets(k) {
 
     k.loadSpriteAtlas("./sprites/rocky-tileset.png", {
         "boulder": {
-            x: 288,
-            y: 0,
+            x: 48,
+            y: 144,
             width: 32,
             height: 32
         }

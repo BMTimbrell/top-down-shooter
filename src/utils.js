@@ -89,11 +89,27 @@ export function spawnObjects(
                     player.pos = scaleToMap(k, map, pos);
                     k.add(player);
                 } else {
+                    const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
+ 
                     k.add([
+                        k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
+                        k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
-                        entity.name
+                        k.offscreen({ hide: true }),
+                        entity.name,
+                        ... boundary ? [
+                            k.area({
+                                shape: new k.Rect(
+                                    k.vec2(0), 
+                                    JSON.parse(boundary).width, 
+                                    JSON.parse(boundary).height
+                                ),
+                                
+                            }),
+                            k.body({ isStatic: true })
+                        ] : ""
                     ]);
-                }    
+                }
             }
         }
     }
