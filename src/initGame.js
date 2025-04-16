@@ -88,17 +88,14 @@ export default function initGame() {
         }
 
         if (store.get(menuAtom).visible || store.get(infoBoxAtom).visible) {
-            k.query({
-                include: "*",
-                exclude: ["gameState"]
-            }).forEach(e => e.paused = true);
+            k.query([]).forEach(e => {
+                if (!e.is("gameState") && !e.is("crosshair")) {
+                    e.paused = true;
+                }
+            });
         } else {
-            k.query({
-                include: "*",
-                exclude: ["gameState"]
-            }).forEach(e => e.paused = false);
+            k.query([]).forEach(e => e.paused = false);
         }
-
     });
 
     k.go("level1", { player, gameState });

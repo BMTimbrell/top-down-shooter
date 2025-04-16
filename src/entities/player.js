@@ -22,7 +22,7 @@ export default function makePlayer(k, posVec2) {
             directionVector: k.vec2(0),
             isDashing: false,
             dashCd: 3,
-            reloadCd: 2,
+            reloadCd: 1.5,
             dashOnCd: false,
             dashLength: 400,
             onMission: false,
@@ -35,8 +35,8 @@ export default function makePlayer(k, posVec2) {
             ],
             gunIndex: 0,
             maxGuns: 3,
-            mind: { level: 1, exp: 25, maxExp: 50 },
-            body: { level: 1, exp: 5, maxExp: 50 },
+            mind: { level: 1, exp: 0, maxExp: 50 },
+            body: { level: 1, exp: 0, maxExp: 50 },
             weaponLvl: { level: 1, exp: 0, maxExp: 50 }
         }
     ]);

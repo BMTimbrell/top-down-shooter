@@ -56,7 +56,8 @@ export function spawnObjects(
         k.anchor("center"),
         k.scale(3),
         k.pos(k.toWorld(k.mousePos())),
-        "crosshair"
+        "crosshair",
+        k.z(999999999999999)
     ]);
 
     for (const layer of layers) {
@@ -212,10 +213,11 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
 }
 
 export function orderByY(k) {
+    const exclude = ["Ground", "crosshair"];
+
     k.onUpdate(() => {
-        k.query({
-            include: "*",
-            exclude: ["Ground"]
-        }).filter(e => Object.hasOwn(e, "pos")).toSorted((a, b) => a.pos.y - b.pos.y).forEach((e, index) => e.z = index + 1);
+        k.query([]).filter(e => !exclude.some(e2 => e.is(e2)) && Object.hasOwn(e, "pos")).
+            toSorted((a, b) => a.pos.y - b.pos.y).
+            forEach((e, index) => e.z = index + 1);
     });
 }
