@@ -8,9 +8,9 @@ export default function makePlayer(k, posVec2) {
     const player = k.make([
         k.sprite("player", { anim: "idle" }),
         k.scale(5),
-        k.anchor("center"),
+        k.anchor(k.vec2(0, 0.6)),
         k.area({
-            shape: new k.Rect(k.vec2(0, 10), 10, 10)
+            shape: new k.Rect(k.vec2(0, 3), 10, 12)
         }),
         k.body(),
         k.pos(posVec2),
@@ -24,7 +24,7 @@ export default function makePlayer(k, posVec2) {
             dashCd: 3,
             reloadCd: 1.5,
             dashOnCd: false,
-            dashLength: 400,
+            dashSpeed: 500,
             onMission: false,
             inDialogue: false,
             reloading: false,
@@ -260,16 +260,16 @@ export default function makePlayer(k, posVec2) {
             // dash direction facing if not moving
             if (player.directionVector.eq(k.vec2(0))) {
                 if (player.flipX) {
-                    player.move(k.vec2(-1, 0).scale(player.dashLength));
+                    player.move(k.vec2(-1, 0).scale(player.dashSpeed));
                 } else {
-                    player.move(k.vec2(1, 0).scale(player.dashLength));
+                    player.move(k.vec2(1, 0).scale(player.dashSpeed));
                 }
             }
             // move same speed diagonally as horizontal and vertically
             if (player.directionVector.x && player.directionVector.y) {
-                player.move(player.directionVector.scale(DIAGONAL_FACTOR * player.dashLength));
+                player.move(player.directionVector.scale(DIAGONAL_FACTOR * player.dashSpeed));
             } else {
-                player.move(player.directionVector.scale(player.dashLength));
+                player.move(player.directionVector.scale(player.dashSpeed));
             }
             player.onAnimEnd(() => {
                 player.isDashing = false;

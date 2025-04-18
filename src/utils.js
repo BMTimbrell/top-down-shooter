@@ -4,7 +4,8 @@ import {
     dialogueAtom,
 } from './store';
 import makeGun from "./entities/gun";
-import { MAP_SCALE } from './constants';
+import { MAP_SCALE, TILE_SIZE } from './constants';
+import makeEnemy from './entities/enemy';
 
 export function makeMap(k, name, { layers, gameState }) {
     k.add(gameState);
@@ -28,15 +29,11 @@ export function makeMap(k, name, { layers, gameState }) {
     return map;
 }
 
-export function scaleToMap(k, map, entity, { scale = MAP_SCALE, mapChild = false } = {}) {
-    // child of map object has positioning based on map pos
-    const startPos = {
-        x: !mapChild ? map.pos.x : 0,
-        y: !mapChild ? map.pos.y : 0
-    }
+export function scaleToMap(k, map, entity, { center = true } = {}) {
+
     return k.vec2(
-        startPos.x + (entity.x * scale), 
-        startPos.y + (entity.y * scale)
+        map.pos.x  + ((entity.x - (center ? TILE_SIZE / 2 : 0))  * MAP_SCALE), 
+        map.pos.y + ((entity.y - (center ? TILE_SIZE / 2 : 0)) * MAP_SCALE)
     );
 }
 
@@ -61,6 +58,7 @@ export function spawnObjects(
     ]);
 
     for (const layer of layers) {
+        // draw all tiles
         if (layer?.data) {
             layer.data.forEach((e, index) => {
                 if (e === 0) return;
@@ -77,7 +75,8 @@ export function spawnObjects(
                 k.add([
                     k.sprite(spriteName, { anim: "idle" }),
                     k.scale(MAP_SCALE),
-                    k.pos(scaleToMap(k, map, pos)),
+                    k.anchor("center"),
+                    k.pos(scaleToMap(k, map, pos, { center: false })),
                     spriteName
                 ]);
             });
@@ -89,11 +88,15 @@ export function spawnObjects(
                     const pos = firstScene || map.tags[1] !== "room" ? entity : k.vec2(entity.x, entity.y - 40);
                     player.pos = scaleToMap(k, map, pos);
                     k.add(player);
+                } else if (entity.name.substring(0, 5) === "enemy") {
+                    const name = entity.name.substring(5).toLowerCase();
+                    makeEnemy(k, scaleToMap(k, map, entity), name, map);
                 } else {
                     const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
  
                     k.add([
                         k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
+                        k.anchor("center"),
                         k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
                         k.offscreen({ hide: true }),
@@ -125,12 +128,12 @@ export function spawnObjects(
 
 export function makeBoundaries(k, map, layer) {
     for (const boundary of layer.objects) {
-        map.add([
+        k.add([
             k.area({
-                shape: new k.Rect(k.vec2(0), boundary.width, boundary.height)
+                shape: new k.Rect(k.vec2(0), boundary.width * MAP_SCALE, boundary.height * MAP_SCALE)
             }),
             k.body({ isStatic: true }),
-            k.pos(scaleToMap(k, map, boundary, { scale: 1, mapChild: true })),
+            k.pos(scaleToMap(k, map, boundary)),
             "boundary"
         ]);
     }
@@ -139,11 +142,11 @@ export function makeBoundaries(k, map, layer) {
 export function makeObjectInteractions(k, map, { layer, player, gameState, doors }) {
     for (const entity of layer.objects) {
         if (entity.name) {
-            map.add([
+            k.add([
                 k.area({
-                    shape: new k.Rect(k.vec2(0), entity.width, entity.height)
+                    shape: new k.Rect(k.vec2(0), entity.width * MAP_SCALE, entity.height * MAP_SCALE)
                 }),
-                k.pos(scaleToMap(k, map, entity, { scale: 1, mapChild: true })),
+                k.pos(scaleToMap(k, map, entity)),
                 entity.name
             ]);
 

@@ -12,6 +12,7 @@ export default function loadAssets(k) {
         }
     });
 
+    // guns
     k.loadSprite("pistol", "./sprites/weapons.png", {
         sliceX: 8,
         sliceY: 36,
@@ -39,6 +40,7 @@ export default function loadAssets(k) {
         }
     });
 
+    // projectiles
     k.loadSprite("bullet", "./sprites/bullets3.png", {
         sliceX: 25,
         sliceY: 1,
@@ -55,11 +57,7 @@ export default function loadAssets(k) {
         }
     });
 
-    // maps
-    // k.loadSprite("room", "./sprites/room.png");
-    // k.loadSprite("main lobby", "./sprites/main-lobby.png");
-    // k.loadSprite("1-1", "./sprites/level1-room1.png");
-
+    // objects
     k.loadSpriteAtlas("./sprites/Tileset.png", {
         "bed": {
             x: 240,
@@ -111,6 +109,16 @@ export default function loadAssets(k) {
             y: 144,
             width: 32,
             height: 32
+        }
+    });
+
+    // enemies
+    k.loadSprite("bird", "./sprites/bird.png", {
+        sliceX: 1,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            // "walk": { from: 4, to: 7, loop: true, speed: 6 }
         }
     });
 }

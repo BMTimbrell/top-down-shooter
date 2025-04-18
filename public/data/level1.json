@@ -211,8 +211,44 @@
                  "type":"",
                  "visible":true,
                  "width":0,
+                 "x":128,
+                 "y":16
+                }, 
+                {
+                 "height":0,
+                 "id":32,
+                 "name":"enemyBird",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":32,
+                 "y":48
+                }, 
+                {
+                 "height":0,
+                 "id":33,
+                 "name":"enemyBird",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":192,
+                 "y":48
+                }, 
+                {
+                 "height":0,
+                 "id":34,
+                 "name":"enemyBird",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
                  "x":112,
-                 "y":0
+                 "y":80
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -221,7 +257,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":32,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

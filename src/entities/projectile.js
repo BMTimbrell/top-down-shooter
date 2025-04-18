@@ -21,7 +21,7 @@ export default function makeProjectile(k, gun, { name, lifespan = 1.5 }) {
         k.destroy(projectile);
     });
 
-    const collisions = ["boulder", "boundary"];
+    const collisions = ["boulder", "boundary", "enemy"];
 
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e))) {

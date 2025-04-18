@@ -6,7 +6,11 @@ export const DIAGONAL_FACTOR = 1 / Math.sqrt(2);
 
 export const MAP_SCALE = 4;
 
-export const GUN_OFFSET = 55;
+export const TILE_SIZE = 16;
+
+export const CELL_SIZE = TILE_SIZE * MAP_SCALE;
+
+export const GUN_OFFSET = 5;
 
 export const GUNS = {
     pistol: {
