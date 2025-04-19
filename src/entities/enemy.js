@@ -14,7 +14,8 @@ export default function makeEnemy(k, pos, name, map) {
         k.timer(),
         "enemy",
         {
-            path: []
+            path: [],
+            shooting: false
         }
     ]);
 
@@ -31,21 +32,31 @@ export default function makeEnemy(k, pos, name, map) {
         this.parent = null;
         this.neighbors = [];
 
-        this.updateNeighbors = function(grid) {
+        this.updateNeighbors = function (grid) {
             const i = this.x;
             const j = this.y;
 
-            if (i < cols - 1 && grid[i + 1][j].passable) {
-                this.neighbors.push(grid[i + 1][j]);
+            const isPassable = (x, y) =>
+                x >= 0 && y >= 0 && x < cols && y < rows && grid[x][y].passable;
+
+            // Cardinal directions
+            if (isPassable(i + 1, j)) this.neighbors.push(grid[i + 1][j]);
+            if (isPassable(i - 1, j)) this.neighbors.push(grid[i - 1][j]);
+            if (isPassable(i, j + 1)) this.neighbors.push(grid[i][j + 1]);
+            if (isPassable(i, j - 1)) this.neighbors.push(grid[i][j - 1]);
+
+            // Diagonals (only if both adjacent sides are also passable)
+            if (isPassable(i + 1, j) && isPassable(i, j + 1) && isPassable(i + 1, j + 1)) {
+                this.neighbors.push(grid[i + 1][j + 1]);
             }
-            if (i > 0 && grid[i - 1][j].passable) {
-                this.neighbors.push(grid[i - 1][j]);
+            if (isPassable(i - 1, j) && isPassable(i, j + 1) && isPassable(i - 1, j + 1)) {
+                this.neighbors.push(grid[i - 1][j + 1]);
             }
-            if (j < rows - 1 && grid[i][j + 1].passable) {
-                this.neighbors.push(grid[i][j + 1]);
+            if (isPassable(i + 1, j) && isPassable(i, j - 1) && isPassable(i + 1, j - 1)) {
+                this.neighbors.push(grid[i + 1][j - 1]);
             }
-            if (j > 0 && grid[i][j - 1].passable) {
-                this.neighbors.push(grid[i][j - 1]);
+            if (isPassable(i - 1, j) && isPassable(i, j - 1) && isPassable(i - 1, j - 1)) {
+                this.neighbors.push(grid[i - 1][j - 1]);
             }
         }
     }
@@ -58,11 +69,13 @@ export default function makeEnemy(k, pos, name, map) {
             for (let j = 0; j < rows; j++) {
                 const enemyWidth = enemy.area.shape.width * 4;
                 const enemyHeight = enemy.area.shape.height * 4;
+                const padding = CELL_SIZE;
+
                 const cell = {
-                    x: map.pos.x + i * CELL_SIZE - enemyWidth / 2,
-                    y: map.pos.y + j * CELL_SIZE - enemyHeight / 2,
-                    width: enemyWidth,
-                    height: enemyHeight
+                    x: map.pos.x + i * CELL_SIZE - (enemyWidth / 2) - padding,
+                    y: map.pos.y + j * CELL_SIZE - (enemyHeight / 2) - padding,
+                    width: enemyWidth + padding * 2,
+                    height: enemyHeight + padding * 2
                 };
 
                 const blockers = k.get("*").filter(obj => obj.has("body") && obj.has("area") && !obj.is("player") && !obj.is("enemy"));
@@ -82,11 +95,11 @@ export default function makeEnemy(k, pos, name, map) {
                     //         }
                     //     }
                     // ]);
-                    
+
                 }
 
                 grid[i][j] = new GridPoint(i, j, !blocked);
-                
+
             }
         }
 
@@ -101,9 +114,9 @@ export default function makeEnemy(k, pos, name, map) {
 
     function findNearestWalkable(grid, targetX, targetY) {
         const candidates = [];
-    
-        for (let dx = -1; dx <= 1; dx++) {
-            for (let dy = -1; dy <= 1; dy++) {
+
+        for (let dx = -2; dx <= 2; dx++) {
+            for (let dy = -2; dy <= 2; dy++) {
                 const x = targetX + dx;
                 const y = targetY + dy;
                 if (
@@ -115,9 +128,9 @@ export default function makeEnemy(k, pos, name, map) {
                 }
             }
         }
-    
+
         if (candidates.length === 0) return null;
-    
+
         // Return the closest candidate to the enemy
         return candidates.sort((a, b) => {
             const aDist = Math.abs(a.x - targetX) + Math.abs(a.y - targetY);
@@ -141,12 +154,12 @@ export default function makeEnemy(k, pos, name, map) {
         const closedSet = [];
 
         function heuristic(pos1, pos2) {
-            let d1 = Math.abs(pos2.x - pos1.x);
-            let d2 = Math.abs(pos2.y - pos1.y);
-          
-            return d1 + d2;
+            const dx = Math.abs(pos2.x - pos1.x);
+            const dy = Math.abs(pos2.y - pos1.y);
+
+            return dx + dy + (1.41 - 2) * Math.min(dx, dy);
         }
-        
+
         while (openSet.length > 0) {
             let lowestIndex = 0;
             for (let i = 0; i < openSet.length; i++) {
@@ -179,7 +192,9 @@ export default function makeEnemy(k, pos, name, map) {
                 const neighbor = neighbors[i];
 
                 if (!closedSet.includes(neighbor)) {
-                    const possibleG = current.g + 1;
+                    const possibleG = current.g + (
+                        (neighbor.x !== current.x && neighbor.y !== current.y) ? 1.41 : 1
+                    );
 
                     if (!openSet.includes(neighbor)) {
                         openSet.push(neighbor);
@@ -217,7 +232,7 @@ export default function makeEnemy(k, pos, name, map) {
                 obj1.y + obj1.height > obj2.pos.y
             );
         }
-        
+
         return false;
     }
 
@@ -231,7 +246,7 @@ export default function makeEnemy(k, pos, name, map) {
         for (let i = 0; i <= steps; i++) {
             const x = from.x + (dx * i) / steps;
             const y = from.y + (dy * i) / steps;
-            
+
             for (const b of blockers) {
                 if (hasOverlap(k.vec2(x, y), b)) {
                     return false;
@@ -244,16 +259,17 @@ export default function makeEnemy(k, pos, name, map) {
 
     let pathTimer = k.rand(0, 1);
     let stuckTimer = 0;
+    let shootTimer = 0;
     // let path = [];
     enemy.onUpdate(() => {
         const player = k.get("player")[0];
-        
+
         if (hasLineOfSight(enemy.pos, player.pos)) {
             enemy.use(k.color("#ff00ff"));
         } else enemy.unuse("color");
 
         pathTimer -= k.dt();
-        if (pathTimer <= 0) {
+        if (pathTimer <= 0 && !hasLineOfSight(enemy.pos, player.pos)) {
             enemy.path = aStar(player);
             pathTimer = k.rand(0, 1);
             // k.add([
@@ -273,7 +289,7 @@ export default function makeEnemy(k, pos, name, map) {
         }
 
         if (enemy.path?.length > 1) {
-            if (enemy.pos.dist(enemy.path[0]) < 50) {
+            if (enemy.pos.dist(enemy.path[0]) < 100) {
                 stuckTimer = 0;
                 enemy.path.shift();
             } else {
@@ -286,7 +302,7 @@ export default function makeEnemy(k, pos, name, map) {
 
             enemy.moveTo(enemy.path[0], 200);
         }
-        
+
     });
 
     return enemy;
