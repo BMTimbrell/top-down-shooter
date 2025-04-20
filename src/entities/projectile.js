@@ -1,4 +1,6 @@
-export default function makeProjectile(k, gun, { name, lifespan = 1.5 }) {
+export default function makeProjectile(k, gun, { name, lifespan = 1.5, friendly = true }) {
+    const target = friendly ? k.toWorld(k.mousePos()) : k.get("player")[0].pos;
+
     const projectile = k.add([
         k.sprite(name, { anim: "idle" }),
         k.pos(gun.worldPos()),
@@ -25,6 +27,9 @@ export default function makeProjectile(k, gun, { name, lifespan = 1.5 }) {
 
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e))) {
+            if (obj.is("enemy")) {
+                obj.hurt(gun.damage);
+            }
             k.destroy(projectile);
         }
     });

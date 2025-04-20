@@ -238,7 +238,7 @@ export default function makePlayer(k, posVec2) {
                 ...prev,
                 rBarPos: {
                     x: player.screenPos().x,
-                    y: player.screenPos().y - 20
+                    y: player.screenPos().y - 65
                 }
             }));
         }

@@ -1,4 +1,5 @@
 import { CELL_SIZE } from "../constants";
+import { useFlash } from '../utils';
 
 export default function makeEnemy(k, pos, name, map) {
     const enemy = k.add([
@@ -12,12 +13,24 @@ export default function makeEnemy(k, pos, name, map) {
         k.body(),
         k.pos(pos),
         k.timer(),
+        k.health(3, 3),
         "enemy",
         {
             path: [],
-            shooting: false
+            shooting: false,
+            firingSpeed: 3
         }
     ]);
+
+    useFlash(k, enemy);
+
+    enemy.on("hurt", () => {
+        enemy.flash();
+    });
+
+    enemy.on("death", () => {
+        enemy.destroy();
+    });
 
     const cols = 15;
     const rows = 15;
@@ -259,17 +272,22 @@ export default function makeEnemy(k, pos, name, map) {
 
     let pathTimer = k.rand(0, 1);
     let stuckTimer = 0;
-    let shootTimer = 0;
+    const shootDistance = k.rand(100, 500);
+
     // let path = [];
     enemy.onUpdate(() => {
         const player = k.get("player")[0];
 
-        if (hasLineOfSight(enemy.pos, player.pos)) {
-            enemy.use(k.color("#ff00ff"));
-        } else enemy.unuse("color");
+        // if (hasLineOfSight(enemy.pos, player.pos)) {
+        //     enemy.use(k.color("#ff00ff"));
+        // } else enemy.unuse("color");
 
         pathTimer -= k.dt();
-        if (pathTimer <= 0 && !hasLineOfSight(enemy.pos, player.pos)) {
+        
+        if (
+            pathTimer <= 0 && 
+            (enemy.pos.dist(player.pos) > shootDistance || !hasLineOfSight(enemy.pos, player.pos))
+        ) {
             enemy.path = aStar(player);
             pathTimer = k.rand(0, 1);
             // k.add([
@@ -288,20 +306,23 @@ export default function makeEnemy(k, pos, name, map) {
             // ]);
         }
 
-        if (enemy.path?.length > 1) {
+        if (
+            enemy.path?.length > 1 && 
+            (enemy.pos.dist(player.pos) > shootDistance || !hasLineOfSight(enemy.pos, player.pos))
+        ) {
             if (enemy.pos.dist(enemy.path[0]) < 100) {
-                stuckTimer = 0;
                 enemy.path.shift();
-            } else {
-                stuckTimer += k.dt();
-                if (stuckTimer > 0.5) {
-                    enemy.path.shift();
-                    stuckTimer = 0;
-                }
             }
 
             enemy.moveTo(enemy.path[0], 200);
         }
+
+        enemy.loop(enemy.firingSpeed, () => {
+            if (hasLineOfSight(enemy.pos, player.pos) && !enemy.shooting) {
+                enemy.shooting = true;
+                
+            }
+        })
 
     });
 
