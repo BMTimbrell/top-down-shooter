@@ -7,7 +7,7 @@ export default function makePlayer(k, posVec2) {
 
     const player = k.make([
         k.sprite("player", { anim: "idle" }),
-        k.scale(5),
+        k.scale(4),
         k.anchor(k.vec2(0, 0.6)),
         k.area({
             shape: new k.Rect(k.vec2(0, 3), 10, 12)
@@ -321,7 +321,7 @@ export default function makePlayer(k, posVec2) {
                 if (!player.onMission && player?.getCurAnim()?.name !== "walk") player.play("walk");
                 else if (player.onMission && player?.getCurAnim()?.name !== "walk2") player.play("walk2");
             } else {
-                player.play("idle");
+                !player.onMission ? player.play("idle") : player.play("idle2");
             }
         }
 

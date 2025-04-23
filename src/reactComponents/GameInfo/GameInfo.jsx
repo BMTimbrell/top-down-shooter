@@ -35,8 +35,8 @@ export default function GameInfo() {
 
                 <div className={styles.hearts}>
                     {hearts.map((e, index) => {
-                        if (e === 1) return <img key={index} src="./sprites/heart2.png" />;
-                        else return <img key={index} src="./sprites/empty-heart2.png" />;
+                        if (e === 1) return <img key={index} src="./sprites/heart.png" />;
+                        else return <img key={index} src="./sprites/empty-heart.png" />;
                     })}
                 </div>
 

@@ -17,8 +17,8 @@
 }
 
 .hearts img {
-    width: 55px;
-    height: 45px;
+    width: 52px;
+    height: 44px;
     margin-right: 0.5rem;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .money img {
-    width: 45px;
+    width: 36px;
     margin-right: 0.5rem;
 }
 
@@ -43,8 +43,8 @@
 }
 
 .dash {
-    width: 55px;
-    height: 55px;
+    width: 44px;
+    height: 44px;
     border: 1px solid white;
     border-radius: 0.25rem;
     background: linear-gradient(to top, grey var(--cd-percent), transparent var(--cd-percent));
@@ -80,25 +80,3 @@
     padding: 0.25rem 0.1875rem;
     border-radius: 0.25rem;
 }
-
-/* match cam scale */
-/* @media (max-width: 62.5em) {
-    .top-container {
-        font-size: 1.2rem;
-    }
-
-    .top-container img {
-        width: 44px;
-        height: 36px;
-    }
-
-    .money img {
-        width: 36px;
-    }
-
-    .dash {
-        width: 44px;
-        height: 44px;
-    }
-} */
-

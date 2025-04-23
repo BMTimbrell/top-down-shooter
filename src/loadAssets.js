@@ -1,11 +1,34 @@
 import { GUNS } from './constants';
 
 export default function loadAssets(k) {
-    k.loadSprite("player", "./sprites/player.png", {
+    // k.loadSprite("player", "./sprites/playertest.png", {
+    //     sliceX: 11,
+    //     sliceY: 12,
+    //     anims: {
+    //         "idle": 11,
+    //         "walk": { from: 11, to: 14, loop: true, speed: 6 },
+    //         "walk2": { from: 112, to: 115, loop: true, speed: 6 },
+    //         "dash": { from: 152, to: 157, speed: 10 }
+    //     }
+    // });
+
+    // k.loadSprite("player", "./sprites/player.png", {
+    //     sliceX: 8,
+    //     sliceY: 30,
+    //     anims: {
+    //         "idle": 32,
+    //         "walk": { from: 104, to: 107, loop: true, speed: 6 },
+    //         "walk2": { from: 112, to: 115, loop: true, speed: 6 },
+    //         "dash": { from: 152, to: 157, speed: 10 }
+    //     }
+    // });
+
+    k.loadSprite("player", "./sprites/playertest2.png", {
         sliceX: 8,
         sliceY: 30,
         anims: {
-            "idle": 113,
+            "idle": 56,
+            "idle2": 32,
             "walk": { from: 104, to: 107, loop: true, speed: 6 },
             "walk2": { from: 112, to: 115, loop: true, speed: 6 },
             "dash": { from: 152, to: 157, speed: 10 }
