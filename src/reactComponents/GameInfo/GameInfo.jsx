@@ -16,8 +16,8 @@ export default function GameInfo() {
         gameInfo.time === 1 ? "Afternoon" :
         gameInfo.time === 2 ? "Evening" : "Night";
 
-    let healthCount = gameInfo.hp.health;
-    for (let i = 0; i < gameInfo.hp.maxHealth; i++) {
+    let healthCount = gameInfo.health;
+    for (let i = 0; i < gameInfo.maxHealth; i++) {
         if (healthCount > 0) hearts.push(1);
         else hearts.push(0);
         healthCount--;

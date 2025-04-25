@@ -3,15 +3,20 @@ export default function makeProjectile(k, gun, { name, lifespan = 1.5, friendly 
 
     const projectile = k.add([
         k.sprite(name, { anim: "idle" }),
-        k.pos(gun.worldPos()),
-        k.rotate(k.toWorld(k.mousePos()).angle(gun.worldPos())),
+        k.pos(gun.pos),
+        k.rotate(
+            friendly ? k.toWorld(k.mousePos()).angle(gun.worldPos()) : 0
+        ),
         k.anchor("center"),
-        k.scale(2),
+        k.scale(4),
         k.area({
             shape: new k.Rect(k.vec2(0), 10, 10),
         }),
         name,
-        k.move(k.toWorld(k.mousePos()).angle(gun.worldPos()), 700),
+        k.move(
+            friendly ? k.toWorld(k.mousePos()).angle(gun.worldPos()) : k.get("player")[0].pos.angle(gun.pos), 
+            gun.projectileSpeed
+        ),
         k.offscreen({ hide: true }),
         {
             lifespan
@@ -27,6 +32,7 @@ export default function makeProjectile(k, gun, { name, lifespan = 1.5, friendly 
 
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e))) {
+            if (obj?.invincible) return;
             if (obj.is("enemy") || obj.is("player")) {
                 obj.hurt(gun.damage);
             }

@@ -72,6 +72,14 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("enemyProjectile", "./sprites/projectile.png", {
+        sliceX: 1,
+        slicey: 1,
+        anims: {
+            "idle": 0
+        }
+    });
+
     k.loadSprite("crosshair", "./sprites/crosshairs.png", {
         sliceX: 12,
         sliceY: 1,

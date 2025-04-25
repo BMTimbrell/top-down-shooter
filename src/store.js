@@ -45,10 +45,8 @@ export const playerInfoAtom = atom({
 export const gameInfoAtom = atom({
     day: 1,
     time: 1,
-    hp: {
-        health: 3,
-        maxHealth: 3
-    },
+    health: 3,
+    maxHealth: 3,
     gold: 0,
     cooldwns: {
         dash: 1,

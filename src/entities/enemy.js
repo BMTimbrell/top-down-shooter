@@ -1,5 +1,6 @@
-import { CELL_SIZE } from "../constants";
+import { CELL_SIZE, MAP_SCALE } from "../constants";
 import { useFlash } from '../utils';
+import makeProjectile from "./projectile";
 
 export default function makeEnemy(k, pos, name, map) {
     const enemy = k.add([
@@ -13,12 +14,13 @@ export default function makeEnemy(k, pos, name, map) {
         k.body(),
         k.pos(pos),
         k.timer(),
-        k.health(3, 3),
+        k.health(10, 10),
         "enemy",
         {
             path: [],
             shooting: false,
-            firingSpeed: 3
+            firingSpeed: 3,
+            speed: 100
         }
     ]);
 
@@ -80,8 +82,8 @@ export default function makeEnemy(k, pos, name, map) {
         for (let i = 0; i < cols; i++) {
             grid[i] = new Array(rows);
             for (let j = 0; j < rows; j++) {
-                const enemyWidth = enemy.area.shape.width * 4;
-                const enemyHeight = enemy.area.shape.height * 4;
+                const enemyWidth = enemy.area.shape.width * MAP_SCALE;
+                const enemyHeight = enemy.area.shape.height * MAP_SCALE;
                 const padding = CELL_SIZE;
 
                 const cell = {
@@ -92,7 +94,7 @@ export default function makeEnemy(k, pos, name, map) {
                 };
 
                 const blockers = k.get("*").filter(obj => obj.has("body") && obj.has("area") && !obj.is("player") && !obj.is("enemy"));
-                const blocked = blockers.some(obj => hasOverlap(cell, obj, "rect"));
+                const blocked = blockers.some(obj => hasOverlap(cell, obj));
 
                 if (blocked) {
                     // k.add([
@@ -125,17 +127,23 @@ export default function makeEnemy(k, pos, name, map) {
         return grid;
     }
 
-    function findNearestWalkable(grid, targetX, targetY) {
+    function findNearestWalkable(grid, target, targetX, targetY) {
         const candidates = [];
 
         for (let dx = -2; dx <= 2; dx++) {
             for (let dy = -2; dy <= 2; dy++) {
                 const x = targetX + dx;
                 const y = targetY + dy;
+                const candidatePos = k.vec2(
+                    map.pos.x + x * CELL_SIZE, 
+                    map.pos.y + y * CELL_SIZE
+                );
+
                 if (
                     x >= 0 && x < cols &&
                     y >= 0 && y < rows &&
-                    grid[x][y].passable
+                    grid[x][y].passable &&
+                    hasLineOfSight(candidatePos, target)
                 ) {
                     candidates.push(grid[x][y]);
                 }
@@ -152,14 +160,19 @@ export default function makeEnemy(k, pos, name, map) {
         })[0];
     }
 
-    function aStar(target) {
+    function aStar(startPos, target) {
         const grid = initGrid(rows, cols);
-        const enemyPos = { x: enemy.pos.x - map.pos.x, y: enemy.pos.y - map.pos.y };
+        startPos = { x: startPos.x - map.pos.x, y: startPos.y - map.pos.y };
         const targetPos = { x: target.pos.x - map.pos.x, y: target.pos.y - map.pos.y };
-        const start = grid[Math.floor(enemyPos.x / CELL_SIZE)][Math.floor(enemyPos.y / CELL_SIZE)];
+        const start = grid[Math.floor(startPos.x / CELL_SIZE)][Math.floor(startPos.y / CELL_SIZE)];
         let end = grid[Math.floor(targetPos.x / CELL_SIZE)][Math.floor(targetPos.y / CELL_SIZE)];
         if (!end.passable) {
-            end = findNearestWalkable(grid, Math.floor(targetPos.x / CELL_SIZE), Math.floor(targetPos.y / CELL_SIZE));
+            end = findNearestWalkable(
+                grid,
+                target.pos, 
+                Math.floor(targetPos.x / CELL_SIZE), 
+                Math.floor(targetPos.y / CELL_SIZE)
+            );
             if (!end) return null;
         }
         const openSet = [start];
@@ -226,22 +239,21 @@ export default function makeEnemy(k, pos, name, map) {
         return null;
     }
 
-    function hasOverlap(obj1, obj2, type = "point") {
-        const rect2 = { width: obj2.area.shape.width, height: obj2.area.shape.height };
-
+    function hasOverlap(obj1, obj2, type = "rect") {
+        const rect = { width: obj2.area.shape.width, height: obj2.area.shape.height };
         if (type === "point") {
             return (
                 obj1.x >= obj2.pos.x &&
-                obj1.x <= obj2.pos.x + rect2.width &&
+                obj1.x <= obj2.pos.x + rect.width &&
                 obj1.y >= obj2.pos.y &&
-                obj1.y <= obj2.pos.y + rect2.height
+                obj1.y <= obj2.pos.y + rect.height
             );
         }
         if (type === "rect") {
             return (
-                obj1.x < obj2.pos.x + rect2.width &&
+                obj1.x < obj2.pos.x + rect.width &&
                 obj1.x + obj1.width > obj2.pos.x &&
-                obj1.y < obj2.pos.y + rect2.height &&
+                obj1.y < obj2.pos.y + rect.height &&
                 obj1.y + obj1.height > obj2.pos.y
             );
         }
@@ -250,7 +262,9 @@ export default function makeEnemy(k, pos, name, map) {
     }
 
     function hasLineOfSight(from, to) {
-        const blockers = k.get("*").filter(obj => obj.has("body") && obj.has("area") && !obj.is("player") && !obj.is("enemy"));
+        const blockers = k.get("*").filter(
+            obj => obj.has("body") && obj.has("area") && !obj.is("player") && !obj.is("enemy")
+        );
 
         const dx = to.x - from.x;
         const dy = to.y - from.y;
@@ -260,8 +274,15 @@ export default function makeEnemy(k, pos, name, map) {
             const x = from.x + (dx * i) / steps;
             const y = from.y + (dy * i) / steps;
 
+            const projectile = {
+                x: x - 20, 
+                y: y - 20, 
+                width: 40, 
+                height: 40
+            };
+
             for (const b of blockers) {
-                if (hasOverlap(k.vec2(x, y), b)) {
+                if (hasOverlap(projectile, b)) {
                     return false;
                 }
             }
@@ -270,26 +291,51 @@ export default function makeEnemy(k, pos, name, map) {
         return true;
     }
 
-    let pathTimer = k.rand(0, 1);
-    let stuckTimer = 0;
-    const shootDistance = k.rand(100, 500);
+    function hasClearShot(from, to) {
+        // 1. first, point‑based LOS
+        if (!hasLineOfSight(from, to)) return false;
 
-    // let path = [];
+        // 2. test bullet body at launch point
+        const dir = to.sub(from).unit();
+        const launch = from.add(dir.scale(20));    // 20 == bullet radius
+        return hasLineOfSight(launch, to);
+    }
+
+    let pathTimer = 0;
+    let shootDistance = k.rand(100, 500);
+    let shootCd = 0;
+
+    // shooting player
+    // enemy.loop(3, () => {
+    //     if (hasClearShot(enemy.pos, k.get("player")[0].pos)) {
+    //         makeProjectile(
+    //             k, 
+    //             { 
+    //                 pos: enemy.pos, 
+    //                 damage: 1, 
+    //                 projectileSpeed: 200,
+    //             }, 
+    //             { 
+    //                 name: "enemyProjectile", 
+    //                 friendly: false,
+    //                 lifespan: 5  
+    //             }
+    //         );
+    //     }
+    // });
+
     enemy.onUpdate(() => {
         const player = k.get("player")[0];
-
-        // if (hasLineOfSight(enemy.pos, player.pos)) {
-        //     enemy.use(k.color("#ff00ff"));
-        // } else enemy.unuse("color");
-
+        shootCd -= k.dt();
         pathTimer -= k.dt();
-        
+
         if (
-            pathTimer <= 0 && 
+            pathTimer <= 0 &&
             (enemy.pos.dist(player.pos) > shootDistance || !hasLineOfSight(enemy.pos, player.pos))
         ) {
-            enemy.path = aStar(player);
-            pathTimer = k.rand(0, 1);
+            enemy.path = aStar(enemy.path?.length ? enemy.path[0] : enemy.pos, player);
+            pathTimer = k.rand(0.5, 1.5);
+
             // k.add([
             //     k.pos(0, 0),
             //     {
@@ -307,22 +353,37 @@ export default function makeEnemy(k, pos, name, map) {
         }
 
         if (
-            enemy.path?.length > 1 && 
-            (enemy.pos.dist(player.pos) > shootDistance || !hasLineOfSight(enemy.pos, player.pos))
+            enemy.path?.length > 0 && (
+                !hasLineOfSight(enemy.pos, player.pos) ||
+                enemy.pos.dist(player.pos) > shootDistance
+            )
         ) {
-            if (enemy.pos.dist(enemy.path[0]) < 100) {
-                enemy.path.shift();
+            if (enemy.path?.length > 0) {
+                if (enemy.pos.dist(enemy.path[0]) < 4) {
+                    enemy.path.shift();
+                }
+            
+                if (enemy.path.length > 0) {
+                    const dir = enemy.path[0].sub(enemy.pos).unit();
+                    enemy.move(dir.scale(enemy.speed));
+                }
             }
-
-            enemy.moveTo(enemy.path[0], 200);
         }
 
-        enemy.loop(enemy.firingSpeed, () => {
-            if (hasLineOfSight(enemy.pos, player.pos) && !enemy.shooting) {
-                enemy.shooting = true;
-                
-            }
-        })
+        /*  shooting  */
+        if (shootCd <= 0 && hasLineOfSight(enemy.pos, player.pos)) {
+            shootDistance = k.rand(100, 500);
+            makeProjectile(k, {
+                pos: enemy.pos,
+                damage: 1,
+                projectileSpeed: 200
+            }, {
+                name: "enemyProjectile",
+                friendly: false,
+                lifespan: 5
+            });
+            shootCd = 3;
+        }
 
     });
 

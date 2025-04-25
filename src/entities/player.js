@@ -10,12 +10,13 @@ export default function makePlayer(k, posVec2) {
         k.scale(4),
         k.anchor(k.vec2(0, 0.6)),
         k.area({
-            shape: new k.Rect(k.vec2(0, 3), 10, 12)
+            shape: new k.Rect(k.vec2(0, 5), 15, 19)
         }),
         k.body(),
         k.pos(posVec2),
         k.timer(),
         "player",
+        k.health(3, 3),
         {
             speed: 200,
             direction: k.vec2(0),
@@ -28,6 +29,7 @@ export default function makePlayer(k, posVec2) {
             onMission: false,
             inDialogue: false,
             reloading: false,
+            invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
                 { name: "smg", ammo: GUNS.smg.maxAmmo, ...GUNS.smg, clip: GUNS.smg.clipSize },
@@ -218,6 +220,22 @@ export default function makePlayer(k, posVec2) {
             mWheel = 'up';
         }
     });
+
+    // taking damage
+    player.on("hurt", async () => {
+        store.set(gameInfoAtom, prev => ({ ...prev, health: player.hp() }));
+
+        const maxFlickers = 20;
+        const interval = 0.05;
+        player.invincible = true;
+
+        await player.loop(interval, () => {
+            player.hidden = !player.hidden;
+        }, maxFlickers);
+
+        player.invincible = false;
+        player.hidden = false;
+    })
 
     player.onUpdate(() => {
         const worldMousePos = k.toWorld(k.mousePos());

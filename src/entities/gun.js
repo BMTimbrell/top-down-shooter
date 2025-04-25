@@ -2,7 +2,14 @@ import makeProjectile from "./projectile";
 import { GUN_OFFSET, GUNS } from "../constants";
 
 export default function makeGun(k, player, gunObj) {
-    const { name, damage, firingInterval, ammo, clip } = gunObj;
+    const { 
+        name, 
+        damage, 
+        firingInterval, 
+        ammo, 
+        clip, 
+        projectileSpeed 
+    } = gunObj;
 
     const gun = k.add([
         k.sprite(name, { anim: "idle" }),
@@ -17,7 +24,8 @@ export default function makeGun(k, player, gunObj) {
             damage,
             firingInterval,
             ammo,
-            clip: gunObj.clip
+            clip,
+            projectileSpeed
         }
     ]);
 
@@ -63,7 +71,7 @@ export default function makeGun(k, player, gunObj) {
         }
 
         if (gun.animFrame === 1 && gun.fireTrigger) {
-            makeProjectile(k, gun, { name: "bullet" });
+            makeProjectile(k, gun, { name: "bullet", lifespan: 1 });
             player.loseAmmo();
             gun.fireTrigger = false;
         } 
