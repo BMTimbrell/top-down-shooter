@@ -5,7 +5,7 @@ import {
     makeBoundaries,
     makeObjectInteractions,
     orderByY
-} from '../utils';
+} from '../utils/map';
 
 export default function level1(k) {
     k.scene("level1", async ({ player, gameState }) => {
@@ -16,6 +16,22 @@ export default function level1(k) {
         const layers = roomData.layers;
 
         const map = makeMap(k, "level1", { layers, gameState });
+
+        for (const layer of layers) {
+            if (layer.name === "boundaries") {
+                makeBoundaries(k, map, layer);
+            } else if (layer.name === "entity interactions") {
+                makeObjectInteractions(
+                    k,
+                    map,
+                    {
+                        layer,
+                        player,
+                        gameState
+                    }
+                );
+            }
+        }
 
         spawnObjects(
             k,
@@ -34,22 +50,6 @@ export default function level1(k) {
 
         // draw in order of y coordinate
         orderByY(k);
-
-        for (const layer of layers) {
-            if (layer.name === "boundaries") {
-                makeBoundaries(k, map, layer);
-            } else if (layer.name === "entity interactions") {
-                makeObjectInteractions(
-                    k,
-                    map,
-                    {
-                        layer,
-                        player,
-                        gameState
-                    }
-                );
-            }
-        }
 
         k.wait(0.1, () => {
             store.set(infoBoxAtom, prev => ({

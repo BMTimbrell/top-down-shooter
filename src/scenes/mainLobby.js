@@ -4,7 +4,7 @@ import {
     makeBoundaries,
     makeObjectInteractions,
     orderByY
-} from '../utils';
+} from '../utils/map';
 
 export default function mainLobby(k) {
     k.scene("main lobby", async ({ player, gameState }) => {

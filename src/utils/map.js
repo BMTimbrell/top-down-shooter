@@ -2,10 +2,10 @@ import {
     store, 
     popupAtom,
     dialogueAtom,
-} from './store';
-import makeGun from "./entities/gun";
-import { MAP_SCALE, TILE_SIZE } from './constants';
-import makeEnemy from './entities/enemy';
+} from '../store';
+import makeGun from "../entities/gun";
+import { CELL_SIZE, MAP_SCALE, TILE_SIZE } from '../constants';
+import makeEnemy from '../entities/enemy';
 
 export function makeMap(k, name, { layers, gameState }) {
     k.add(gameState);
@@ -13,18 +13,20 @@ export function makeMap(k, name, { layers, gameState }) {
     // reset popup
     store.set(popupAtom, prev => ({ ...prev, visible: false }));
 
-    const mapWidth = layers.find(e => e.name === "ground")?.width || 0;
-    const mapHeight = layers.find(e => e.name === "ground")?.height || 0;
+    const mapWidth = layers.find(e => e.name === "Ground")?.width || 0;
+    const mapHeight = layers.find(e => e.name === "Ground")?.height || 0;
+
     const map = k.add([
         k.pos(k.vec2(k.center())),
         k.scale(MAP_SCALE),
         name
     ]);
-    map.width = mapWidth * MAP_SCALE;
-    map.height = mapHeight * MAP_SCALE;
+
+    map.width = mapWidth * CELL_SIZE;
+    map.height = mapHeight * CELL_SIZE;
 
     // center offset
-    map.pos = map.pos.sub(map.width / 2 * MAP_SCALE, map.height / 2 * MAP_SCALE);
+    map.pos = map.pos.sub(map.width / 2, map.height / 2);
 
     return map;
 }
@@ -223,34 +225,4 @@ export function orderByY(k) {
             toSorted((a, b) => a.pos.y - b.pos.y).
             forEach((e, index) => e.z = index + 1);
     });
-}
-
-export function useFlash(k, entity) {
-    let flashAmount = 0;
-
-    k.loadShader(
-        "flash",
-        null,
-         `
-            uniform float u_flash;
-            vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
-                vec4 texColor = texture2D(tex, uv);
-                // blend the texture with white based on flash
-                return mix(texColor, vec4(1.0, 1.0, 1.0, texColor.a), u_flash);
-            }
-        `,
-
-    );
-
-    entity.use(k.shader("flash", () => ({
-        u_flash: flashAmount
-    })));
-
-
-    entity.flash = (duration = 0.1) => {
-        flashAmount = 1;
-        k.tween(flashAmount, 0, duration, (val) => {
-            flashAmount = val;
-        }, k.easings.easeOutQuad);
-    };
 }
