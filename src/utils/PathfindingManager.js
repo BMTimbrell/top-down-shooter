@@ -81,7 +81,15 @@ export default class PathfindingManager {
                         !obj.is("enemy")
                 );
 
-                const blocked = blockers.some(obj => hasOverlap(cell, obj));
+                const blocked = blockers.some(obj => hasOverlap(
+                    cell, 
+                    {
+                        x: obj.pos.x,
+                        y: obj.pos.y, 
+                        width: obj.area.shape.width, 
+                        height: obj.area.shape.height 
+                    }
+                ));
 
                 // if (blocked) {
                 //     k.add([

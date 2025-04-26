@@ -1,6 +1,7 @@
-import { DIAGONAL_FACTOR } from "../constants";
+import { DIAGONAL_FACTOR, MAP_SCALE } from "../constants";
 import { GUNS } from '../constants';
 import { gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
+import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
 
 export default function makePlayer(k, posVec2) {
@@ -23,6 +24,7 @@ export default function makePlayer(k, posVec2) {
             directionVector: k.vec2(0),
             dashing: false,
             dashCd: 3,
+            dashHitEnemies: new Set(),
             reloadCd: 1.5,
             dashOnCd: false,
             dashSpeed: 500,
@@ -65,7 +67,12 @@ export default function makePlayer(k, posVec2) {
     // dash
     function setPlayerDashing(dashing) {
         if (!dashing) return;
-
+        player.dashHitEnemies.clear();
+        player.use(k.area({
+            shape: new k.Rect(k.vec2(0, 5), 15, 19),
+            collisionIgnore: ["enemy"]
+        }
+        ));
         player.dashCd = player.baseDashCd;
         player.dashElapsed = 0;
         player.play("dash");
@@ -226,23 +233,15 @@ export default function makePlayer(k, posVec2) {
 
         player.invincible = false;
         player.hidden = false;
-    })
-
-    player.onCollide("enemy", e => {
-        if (player.dashing) {
-            e.hurt(5);
-            player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
-        }
     });
-
-    player.onCollideUpdate("enemy", (_, col) => {
-        if (player.dashing) col.preventResolution();
-    })
 
     player.onAnimEnd(anim => {
         if (anim === "dash") {
             player.dashing = false;
             player.invincible = false;
+            player.use(k.area({
+                shape: new k.Rect(k.vec2(0, 5), 15, 19)
+            }));
         }
     });
 
@@ -311,6 +310,31 @@ export default function makePlayer(k, posVec2) {
                 : player.dashSpeed;
 
             player.move(dashDirection.scale(dashSpeed));
+
+            k.get("enemy").forEach(e => {
+                const enemyScale = e.scale?.x || 1;
+                const enemyOverlap = {
+                    x: e.pos.x - (e.area.shape.width * enemyScale) / 2,
+                    y: e.pos.y - (e.area.shape.height * enemyScale) / 2,
+                    width: e.area.shape.width * enemyScale,
+                    height: e.area.shape.height * enemyScale
+                };
+
+                const playerScale = player.scale?.x || 1;
+                const playerOverlap = {
+                    x: player.pos.x - (player.area.shape.width * playerScale) / 2,
+                    y: player.pos.y - (player.area.shape.height * playerScale) / 2,
+                    width: player.area.shape.width * playerScale,
+                    height: player.area.shape.height * playerScale
+                };
+
+                if (hasOverlap(enemyOverlap, playerOverlap) && !player.dashHitEnemies.has(e)) {
+                    e.hurt(1);
+                    player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
+                    player.dashHitEnemies.add(e);
+                }
+            });
+
             return;
         }
 
