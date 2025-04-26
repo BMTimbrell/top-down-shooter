@@ -36,7 +36,7 @@ export default function makeGun(k, player, gunObj) {
         if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval--;
 
         // remove gun while player is dashing
-        if (player.isDashing) {
+        if (player.dashing) {
             gun.opacity = 0;
             return;
         }
@@ -71,7 +71,7 @@ export default function makeGun(k, player, gunObj) {
         }
 
         if (gun.animFrame === 1 && gun.fireTrigger) {
-            makeProjectile(k, gun, { name: "bullet", lifespan: 1 });
+            makeProjectile(k, gun, { name: "bullet", lifespan: 0.5 });
             player.loseAmmo();
             gun.fireTrigger = false;
         } 

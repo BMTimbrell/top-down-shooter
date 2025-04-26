@@ -21,7 +21,7 @@ export default function makePlayer(k, posVec2) {
             speed: 200,
             direction: k.vec2(0),
             directionVector: k.vec2(0),
-            isDashing: false,
+            dashing: false,
             dashCd: 3,
             reloadCd: 1.5,
             dashOnCd: false,
@@ -43,6 +43,8 @@ export default function makePlayer(k, posVec2) {
         }
     ]);
 
+    player.baseDashCd = player.dashCd;
+
     store.set(playerInfoAtom, prev => ({
         ...prev,
         data: {
@@ -52,6 +54,7 @@ export default function makePlayer(k, posVec2) {
         }
     }));
 
+    // on mission
     function setOnMission(onMission = false) {
         if (onMission) {
             player.onMission = true;
@@ -59,29 +62,17 @@ export default function makePlayer(k, posVec2) {
         }
     }
 
-    function setPlayerDashing(isDashing) {
-        if (isDashing) {
-            player.play("dash");
-            player.isDashing = true;
-            player.dashOnCd = true;
-            store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, dash: 0 } }));
+    // dash
+    function setPlayerDashing(dashing) {
+        if (!dashing) return;
 
-            player.wait(player.dashCd, () => {
-                player.dashOnCd = false;
-            });
-
-            // every 0.1s update cd progress for ui
-            const interval = 0.1;
-            player.loop(interval, () => {
-                store.set(gameInfoAtom, prev => ({
-                    ...prev,
-                    cooldwns: {
-                        ...prev.cooldwns,
-                        dash: prev.cooldwns.dash + interval / player.dashCd
-                    }
-                }));
-            }, player.dashCd / interval);
-        }
+        player.dashCd = player.baseDashCd;
+        player.dashElapsed = 0;
+        player.play("dash");
+        player.dashing = true;
+        player.dashOnCd = true;
+        player.invincible = true;
+        store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, dash: 0 } }));
     }
 
     function equipGun(index = 0) {
@@ -174,7 +165,7 @@ export default function makePlayer(k, posVec2) {
         }));
 
         reloadWait = player.wait(player.reloadCd, () => {
-           gun.clip = Math.min(
+            gun.clip = Math.min(
                 gun.ammo,
                 gun.clipSize
             );
@@ -237,20 +228,41 @@ export default function makePlayer(k, posVec2) {
         player.hidden = false;
     })
 
+    player.onCollide("enemy", e => {
+        if (player.dashing) {
+            e.hurt(5);
+            player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
+        }
+    });
+
+    player.onCollideUpdate("enemy", (_, col) => {
+        if (player.dashing) col.preventResolution();
+    })
+
+    player.onAnimEnd(anim => {
+        if (anim === "dash") {
+            player.dashing = false;
+            player.invincible = false;
+        }
+    });
+
     player.onUpdate(() => {
+        // === A. Update Direction (mouse and keyboard) ===
         const worldMousePos = k.toWorld(k.mousePos());
         player.direction = worldMousePos.sub(player.pos).unit();
 
+        // === B. Update Camera ===
         if (!k.getCamPos().eq(player.pos)) {
             k.tween(
                 k.getCamPos(),
                 player.pos,
                 0.2,
-                newPos => k.setCamPos(newPos),
+                (newPos) => k.setCamPos(newPos),
                 k.easings.linear
             );
         }
 
+        // === C. Update UI (reload bar position) ===
         if (player.reloading) {
             store.set(gameInfoAtom, prev => ({
                 ...prev,
@@ -261,95 +273,94 @@ export default function makePlayer(k, posVec2) {
             }));
         }
 
-        // don't do anything while showing dialogue box
+        // === D. Prevent movement during dialogue ===
         if (player.inDialogue) return;
 
-        // dashing
-        if (k.isMouseDown("right") && !player.isDashing && !player.dashOnCd) {
-            if (!player.directionVector.eq(k.vec2(0))) {
-                if (player.directionVector.x < 0) player.flipX = true;
-                else player.flipX = false;
-            }
+        // === E. Dashing ===
+        if (player.dashOnCd) {
+            player.dashElapsed += k.dt();
+            const progress = Math.min(player.dashElapsed / player.dashCd, 1);
 
+            store.set(gameInfoAtom, prev => ({
+                ...prev,
+                cooldwns: {
+                    ...prev.cooldwns,
+                    dash: progress
+                }
+            }));
+
+            if (player.dashElapsed >= player.dashCd) {
+                player.dashOnCd = false;
+            }
+        }
+
+        if (k.isMouseDown("right") && !player.dashing && !player.dashOnCd) {
+            if (!player.directionVector.eq(k.vec2(0))) {
+                player.flipX = player.directionVector.x < 0;
+            }
             player.setPlayerDashing(true);
         }
 
-        if (player.isDashing) {
-            // dash direction facing if not moving
-            if (player.directionVector.eq(k.vec2(0))) {
-                if (player.flipX) {
-                    player.move(k.vec2(-1, 0).scale(player.dashSpeed));
-                } else {
-                    player.move(k.vec2(1, 0).scale(player.dashSpeed));
-                }
-            }
-            // move same speed diagonally as horizontal and vertically
-            if (player.directionVector.x && player.directionVector.y) {
-                player.move(player.directionVector.scale(DIAGONAL_FACTOR * player.dashSpeed));
-            } else {
-                player.move(player.directionVector.scale(player.dashSpeed));
-            }
-            player.onAnimEnd(() => {
-                player.isDashing = false;
-            });
+        if (player.dashing) {
+            const dashDirection = player.directionVector.eq(k.vec2(0))
+                ? (player.flipX ? k.vec2(-1, 0) : k.vec2(1, 0))
+                : player.directionVector;
+
+            const dashSpeed = player.directionVector.x && player.directionVector.y
+                ? DIAGONAL_FACTOR * player.dashSpeed
+                : player.dashSpeed;
+
+            player.move(dashDirection.scale(dashSpeed));
             return;
         }
 
-        // change weapon
-        if (k.isKeyPressed(['1', '2', '3', '4', '5'])) {
-            const keyDown = k.isKeyPressed('1') ? 1 :
-                k.isKeyPressed('2') ? 2 :
-                    k.isKeyPressed('3') ? 3 :
-                        k.isKeyPressed('4') ? 4 : 5;
+        // === F. Weapon Switching ===
+        if (k.isKeyPressed(["1", "2", "3", "4", "5"])) {
+            const keyDown = k.isKeyPressed("1") ? 1 :
+                k.isKeyPressed("2") ? 2 :
+                    k.isKeyPressed("3") ? 3 :
+                        k.isKeyPressed("4") ? 4 : 5;
             player.equipGun(keyDown - 1);
         }
-        if (mWheel === 'down') {
-            player.equipGun(player.gunIndex + 1);
-        } else if (mWheel === 'up') {
-            player.equipGun(player.gunIndex - 1);
-        }
-        mWheel = '';
+        if (mWheel === "down") player.equipGun(player.gunIndex + 1);
+        else if (mWheel === "up") player.equipGun(player.gunIndex - 1);
+        mWheel = "";
 
-        // reload
+        // === G. Reloading ===
         if (k.isKeyPressed("r")) {
             player.reload();
         }
 
-        // movement
+        // === H. Animation (based on movement) ===
+        player.flipX = player.direction.x < 0;
+
+        if (
+            k.isKeyDown("a") ||
+            k.isKeyDown("d") ||
+            k.isKeyDown("w") ||
+            k.isKeyDown("s")
+        ) {
+            if (!player.onMission && player?.getCurAnim()?.name !== "walk") {
+                player.play("walk");
+            } else if (player.onMission && player?.getCurAnim()?.name !== "walk2") {
+                player.play("walk2");
+            }
+        } else {
+            !player.onMission ? player.play("idle") : player.play("idle2");
+        }
+
+        // === I. Movement (normal walking) ===
         player.directionVector = k.vec2(0);
         if (k.isKeyDown("a")) player.directionVector.x = -1;
         if (k.isKeyDown("d")) player.directionVector.x = 1;
         if (k.isKeyDown("w")) player.directionVector.y = -1;
         if (k.isKeyDown("s")) player.directionVector.y = 1;
 
-        // face direction of mouse
-        if (player.direction.x < 0) {
-            player.flipX = true;
-        } else {
-            player.flipX = false;
-        }
+        const moveSpeed = player.directionVector.x && player.directionVector.y
+            ? DIAGONAL_FACTOR * player.speed
+            : player.speed;
 
-        if (!player.isDashing) {
-            if (
-                k.isKeyDown("a") ||
-                k.isKeyDown("d") ||
-                k.isKeyDown("w") ||
-                k.isKeyDown("s")
-            ) {
-                if (!player.onMission && player?.getCurAnim()?.name !== "walk") player.play("walk");
-                else if (player.onMission && player?.getCurAnim()?.name !== "walk2") player.play("walk2");
-            } else {
-                !player.onMission ? player.play("idle") : player.play("idle2");
-            }
-        }
-
-        // move same speed diagonally as horizontal and vertically
-        if (player.directionVector.x && player.directionVector.y) {
-            player.move(player.directionVector.scale(DIAGONAL_FACTOR * player.speed));
-            return;
-        }
-
-        player.move(player.directionVector.scale(player.speed));
+        player.move(player.directionVector.scale(moveSpeed));
     });
 
     return player;

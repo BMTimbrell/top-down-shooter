@@ -1,4 +1,4 @@
-import { CELL_SIZE, MAP_SCALE } from "../constants";
+import { CELL_SIZE, MAP_SCALE, DIAGONAL_FACTOR } from "../constants";
 import { useFlash } from '../utils/shader';
 import { hasLineOfSight } from "../utils/collision";
 import makeProjectile from "./projectile";
@@ -79,9 +79,10 @@ export default function makeEnemy(k, pos, name, map) {
                 if (enemy.pos.dist(enemy.path[0]) < 4) {
                     enemy.path.shift();
                 }
-            
+
                 if (enemy.path.length > 0) {
                     const dir = enemy.path[0].sub(enemy.pos).unit();
+                    
                     enemy.move(dir.scale(enemy.speed));
                 }
             }

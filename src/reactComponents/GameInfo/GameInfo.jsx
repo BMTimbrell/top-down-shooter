@@ -53,7 +53,7 @@ export default function GameInfo() {
                             <img
                                 src="./sprites/dash-icon-4.png"
                                 className={styles["dash-icon"]}
-                                style={{ opacity: cooldwns.dash > 0.98 ? 1 : 0.5 }}
+                                style={{ opacity: cooldwns.dash === 1 ? 1 : 0.5 }}
                             />
                         </div>
                     </div>
