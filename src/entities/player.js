@@ -23,11 +23,13 @@ export default function makePlayer(k, posVec2) {
             direction: k.vec2(0),
             directionVector: k.vec2(0),
             dashing: false,
-            dashCd: 3,
+            dashCd: 2.5,
             dashHitEnemies: new Set(),
             reloadCd: 1.5,
             dashOnCd: false,
             dashSpeed: 500,
+            dashTimer: 0,
+            dashDuration: 0.75,
             onMission: false,
             inDialogue: false,
             reloading: false,
@@ -74,6 +76,7 @@ export default function makePlayer(k, posVec2) {
         }
         ));
         player.dashCd = player.baseDashCd;
+        player.dashTimer = player.dashDuration;
         player.dashElapsed = 0;
         player.play("dash");
         player.dashing = true;
@@ -236,12 +239,8 @@ export default function makePlayer(k, posVec2) {
     });
 
     player.onAnimEnd(anim => {
-        if (anim === "dash") {
-            player.dashing = false;
-            player.invincible = false;
-            player.use(k.area({
-                shape: new k.Rect(k.vec2(0, 5), 15, 19)
-            }));
+        if (anim === "dash" && player.dashing) {
+            player.frame = player.frame;
         }
     });
 
@@ -301,6 +300,16 @@ export default function makePlayer(k, posVec2) {
         }
 
         if (player.dashing) {
+            player.dashTimer -= k.dt();
+            
+            if (player.dashTimer <= 0) {
+                player.dashing = false;
+                player.invincible = false;
+                player.use(k.area({
+                    shape: new k.Rect(k.vec2(0, 5), 15, 19)
+                }));
+            }
+
             const dashDirection = player.directionVector.eq(k.vec2(0))
                 ? (player.flipX ? k.vec2(-1, 0) : k.vec2(1, 0))
                 : player.directionVector;
@@ -331,6 +340,7 @@ export default function makePlayer(k, posVec2) {
                 if (hasOverlap(enemyOverlap, playerOverlap) && !player.dashHitEnemies.has(e)) {
                     e.hurt(1);
                     player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
+                    player.dashTimer += 0.2;
                     player.dashHitEnemies.add(e);
                 }
             });
@@ -351,7 +361,7 @@ export default function makePlayer(k, posVec2) {
         mWheel = "";
 
         // === G. Reloading ===
-        if (k.isKeyPressed("r")) {
+        if (k.isKeyPressed("r") && !player.reloading) {
             player.reload();
         }
 

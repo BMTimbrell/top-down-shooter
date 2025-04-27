@@ -31,7 +31,7 @@ export default function loadAssets(k) {
             "idle2": 32,
             "walk": { from: 104, to: 107, loop: true, speed: 6 },
             "walk2": { from: 112, to: 115, loop: true, speed: 6 },
-            "dash": { from: 152, to: 157, speed: 10 }
+            "dash": { from: 152, to: 156, speed: 10 }
         }
     });
 

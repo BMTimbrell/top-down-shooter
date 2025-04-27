@@ -38,7 +38,7 @@ export default function makeEnemy(k, pos, name, map) {
 
     const pf = new PathfindingManager(k, map, enemy);
     let pathTimer = 0;
-    let shootDistance = k.rand(100, 500);
+    let shootDistance = k.randi(100, 500);
     let shootCd = 0;
 
     enemy.onUpdate(() => {
@@ -52,6 +52,7 @@ export default function makeEnemy(k, pos, name, map) {
         ) {
             enemy.path = pf.findPath(enemy.path?.length ? enemy.path[0] : enemy.pos, player.pos);
             pathTimer = k.rand(0.5, 1.5);
+            shootDistance = k.randi(100, 500);
 
             // k.add([
             //     k.pos(0, 0),
@@ -90,7 +91,6 @@ export default function makeEnemy(k, pos, name, map) {
 
         /*  shooting  */
         if (shootCd <= 0 && hasLineOfSight(k, enemy.pos, player.pos)) {
-            shootDistance = k.rand(100, 500);
             makeProjectile(k, {
                 pos: enemy.pos,
                 damage: 1,

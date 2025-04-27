@@ -1,11 +1,22 @@
-export default function makeProjectile(k, gun, { name, lifespan = 1.5, friendly = true }) {
-    const target = friendly ? k.toWorld(k.mousePos()) : k.get("player")[0].pos;
+export default function makeProjectile(
+    k, 
+    gun, 
+    { 
+        name, 
+        lifespan = 1.5, 
+        friendly = true, 
+        spread = 0 ,
+        speedOffset = 0
+    }) {
+
+    const target = (friendly ? k.toWorld(k.mousePos()) : k.get("player")[0].pos).angle(gun.pos) + spread;
+    const projectileSpeed = gun.projectileSpeed + speedOffset;
 
     const projectile = k.add([
         k.sprite(name, { anim: "idle" }),
         k.pos(gun.pos),
         k.rotate(
-            friendly ? k.toWorld(k.mousePos()).angle(gun.worldPos()) : 0
+            friendly ? k.toWorld(k.mousePos()).angle(gun.worldPos()) + spread : 0
         ),
         k.anchor("center"),
         k.scale(4),
@@ -14,8 +25,8 @@ export default function makeProjectile(k, gun, { name, lifespan = 1.5, friendly 
         }),
         name,
         k.move(
-            friendly ? k.toWorld(k.mousePos()).angle(gun.worldPos()) : k.get("player")[0].pos.angle(gun.pos), 
-            gun.projectileSpeed
+            target, 
+            projectileSpeed
         ),
         k.offscreen({ hide: true }),
         {

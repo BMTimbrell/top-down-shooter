@@ -2,13 +2,13 @@ import makeProjectile from "./projectile";
 import { GUN_OFFSET, GUNS } from "../constants";
 
 export default function makeGun(k, player, gunObj) {
-    const { 
-        name, 
-        damage, 
-        firingInterval, 
-        ammo, 
-        clip, 
-        projectileSpeed 
+    const {
+        name,
+        damage,
+        firingInterval,
+        ammo,
+        clip,
+        projectileSpeed
     } = gunObj;
 
     const gun = k.add([
@@ -17,6 +17,7 @@ export default function makeGun(k, player, gunObj) {
         k.pos(player.pos.x, player.pos.y + GUN_OFFSET),
         k.scale(3),
         k.rotate(0),
+        k.opacity(1),
         name,
         {
             direction: k.vec2(0),
@@ -25,7 +26,9 @@ export default function makeGun(k, player, gunObj) {
             firingInterval,
             ammo,
             clip,
-            projectileSpeed
+            projectileSpeed,
+            pulseTimer: 0,
+            pulseDuration: 0.3,
         }
     ]);
 
@@ -35,17 +38,24 @@ export default function makeGun(k, player, gunObj) {
         gun.pos = k.vec2(player.pos.x, player.pos.y + GUN_OFFSET);
         if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval--;
 
-        // remove gun while player is dashing
+        // fade gun in and out when dashing
+        gun.opacity = player.dashing ? Math.max(0, gun.opacity - 5 * k.dt()) : Math.min(1, gun.opacity + 5 * k.dt());
+
         if (player.dashing) {
-            gun.opacity = 0;
             return;
         }
 
-        player.onAnimEnd(anim => {
-            if (anim === "dash") {
-                gun.opacity = 1;
-            }
-        });
+        if (gun.opacity === 1) {
+            gun.pulseTimer = gun.pulseDuration;
+        }
+
+        if (gun.pulseTimer > 0) {
+            gun.pulseTimer -= k.dt();
+
+            const t = 1 - gun.pulseTimer / gun.pulseDuration;
+            const scaleBoost = Math.sin(t * Math.PI) * 0.7;
+            gun.scale = k.vec2(3).add(k.vec2(scaleBoost));
+        } else gun.scaleTo = k.vec2(3);
 
         const worldMousePos = k.toWorld(k.mousePos());
 
@@ -59,22 +69,41 @@ export default function makeGun(k, player, gunObj) {
         gun.rotateTo((worldMousePos).angle(gun.pos));
 
         if (
-            k.isMouseDown() && gun.getCurAnim().name !== "firing" && 
+            k.isMouseDown() && gun.getCurAnim().name !== "firing" &&
             gun.firingInterval <= 0 &&
             !player.reloading
         ) {
             if (gunObj.clip <= 0) {
                 player.reload();
-            } else{
+            } else {
                 gun.play("firing");
             }
         }
 
         if (gun.animFrame === 1 && gun.fireTrigger) {
-            makeProjectile(k, gun, { name: "bullet", lifespan: 0.5 });
+            const pellets = gunObj.pelletCount || 1;
+            const spread = gunObj.pelletSpread || 0;
+            const speedVariation = gunObj.pelletSpeedVariation || 0;
+
+            for (let i = 0; i < pellets; i++) {
+                const randomSpread = k.randi(-spread, spread);
+                const randomSpeedOffset = k.randi(-speedVariation, speedVariation);
+
+                makeProjectile(
+                    k, 
+                    gun, 
+                    { 
+                        name: "bullet", 
+                        spread: randomSpread,
+                        speedOffset: randomSpeedOffset,
+                        lifespan: gunObj.projectileLifespan
+                    }
+                );
+            }
+
             player.loseAmmo();
             gun.fireTrigger = false;
-        } 
+        }
 
         if (gun.animFrame === 2) {
             gun.fireTrigger = true;
