@@ -46,6 +46,8 @@ export default function makeEnemy(k, pos, name, map) {
         shootCd -= k.dt();
         pathTimer -= k.dt();
 
+        enemy.flipX = player.pos.sub(enemy.pos).x < 0;
+
         if (
             pathTimer <= 0 &&
             (enemy.pos.dist(player.pos) > shootDistance || !hasLineOfSight(k, enemy.pos, player.pos))
@@ -83,8 +85,9 @@ export default function makeEnemy(k, pos, name, map) {
 
                 if (enemy.path.length > 0) {
                     const dir = enemy.path[0].sub(enemy.pos).unit();
-                    
-                    enemy.flipX = dir.x < 0;
+
+                    if (dir.x > 0.5 && dir.x < 0.5) enemy.flipX = dir.x < 0;
+
                     enemy.move(dir.scale(enemy.speed));
                 }
             }
