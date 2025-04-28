@@ -1,4 +1,4 @@
-import { DIAGONAL_FACTOR, MAP_SCALE } from "../constants";
+import { DIAGONAL_FACTOR } from "../constants";
 import { GUNS } from '../constants';
 import { gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
 import { hasOverlap } from "../utils/collision";
@@ -26,6 +26,7 @@ export default function makePlayer(k, posVec2) {
             dashCd: 2.5,
             dashHitEnemies: new Set(),
             reloadCd: 1.5,
+            dashDamage: 5,
             dashOnCd: false,
             dashSpeed: 500,
             dashTimer: 0,
@@ -104,16 +105,18 @@ export default function makePlayer(k, posVec2) {
         if (index < 0) index = player.guns.length - 1;
 
         player.gunIndex = index;
-        const gun = player.guns[index];
+        const gunData = player.guns[index];
         store.set(
             gameInfoAtom,
             prev => ({
                 ...prev,
-                cooldwns: { ...prev.cooldwns, reload: gun.clip / gun.clipSize }
+                cooldwns: { ...prev.cooldwns, reload: gunData.clip / gunData.clipSize }
             })
         );
 
-        makeGun(k, player, player.guns[index]);
+        const gun = makeGun(k, player, player.guns[index]);
+
+        gun.pulseTimer = gun.pulseDuration;
 
         store.set(gameInfoAtom, prev => ({
             ...prev,
@@ -310,15 +313,11 @@ export default function makePlayer(k, posVec2) {
                 }));
             }
 
-            const dashDirection = player.directionVector.eq(k.vec2(0))
+            const dashDirection = player.directionVector.isZero()
                 ? (player.flipX ? k.vec2(-1, 0) : k.vec2(1, 0))
                 : player.directionVector;
 
-            const dashSpeed = player.directionVector.x && player.directionVector.y
-                ? DIAGONAL_FACTOR * player.dashSpeed
-                : player.dashSpeed;
-
-            player.move(dashDirection.scale(dashSpeed));
+            player.move(dashDirection.scale(player.dashSpeed));
 
             k.get("enemy").forEach(e => {
                 const enemyScale = e.scale?.x || 1;
@@ -338,7 +337,7 @@ export default function makePlayer(k, posVec2) {
                 };
 
                 if (hasOverlap(enemyOverlap, playerOverlap) && !player.dashHitEnemies.has(e)) {
-                    e.hurt(1);
+                    e.hurt(player.dashDamage);
                     player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
                     player.dashTimer += 0.2;
                     player.dashHitEnemies.add(e);
@@ -390,11 +389,10 @@ export default function makePlayer(k, posVec2) {
         if (k.isKeyDown("w")) player.directionVector.y = -1;
         if (k.isKeyDown("s")) player.directionVector.y = 1;
 
-        const moveSpeed = player.directionVector.x && player.directionVector.y
-            ? DIAGONAL_FACTOR * player.speed
-            : player.speed;
+        if (!player.directionVector.isZero())
+            player.directionVector = player.directionVector.unit();
 
-        player.move(player.directionVector.scale(moveSpeed));
+        player.move(player.directionVector.scale(player.speed));
     });
 
     return player;

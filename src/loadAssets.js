@@ -31,7 +31,7 @@ export default function loadAssets(k) {
             "idle2": 32,
             "walk": { from: 104, to: 107, loop: true, speed: 6 },
             "walk2": { from: 112, to: 115, loop: true, speed: 6 },
-            "dash": { from: 152, to: 156, speed: 10 }
+            "dash": { from: 152, to: 157, speed: 10 }
         }
     });
 
@@ -144,12 +144,12 @@ export default function loadAssets(k) {
     });
 
     // enemies
-    k.loadSprite("bird", "./sprites/bird.png", {
-        sliceX: 1,
+    k.loadSprite("bird", "./sprites/bird-sheet.png", {
+        sliceX: 8,
         sliceY: 1,
         anims: {
             "idle": 0,
-            // "walk": { from: 4, to: 7, loop: true, speed: 6 }
+            "fly": { from: 0, to: 7, loop: true, speed: 7 }
         }
     });
 }

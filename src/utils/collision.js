@@ -5,8 +5,6 @@ export function hasOverlap(obj1, obj2) {
         obj1.y < obj2.y + obj2.height &&
         obj1.y + obj1.height > obj2.y
     );
-
-    return false;
 }
 
 export function hasLineOfSight(k, from, to) {

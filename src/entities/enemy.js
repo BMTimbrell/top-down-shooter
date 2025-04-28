@@ -6,7 +6,7 @@ import PathfindingManager from "../utils/PathfindingManager";
 
 export default function makeEnemy(k, pos, name, map) {
     const enemy = k.add([
-        k.sprite(name, { anim: "idle" }),
+        k.sprite(name, { anim: "fly" }),
         k.scale(4),
         k.anchor("center"),
         k.area({

@@ -32,6 +32,8 @@ export default function makeGun(k, player, gunObj) {
         }
     ]);
 
+    let prevOpacity = gun.opacity;
+
     gun.onUpdate(() => {
         if (player.guns[player.gunIndex] !== gunObj) gun.destroy();
 
@@ -45,15 +47,20 @@ export default function makeGun(k, player, gunObj) {
             return;
         }
 
-        if (gun.opacity === 1) {
+        // pulse after fade in
+        if (prevOpacity < 1 && gun.opacity === 1) {
             gun.pulseTimer = gun.pulseDuration;
         }
+        prevOpacity = gun.opacity;
 
         if (gun.pulseTimer > 0) {
             gun.pulseTimer -= k.dt();
 
             const t = 1 - gun.pulseTimer / gun.pulseDuration;
-            const scaleBoost = Math.sin(t * Math.PI) * 0.7;
+
+            const decay = 2;
+            const scaleBoost = Math.sin(t * Math.PI) * Math.exp(-t * decay);
+
             gun.scale = k.vec2(3).add(k.vec2(scaleBoost));
         } else gun.scaleTo = k.vec2(3);
 
