@@ -86,8 +86,8 @@ export default function makeEnemy(k, pos, name, map) {
                 if (enemy.path.length > 0) {
                     const dir = enemy.path[0].sub(enemy.pos).unit();
 
-                    if (dir.x > 0.5 && dir.x < 0.5) enemy.flipX = dir.x < 0;
-
+                    if (dir.x > 0.25 || dir.x < -0.25) enemy.flipX = dir.x < 0;
+                    
                     enemy.move(dir.scale(enemy.speed));
                 }
             }
