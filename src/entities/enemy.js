@@ -22,7 +22,8 @@ export default function makeEnemy(k, pos, name, map) {
             path: [],
             shooting: false,
             firingSpeed: 3,
-            speed: 100
+            speed: 100,
+            dead: false
         }
     ]);
 
@@ -33,7 +34,13 @@ export default function makeEnemy(k, pos, name, map) {
     });
 
     enemy.on("death", () => {
-        enemy.destroy();
+        enemy.dead = true;
+        enemy.unuse("body");
+        enemy.play("dying");
+    });
+
+    enemy.onAnimEnd(anim => {
+        if (anim === "dying") enemy.destroy();
     });
 
     const pf = new PathfindingManager(k, map, enemy);
@@ -42,6 +49,8 @@ export default function makeEnemy(k, pos, name, map) {
     let shootCd = 0;
 
     enemy.onUpdate(() => {
+        if (enemy.dead) return;
+
         const player = k.get("player")[0];
         shootCd -= k.dt();
         pathTimer -= k.dt();
@@ -87,7 +96,7 @@ export default function makeEnemy(k, pos, name, map) {
                     const dir = enemy.path[0].sub(enemy.pos).unit();
 
                     if (dir.x > 0.25 || dir.x < -0.25) enemy.flipX = dir.x < 0;
-                    
+
                     enemy.move(dir.scale(enemy.speed));
                 }
             }

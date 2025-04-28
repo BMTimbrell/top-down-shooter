@@ -336,7 +336,11 @@ export default function makePlayer(k, posVec2) {
                     height: player.area.shape.height * playerScale
                 };
 
-                if (hasOverlap(enemyOverlap, playerOverlap) && !player.dashHitEnemies.has(e)) {
+                if (
+                    hasOverlap(enemyOverlap, playerOverlap) && 
+                    !player.dashHitEnemies.has(e) && 
+                    !e.dead
+                ) {
                     e.hurt(player.dashDamage);
                     player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
                     player.dashTimer += 0.2;

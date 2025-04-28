@@ -43,7 +43,7 @@ export default function makeProjectile(
 
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e))) {
-            if (obj?.invincible) return;
+            if (obj?.invincible || obj?.dead) return;
             if (obj.is("enemy") || obj.is("player")) {
                 obj.hurt(gun.damage);
             }

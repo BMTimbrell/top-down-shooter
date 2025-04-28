@@ -146,10 +146,10 @@ export default function loadAssets(k) {
     // enemies
     k.loadSprite("bird", "./sprites/bird-sheet.png", {
         sliceX: 8,
-        sliceY: 1,
+        sliceY: 2,
         anims: {
-            "idle": 0,
-            "fly": { from: 0, to: 7, loop: true, speed: 7 }
+            "fly": { from: 0, to: 7, loop: true, speed: 7 },
+            "dying": { from: 8, to: 10, loop: false, speed: 5 }
         }
     });
 }
