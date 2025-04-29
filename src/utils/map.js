@@ -158,25 +158,23 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
             k.onCollideUpdate("player", entity.name, () => {
                 // show popup if not showing dialogue box
                 if (!player.inDialogue) {
-                    store.set(popupAtom, prev => ({ ...prev, visible: true }));
                     store.set(
                         popupAtom, 
                         prev => ({ 
-                            ...prev, 
+                            ...prev,
+                            visible: true, 
                             text: {
                                 action: doors.some(e => e === name) ? "Go To" : "Check", 
                                 name, 
                                 key: "E" 
+                            },
+                            pos: {
+                                x: k.get(name)[0].screenPos().x, 
+                                y: k.get(name)[0].screenPos().y 
                             }
                         })
                     );
                 }
-                
-                // set position for popup
-                store.set(
-                    popupAtom, 
-                    prev => ({ ...prev, pos: { x: k.get(name)[0].screenPos().x, y: k.get(name)[0].screenPos().y }})
-                );
 
                 // dialogue
                 if (k.isKeyPressed("e")) {

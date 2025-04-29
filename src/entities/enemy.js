@@ -1,8 +1,9 @@
-import { CELL_SIZE, MAP_SCALE, DIAGONAL_FACTOR } from "../constants";
 import { useFlash } from '../utils/shader';
 import { hasLineOfSight } from "../utils/collision";
 import makeProjectile from "./projectile";
 import PathfindingManager from "../utils/PathfindingManager";
+import makeGunDrop from './gunDrop';
+import { GUNS } from '../constants';
 
 export default function makeEnemy(k, pos, name, map) {
     const enemy = k.add([
@@ -40,7 +41,16 @@ export default function makeEnemy(k, pos, name, map) {
     });
 
     enemy.onAnimEnd(anim => {
-        if (anim === "dying") enemy.destroy();
+        if (anim === "dying") {
+            makeGunDrop(
+                k, 
+                { 
+                    name: "pistol"
+                }, 
+                enemy.pos
+            );
+            enemy.destroy();
+        }
     });
 
     const pf = new PathfindingManager(k, map, enemy);

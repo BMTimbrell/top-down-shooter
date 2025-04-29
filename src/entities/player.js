@@ -1,6 +1,5 @@
-import { DIAGONAL_FACTOR } from "../constants";
-import { GUNS } from '../constants';
-import { gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
+import { DROP_OFFSET, GUNS } from '../constants';
+import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
 import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
 
@@ -124,21 +123,21 @@ export default function makePlayer(k, posVec2) {
         }));
     }
 
-    function addGun(gun) {
-        if (player.guns.length < player.maxGuns) {
-            player.guns.push(gun);
-            store.set(playerInfoAtom, prev => ({
-                ...prev,
-                data: {
-                    ...prev.data,
-                    guns: player.guns
-                }
-            }));
-            return gun;
-        }
+    // function addGun(gun) {
+    //     if (player.guns.length < player.maxGuns) {
+    //         player.guns.push(gun);
+    //         store.set(playerInfoAtom, prev => ({
+    //             ...prev,
+    //             data: {
+    //                 ...prev.data,
+    //                 guns: player.guns
+    //             }
+    //         }));
+    //         return gun;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     function loseAmmo() {
         const gun = player.guns[player.gunIndex];
@@ -167,7 +166,7 @@ export default function makePlayer(k, posVec2) {
     function reload() {
         if (!player.onMission) return;
         const gun = player.guns[player.gunIndex];
-        if (gun.ammo <= 0 || gun.clip === gun.clipSize) return;
+        if (gun.ammo <= gun.clip || gun.clip === gun.clipSize) return;
 
         store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, reload: 0 } }));
 
@@ -212,7 +211,7 @@ export default function makePlayer(k, posVec2) {
 
     }
 
-    player.use({ setOnMission, setPlayerDashing, equipGun, addGun, loseAmmo, reload });
+    player.use({ setOnMission, setPlayerDashing, equipGun, loseAmmo, reload });
 
     let mWheel = '';
 
@@ -245,6 +244,72 @@ export default function makePlayer(k, posVec2) {
         if (anim === "dash" && player.dashing) {
             player.frame = player.frame;
         }
+    });
+
+    // gun drop
+    player.onCollideUpdate("drop", drop => {
+        const gunName = drop.tags[1];
+        const gunFound = player.guns.find(gun => gun.name === gunName);
+        const action = gunFound ? "Get Ammo" : "Pick Up";
+        store.set(
+            popupAtom,
+            prev => ({
+                ...prev,
+                visible: true,
+                text: {
+                    action,
+                    name: gunName,
+                    key: "E"
+                },
+                pos: {
+                    x: drop.screenPos().x - DROP_OFFSET,
+                    y: drop.screenPos().y - DROP_OFFSET
+                }
+            })
+        );
+
+        if (k.isKeyDown("e")) {
+            if (gunFound) {
+                gunFound.ammo = Math.min(gunFound.ammo + drop.ammo, gunFound.maxAmmo);
+                gunFound.clip = Math.min(gunFound.clip + drop.ammo, gunFound.clipSize);
+                
+                if (player.guns[player.gunIndex] === gunFound) {
+                    store.set(
+                        gameInfoAtom,
+                        prev => ({
+                            ...prev,
+                            cooldwns: { ...prev.cooldwns, reload: gunFound.clip / gunFound.clipSize }
+                        })
+                    );
+                }
+            } else if (player.guns.length === player.maxGuns) {
+                player.guns[player.gunIndex] = {
+                    name: gunName,
+                    ammo: GUNS.pistol.maxAmmo,
+                    ...GUNS.pistol,
+                    clip: GUNS.pistol.clipSize
+                };
+            } else {
+                player.guns.push({
+                    name: gunName,
+                    ammo: GUNS.pistol.maxAmmo,
+                    ...GUNS.pistol,
+                    clip: GUNS.pistol.clipSize
+                });
+            }
+
+            drop.destroy();
+        }
+    });
+
+    player.onCollideEnd("drop", () => {
+        store.set(
+            popupAtom,
+            prev => ({
+                ...prev,
+                visible: false
+            })
+        );
     });
 
     player.onUpdate(() => {
@@ -304,7 +369,7 @@ export default function makePlayer(k, posVec2) {
 
         if (player.dashing) {
             player.dashTimer -= k.dt();
-            
+
             if (player.dashTimer <= 0) {
                 player.dashing = false;
                 player.invincible = false;
@@ -337,8 +402,8 @@ export default function makePlayer(k, posVec2) {
                 };
 
                 if (
-                    hasOverlap(enemyOverlap, playerOverlap) && 
-                    !player.dashHitEnemies.has(e) && 
+                    hasOverlap(enemyOverlap, playerOverlap) &&
+                    !player.dashHitEnemies.has(e) &&
                     !e.dead
                 ) {
                     e.hurt(player.dashDamage);

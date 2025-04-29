@@ -19,7 +19,8 @@
 }
 
 :root {
-    --ui-transparent-bg: #04041fEE;
+    /* #04041fEE */
+    --ui-transparent-bg: #04041fDD;
     --ui-bg: #04041f;
     --green: #226d18;
     --primary-hover: #dddddd;

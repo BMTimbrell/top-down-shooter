@@ -2,8 +2,6 @@ export const PALETTE = {
 
 };
 
-export const DIAGONAL_FACTOR = 1 / 1.41;
-
 export const MAP_SCALE = 4;
 
 export const TILE_SIZE = 16;
@@ -11,6 +9,8 @@ export const TILE_SIZE = 16;
 export const CELL_SIZE = TILE_SIZE * MAP_SCALE;
 
 export const GUN_OFFSET = 5;
+
+export const DROP_OFFSET = 50;
 
 export const GUNS = {
     pistol: {
