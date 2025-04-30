@@ -26,6 +26,14 @@ export default function loadAssets(k) {
         size: 16
     });
 
+    k.loadSprite("coin", "./sprites/coin2.png", {
+        sliceX: 1,
+        sliceY: 1,
+        anims: {
+            "idle": 0
+        }
+    });
+
     k.loadSprite("player", "./sprites/playertest2.png", {
         sliceX: 8,
         sliceY: 30,

@@ -36,9 +36,7 @@ export default function makePlayer(k, posVec2) {
             reloading: false,
             invincible: false,
             guns: [
-                { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                { name: "smg", ammo: GUNS.smg.maxAmmo, ...GUNS.smg, clip: GUNS.smg.clipSize },
-                { name: "shotgun", ammo: GUNS.shotgun.maxAmmo, ...GUNS.shotgun, clip: GUNS.shotgun.clipSize }
+                { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -87,7 +85,7 @@ export default function makePlayer(k, posVec2) {
     }
 
     function equipGun(index = 0) {
-        if (!player.onMission) return;
+        if (!player.onMission || player.guns.length === 1) return;
 
         // reset reload when changing guns
         if (player.reloading) {
@@ -235,8 +233,8 @@ export default function makePlayer(k, posVec2) {
     player.onCollideUpdate("drop", drop => {
         if (drop.pickupDelay > 0) return;
 
-        const gunName = drop.tags[1];
-        const gunFound = player.guns.find(gun => gun.name === gunName);
+        const dropName = drop.tags[1];
+        const gunFound = player.guns.find(gun => gun.name === dropName);
         const action = gunFound ? "Get Ammo" : "Pick Up";
         store.set(
             popupAtom,
@@ -245,7 +243,7 @@ export default function makePlayer(k, posVec2) {
                 visible: true,
                 text: {
                     action,
-                    name: gunName,
+                    name: dropName,
                     key: "E"
                 },
                 pos: {
@@ -256,6 +254,19 @@ export default function makePlayer(k, posVec2) {
         );
 
         if (k.isKeyDown("e")) {
+
+            if (dropName === "coin") {
+                store.set(
+                    gameInfoAtom,
+                    prev => ({
+                        ...prev,
+                        gold: prev.gold + drop.amount
+                    })
+                );
+                drop.destroy();
+                return;
+            }
+
             const equippedGun = player.guns[player.gunIndex];
 
             if (gunFound) {
@@ -297,18 +308,18 @@ export default function makePlayer(k, posVec2) {
             } else if (player.guns.length === player.maxGuns) {
                 makeGunDrop(k, equippedGun, player.pos);
                 player.guns[player.gunIndex] = {
-                    name: gunName,
-                    ammo: GUNS.pistol.maxAmmo,
-                    ...GUNS.pistol,
-                    clip: GUNS.pistol.clipSize
+                    name: dropName,
+                    ammo: GUNS[dropName].maxAmmo,
+                    ...GUNS[dropName],
+                    clip: GUNS[dropName].clipSize
                 };
                 player.equipGun(player.gunIndex);
             } else {
                 player.guns.push({
-                    name: gunName,
-                    ammo: GUNS.pistol.maxAmmo,
-                    ...GUNS.pistol,
-                    clip: GUNS.pistol.clipSize
+                    name: dropName,
+                    ammo: GUNS[dropName].maxAmmo,
+                    ...GUNS[dropName],
+                    clip: GUNS[dropName].clipSize
                 });
             }
 

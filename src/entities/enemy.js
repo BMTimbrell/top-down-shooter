@@ -3,7 +3,8 @@ import { hasLineOfSight } from "../utils/collision";
 import makeProjectile from "./projectile";
 import PathfindingManager from "../utils/PathfindingManager";
 import makeGunDrop from './gunDrop';
-import { GUNS } from '../constants';
+import makeCoin from './coin';
+import { GUNS } from "../constants";
 
 export default function makeEnemy(k, pos, name, map) {
     const enemy = k.add([
@@ -42,13 +43,27 @@ export default function makeEnemy(k, pos, name, map) {
 
     enemy.onAnimEnd(anim => {
         if (anim === "dying") {
-            makeGunDrop(
-                k, 
-                { 
-                    name: "pistol"
-                }, 
-                enemy.pos
-            );
+            const dropChance = k.randi(1, 3);
+            const gunDropChance = k.randi(1, 4);
+            // console.log(dropChance, gunDropChance)
+
+            if (dropChance === 2) {
+                if (gunDropChance === 3) {
+                    const guns = Object.keys(GUNS);
+                    const gunName = guns[k.randi(0, guns.length)];
+
+                    makeGunDrop(
+                        k, 
+                        { 
+                            name: gunName
+                        }, 
+                        enemy.pos
+                    );
+                } else {
+                    makeCoin(k, enemy.pos);
+                }
+            }
+
             enemy.destroy();
         }
     });

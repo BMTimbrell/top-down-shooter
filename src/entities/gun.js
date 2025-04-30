@@ -47,6 +47,11 @@ export default function makeGun(k, player, gunObj) {
             return;
         }
 
+        // reset fire state after dash ends
+        if (gun.getCurAnim().name !== "firing" && gun.firingInterval <= 0) {
+            gun.fireTrigger = true;
+        }
+
         // pulse after fade in
         if (prevOpacity < 1 && gun.opacity === 1) {
             gun.pulseTimer = gun.pulseDuration;
@@ -76,7 +81,8 @@ export default function makeGun(k, player, gunObj) {
         gun.rotateTo((worldMousePos).angle(gun.pos));
 
         if (
-            k.isMouseDown() && gun.getCurAnim().name !== "firing" &&
+            k.isMouseDown() && 
+            gun.getCurAnim().name !== "firing" &&
             gun.firingInterval <= 0 &&
             !player.reloading
         ) {
