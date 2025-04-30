@@ -3,6 +3,7 @@ import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, store } from "../sto
 import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
+import makeFloatingText from '../utils/floatingText';
 
 export default function makePlayer(k, posVec2) {
 
@@ -263,6 +264,8 @@ export default function makePlayer(k, posVec2) {
                         gold: prev.gold + drop.amount
                     })
                 );
+                makeFloatingText(k, drop.pos, `+${drop.amount}`);
+
                 drop.destroy();
                 return;
             }
@@ -271,25 +274,7 @@ export default function makePlayer(k, posVec2) {
 
             if (gunFound) {
                 if (gunFound.ammo === gunFound.maxAmmo) {
-                    const text = k.add([
-                        k.pos(drop.pos.x, drop.pos.y - 65),
-                        k.anchor("center"),
-                        k.text("Gun is full", {
-                            size: 16,
-                            font: "dogicabold"
-                        }),
-                        k.color(255, 255, 255),
-                        k.opacity(1)
-                    ]);
-
-                    text.onUpdate(() => {
-                        text.pos = text.pos.sub(k.vec2(0, k.dt() * 10));
-                        text.opacity -= k.dt() * 2;
-
-                        if (text.opacity <= 0) {
-                            text.destroy();
-                        }
-                    });
+                    makeFloatingText(k, drop.pos, "Gun is full");
                     return;
                 }
 

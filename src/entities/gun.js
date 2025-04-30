@@ -44,12 +44,12 @@ export default function makeGun(k, player, gunObj) {
         gun.opacity = player.dashing ? Math.max(0, gun.opacity - 5 * k.dt()) : Math.min(1, gun.opacity + 5 * k.dt());
 
         if (player.dashing) {
+            // reset fire state
+            if (gun.getCurAnim().name !== "firing") {
+                gun.fireTrigger = true;
+            }
+        
             return;
-        }
-
-        // reset fire state after dash ends
-        if (gun.getCurAnim().name !== "firing" && gun.firingInterval <= 0) {
-            gun.fireTrigger = true;
         }
 
         // pulse after fade in
