@@ -22,6 +22,9 @@ export default function loadAssets(k) {
     //         "dash": { from: 152, to: 157, speed: 10 }
     //     }
     // });
+    k.loadFont("dogicabold", "./fonts/dogicabold.ttf", {
+        size: 16
+    });
 
     k.loadSprite("player", "./sprites/playertest2.png", {
         sliceX: 8,

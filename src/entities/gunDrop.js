@@ -14,10 +14,17 @@ export default function makeGunDrop(k, gunObj, pos) {
         k.opacity(1),
         name,
         {
-            ammo
+            ammo,
+            pickupDelay: 0.5
         },
         "drop"
     ]);
+
+    gun.onUpdate(() => {
+        if (gun.pickupDelay > 0) {
+            gun.pickupDelay -= k.dt();
+        }
+    });
 
     return gun;
 }

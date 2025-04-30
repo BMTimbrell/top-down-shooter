@@ -2,6 +2,7 @@ import { DROP_OFFSET, GUNS } from '../constants';
 import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
 import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
+import makeGunDrop from './gunDrop';
 
 export default function makePlayer(k, posVec2) {
 
@@ -123,22 +124,6 @@ export default function makePlayer(k, posVec2) {
         }));
     }
 
-    // function addGun(gun) {
-    //     if (player.guns.length < player.maxGuns) {
-    //         player.guns.push(gun);
-    //         store.set(playerInfoAtom, prev => ({
-    //             ...prev,
-    //             data: {
-    //                 ...prev.data,
-    //                 guns: player.guns
-    //             }
-    //         }));
-    //         return gun;
-    //     }
-
-    //     return null;
-    // }
-
     function loseAmmo() {
         const gun = player.guns[player.gunIndex];
         gun.ammo--;
@@ -248,6 +233,8 @@ export default function makePlayer(k, posVec2) {
 
     // gun drop
     player.onCollideUpdate("drop", drop => {
+        if (drop.pickupDelay > 0) return;
+
         const gunName = drop.tags[1];
         const gunFound = player.guns.find(gun => gun.name === gunName);
         const action = gunFound ? "Get Ammo" : "Pick Up";
@@ -269,11 +256,36 @@ export default function makePlayer(k, posVec2) {
         );
 
         if (k.isKeyDown("e")) {
+            const equippedGun = player.guns[player.gunIndex];
+
             if (gunFound) {
+                if (gunFound.ammo === gunFound.maxAmmo) {
+                    const text = k.add([
+                        k.pos(drop.pos.x, drop.pos.y - 65),
+                        k.anchor("center"),
+                        k.text("Gun is full", {
+                            size: 16,
+                            font: "dogicabold"
+                        }),
+                        k.color(255, 255, 255),
+                        k.opacity(1)
+                    ]);
+
+                    text.onUpdate(() => {
+                        text.pos = text.pos.sub(k.vec2(0, k.dt() * 10));
+                        text.opacity -= k.dt() * 2;
+
+                        if (text.opacity <= 0) {
+                            text.destroy();
+                        }
+                    });
+                    return;
+                }
+
                 gunFound.ammo = Math.min(gunFound.ammo + drop.ammo, gunFound.maxAmmo);
                 gunFound.clip = Math.min(gunFound.clip + drop.ammo, gunFound.clipSize);
-                
-                if (player.guns[player.gunIndex] === gunFound) {
+
+                if (equippedGun === gunFound) {
                     store.set(
                         gameInfoAtom,
                         prev => ({
@@ -283,12 +295,14 @@ export default function makePlayer(k, posVec2) {
                     );
                 }
             } else if (player.guns.length === player.maxGuns) {
+                makeGunDrop(k, equippedGun, player.pos);
                 player.guns[player.gunIndex] = {
                     name: gunName,
                     ammo: GUNS.pistol.maxAmmo,
                     ...GUNS.pistol,
                     clip: GUNS.pistol.clipSize
                 };
+                player.equipGun(player.gunIndex);
             } else {
                 player.guns.push({
                     name: gunName,
