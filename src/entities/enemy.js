@@ -5,6 +5,8 @@ import PathfindingManager from "../utils/PathfindingManager";
 import makeGunDrop from './gunDrop';
 import makeCoin from './coin';
 import { GUNS } from "../constants";
+import makeHeart from './heart';
+import { store, gameInfoAtom } from "../store";
 
 export default function makeEnemy(k, pos, name, map) {
     const enemy = k.add([
@@ -45,10 +47,19 @@ export default function makeEnemy(k, pos, name, map) {
         if (anim === "dying") {
             const dropChance = k.randi(1, 3);
             const gunDropChance = k.randi(1, 4);
-            // console.log(dropChance, gunDropChance)
+            const gameInfo = store.get(gameInfoAtom);
+            const healthDropChance = k.randi(
+                1, 
+                Math.min(
+                    11 - (gameInfo.maxHealth - gameInfo.health), 
+                    5
+                )
+            );
 
             if (dropChance === 2) {
-                if (gunDropChance === 3) {
+                if (healthDropChance === 1) {
+                    makeHeart(k, enemy.pos);
+                } else if (gunDropChance === 3) {
                     const guns = Object.keys(GUNS);
                     const gunName = guns[k.randi(0, guns.length)];
 

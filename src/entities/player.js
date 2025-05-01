@@ -255,7 +255,6 @@ export default function makePlayer(k, posVec2) {
         );
 
         if (k.isKeyDown("e")) {
-
             if (dropName === "coin") {
                 store.set(
                     gameInfoAtom,
@@ -270,11 +269,30 @@ export default function makePlayer(k, posVec2) {
                 return;
             }
 
+            if (dropName === "heart") {
+                if (player.hp() >= player.maxHP()) {
+                    makeFloatingText(k, drop.pos, "Health is full");
+                    return;
+                }
+                player.heal(1);
+
+                store.set(
+                    gameInfoAtom,
+                    prev => ({
+                        ...prev,
+                        health: player.hp()
+                    })
+                );
+
+                drop.destroy();
+                return;
+            }
+
             const equippedGun = player.guns[player.gunIndex];
 
             if (gunFound) {
                 if (gunFound.ammo === gunFound.maxAmmo) {
-                    makeFloatingText(k, drop.pos, "Gun is full");
+                    makeFloatingText(k, drop.pos, "Ammo is full");
                     return;
                 }
 

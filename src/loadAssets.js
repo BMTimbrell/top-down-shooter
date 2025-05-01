@@ -34,6 +34,14 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("heart", "./sprites/heart.png", {
+        sliceX: 1,
+        sliceY: 1,
+        anims: {
+            "idle": 0
+        }
+    });
+
     k.loadSprite("player", "./sprites/playertest2.png", {
         sliceX: 8,
         sliceY: 30,
