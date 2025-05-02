@@ -7,6 +7,8 @@ export default function makeFloatingText(k, pos, text) {
             font: "dogicabold"
         }),
         k.color(255, 255, 255),
+        "text",
+        k.z(9999999999),
         k.opacity(1)
     ]);
 

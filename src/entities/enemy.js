@@ -8,7 +8,7 @@ import { GUNS } from "../constants";
 import makeHeart from './heart';
 import { store, gameInfoAtom } from "../store";
 
-export default function makeEnemy(k, pos, name, map) {
+export default function makeEnemy(k, pos, name, { roomId, spawned }) {
     const enemy = k.add([
         k.sprite(name, { anim: "fly" }),
         k.scale(4),
@@ -27,7 +27,9 @@ export default function makeEnemy(k, pos, name, map) {
             shooting: false,
             firingSpeed: 3,
             speed: 100,
-            dead: false
+            dead: false,
+            roomId,
+            spawned
         }
     ]);
 
@@ -74,18 +76,28 @@ export default function makeEnemy(k, pos, name, map) {
                     makeCoin(k, enemy.pos);
                 }
             }
-
+        
+            // remove boulder when all enemies in room are dead
+            const enemies = k.get("enemy").filter(e => e.roomId === enemy.roomId);
+            if (enemies.length === 1) {
+                k.get("boulder").filter(b => b.roomIds.includes(enemy.roomId)).forEach(b => {
+                    b.opacity = 0;
+                    b.unuse("body");
+                });
+            }
             enemy.destroy();
         }
     });
 
-    const pf = new PathfindingManager(k, map, enemy);
+    const room = k.get("room").find(r => r.rId === enemy.roomId);
+    const pf = new PathfindingManager(k, room, enemy);
     let pathTimer = 0;
     let shootDistance = k.randi(100, 500);
     let shootCd = 0;
 
     enemy.onUpdate(() => {
-        if (enemy.dead) return;
+        enemy.opacity = enemy.spawned ? 1 : 0;
+        if (enemy.dead || !enemy.spawned) return;
 
         const player = k.get("player")[0];
         shootCd -= k.dt();

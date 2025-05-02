@@ -1,5 +1,5 @@
 import { DROP_OFFSET, GUNS } from '../constants';
-import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, store } from "../store";
+import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, infoBoxAtom, store } from "../store";
 import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
@@ -338,6 +338,24 @@ export default function makePlayer(k, posVec2) {
                 visible: false
             })
         );
+    });
+
+    player.onCollide("entrance", entrance => {
+        if (entrance.rId === "1-1") {
+            store.set(infoBoxAtom, prev => ({
+                ...prev,
+                visible: true,
+                text: "You can right click to slide. You are immune to damage while sliding. "
+                 + "Sliding into enemies will damage them. Your cooldown and duration will get "
+                 + "reduced and increased respectively for each enemy you hit."
+            }));
+        }
+        k.get("enemy").filter(e => e.roomId === entrance.rId).forEach(e => e.spawned = true);
+        k.get("boulder").filter(b => b.roomIds.includes(entrance.rId)).forEach(b => {
+            b.opacity = 1;
+            b.use(k.body({ isStatic: true }));
+        });
+        entrance.destroy();
     });
 
     player.onUpdate(() => {

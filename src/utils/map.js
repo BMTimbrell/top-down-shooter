@@ -1,5 +1,5 @@
-import { 
-    store, 
+import {
+    store,
     popupAtom,
     dialogueAtom,
 } from '../store';
@@ -34,19 +34,19 @@ export function makeMap(k, name, { layers, gameState }) {
 export function scaleToMap(k, map, entity, { center = true } = {}) {
 
     return k.vec2(
-        map.pos.x  + ((entity.x - (center ? TILE_SIZE / 2 : 0))  * MAP_SCALE), 
+        map.pos.x + ((entity.x - (center ? TILE_SIZE / 2 : 0)) * MAP_SCALE),
         map.pos.y + ((entity.y - (center ? TILE_SIZE / 2 : 0)) * MAP_SCALE)
     );
 }
 
 export function spawnObjects(
-    k, 
-    map, 
-    { 
-        layers, 
-        player, 
-        firstScene, 
-        doors = [], 
+    k,
+    map,
+    {
+        layers,
+        player,
+        firstScene,
+        doors = [],
         tileset
     }
 ) {
@@ -90,12 +90,25 @@ export function spawnObjects(
                     const pos = firstScene || map.tags[1] !== "room" ? entity : k.vec2(entity.x, entity.y - 40);
                     player.pos = scaleToMap(k, map, pos);
                     k.add(player);
-                } else if (entity.name.substring(0, 5) === "enemy") {
+                } else if (entity.name.includes("enemy")) {
+                    const spawned = entity?.properties?.find(e => e.name === "spawned")?.value;
                     const name = entity.name.substring(5).toLowerCase();
-                    makeEnemy(k, scaleToMap(k, map, entity), name, map);
+                    const roomId = entity?.properties?.find(e => e.name === "room")?.value;
+
+                    makeEnemy(
+                        k,
+                        scaleToMap(k, map, entity),
+                        name,
+                        {
+                            roomId,
+                            spawned
+                        }
+                    );
+
                 } else {
                     const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
- 
+                    const roomIds = entity?.properties?.find(e => e.name === "rooms")?.value;
+
                     k.add([
                         k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
                         k.anchor("center"),
@@ -106,14 +119,15 @@ export function spawnObjects(
                         ... boundary ? [
                             k.area({
                                 shape: new k.Rect(
-                                    k.vec2(0), 
-                                    JSON.parse(boundary).width, 
+                                    k.vec2(0),
+                                    JSON.parse(boundary).width,
                                     JSON.parse(boundary).height
                                 ),
-                                
+
                             }),
                             k.body({ isStatic: true })
-                        ] : ""
+                        ] : "",
+                        roomIds ? { roomIds } : ""
                     ]);
                 }
             }
@@ -141,6 +155,36 @@ export function makeBoundaries(k, map, layer) {
     }
 }
 
+export function makeRooms(k, map, layer) {
+    for (const room of layer.objects) {
+        k.add([
+            k.area({
+                shape: new k.Rect(k.vec2(0), room.width * MAP_SCALE, room.height * MAP_SCALE)
+            }),
+            k.pos(scaleToMap(k, map, room)),
+            "room",
+            {
+                rId: room.name
+            }
+        ]);
+    }
+}
+
+export function makeEntrances(k, map, layer) {
+    for (const entrance of layer.objects) {
+        k.add([
+            k.area({
+                shape: new k.Rect(k.vec2(0), entrance.width * MAP_SCALE, entrance.height * MAP_SCALE)
+            }),
+            k.pos(scaleToMap(k, map, entrance)),
+            "entrance",
+            {
+                rId: entrance.name
+            }
+        ]);
+    }
+}
+
 export function makeObjectInteractions(k, map, { layer, player, gameState, doors }) {
     for (const entity of layer.objects) {
         if (entity.name) {
@@ -154,23 +198,23 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
 
             const name = entity.name.substring(6);
             const sceneName = k.getSceneName();
-            
+
             k.onCollideUpdate("player", entity.name, () => {
                 // show popup if not showing dialogue box
                 if (!player.inDialogue) {
                     store.set(
-                        popupAtom, 
-                        prev => ({ 
+                        popupAtom,
+                        prev => ({
                             ...prev,
-                            visible: true, 
+                            visible: true,
                             text: {
-                                action: doors.some(e => e === name) ? "Go To" : "Check", 
-                                name, 
-                                key: "E" 
+                                action: doors.some(e => e === name) ? "Go To" : "Check",
+                                name,
+                                key: "E"
                             },
                             pos: {
-                                x: k.get(name)[0].screenPos().x, 
-                                y: k.get(name)[0].screenPos().y 
+                                x: k.get(name)[0].screenPos().x,
+                                y: k.get(name)[0].screenPos().y
                             }
                         })
                     );
@@ -187,17 +231,17 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                                 store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
                                 player.inDialogue = false;
                             } else {
-                                store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1}));
+                                store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1 }));
                             }
                         } else {
                             store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
                         }
                     } else if (description) {
-                            player.inDialogue = true;
+                        player.inDialogue = true;
 
-                            store.set(dialogueAtom, prev => ({ ...prev, text: description }));
-                            store.set(popupAtom, prev => ({ ...prev, visible: false }));
-                            store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
+                        store.set(dialogueAtom, prev => ({ ...prev, text: description }));
+                        store.set(popupAtom, prev => ({ ...prev, visible: false }));
+                        store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
                     } else if (doors.some(e => e === name)) {
                         const sceneName = k.getSceneName();
                         if (gameState.firstScene[sceneName]) {
@@ -207,7 +251,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                     }
                 }
             });
-            
+
             k.onCollideEnd("player", entity.name, () => {
                 store.set(popupAtom, prev => ({ ...prev, visible: false }));
             });
@@ -216,7 +260,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
 }
 
 export function orderByY(k) {
-    const exclude = ["Ground", "crosshair"];
+    const exclude = ["Ground", "crosshair", "text"];
 
     k.onUpdate(() => {
         k.query([]).filter(e => !exclude.some(e2 => e.is(e2)) && Object.hasOwn(e, "pos")).

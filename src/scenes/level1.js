@@ -3,6 +3,8 @@ import {
     makeMap,
     spawnObjects,
     makeBoundaries,
+    makeRooms,
+    makeEntrances,
     makeObjectInteractions,
     orderByY
 } from '../utils/map';
@@ -30,6 +32,10 @@ export default function level1(k) {
                         gameState
                     }
                 );
+            } else if (layer.name === "rooms") {
+                makeRooms(k, map, layer);
+            } else if (layer.name === "entrances") {
+                makeEntrances(k, map, layer);
             }
         }
 

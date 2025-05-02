@@ -48,8 +48,8 @@ export default class PathfindingManager {
     constructor(k, map, enemy) {
         this.k = k;
         this.enemy = enemy;
-        this.rows = map.height / CELL_SIZE;
-        this.cols = map.width / CELL_SIZE;
+        this.rows = map.area.shape.height / CELL_SIZE;
+        this.cols = map.area.shape.width / CELL_SIZE;
         this.map = map;
         this.grid = this.initGrid(this.cols, this.rows);
     }
@@ -63,12 +63,12 @@ export default class PathfindingManager {
             for (let j = 0; j < rows; j++) {
                 const enemyWidth = this.enemy.area.shape.width * MAP_SCALE;
                 const enemyHeight = this.enemy.area.shape.height * MAP_SCALE;
-                const padding = CELL_SIZE;
+                const padding = 0;
 
                 // take corners wide to not get stuck
                 const cell = {
-                    x: this.map.pos.x + i * CELL_SIZE - (enemyWidth / 2) - padding,
-                    y: this.map.pos.y + j * CELL_SIZE - (enemyHeight / 2) - padding,
+                    x: this.map.pos.x + i * CELL_SIZE - (enemyWidth / 2) + (CELL_SIZE / 2),
+                    y: this.map.pos.y + j * CELL_SIZE - (enemyHeight / 2) + (CELL_SIZE / 2),
                     width: enemyWidth + padding * 2,
                     height: enemyHeight + padding * 2
                 };
@@ -182,8 +182,8 @@ export default class PathfindingManager {
                 }
 
                 return path.map(e => this.k.vec2(
-                    offsetX + e.x * CELL_SIZE,
-                    offsetY + e.y * CELL_SIZE
+                    offsetX + e.x * CELL_SIZE + CELL_SIZE / 2,
+                    offsetY + e.y * CELL_SIZE + CELL_SIZE / 2
                 ));
             }
 
