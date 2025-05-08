@@ -1,7 +1,11 @@
 import { GUNS } from "../constants";
 
 export default function makeGunDrop(k, gunObj, pos) {
-    const { name, ammo = GUNS[name].maxAmmo } = gunObj;
+    const { 
+        name, 
+        ammo = gunObj?.ammo ? gunObj.ammo : GUNS[name].maxAmmo,
+        clip = gunObj?.clip ? gunObj.clip : GUNS[name].clipSize 
+    } = gunObj;
 
     const gun = k.add([
         k.sprite(name, { anim: "idle" }),
@@ -15,7 +19,8 @@ export default function makeGunDrop(k, gunObj, pos) {
         name,
         "drop",
         {
-            ammo
+            ammo,
+            clip
         }
     ]);
 

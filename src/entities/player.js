@@ -317,9 +317,9 @@ export default function makePlayer(k, posVec2) {
                     makeGunDrop(k, equippedGun, player.pos);
                     player.guns[player.gunIndex] = {
                         name: dropName,
-                        ammo: GUNS[dropName].maxAmmo,
+                        ammo: drop.ammo,
                         ...GUNS[dropName],
-                        clip: GUNS[dropName].clipSize
+                        clip: drop.clip
                     };
                     player.equipGun(player.gunIndex);
                 } else {
