@@ -243,5 +243,14 @@ export default class PathfindingManager {
         return null;
     }
 
+    cleanup() {
+        this.k = null;
+        this.enemy = null;
+        this.grid = null;
+        this.map = null;
+        this.rows = null;
+        this.cols = null;
+    }
+
 
 }

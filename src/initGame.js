@@ -34,7 +34,9 @@ export default function initGame() {
                 "room": true,
                 "main lobby": true,
                 "level1": true
-            }
+            },
+            reinforcements: [],
+            pendingSpawns: []
         }
     ]);
 

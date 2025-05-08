@@ -47,7 +47,8 @@ export function spawnObjects(
         player,
         firstScene,
         doors = [],
-        tileset
+        tileset,
+        gameState = null
     }
 ) {
     const crosshair = k.make([
@@ -79,6 +80,7 @@ export function spawnObjects(
                     k.scale(MAP_SCALE),
                     k.anchor("center"),
                     k.pos(scaleToMap(k, map, pos, { center: false })),
+                    k.offscreen({ hide: true, pause: true }),
                     spriteName
                 ]);
             });
@@ -92,18 +94,32 @@ export function spawnObjects(
                     k.add(player);
                 } else if (entity.name.includes("enemy")) {
                     const spawned = entity?.properties?.find(e => e.name === "spawned")?.value;
-                    const name = entity.name.substring(5).toLowerCase();
+                    const reinforcement = entity.name.includes("reinforcement");
+                    const name = entity.name.replace("enemy", "").replace(" reinforcement", "").toLowerCase();
                     const roomId = entity?.properties?.find(e => e.name === "room")?.value;
 
-                    makeEnemy(
-                        k,
-                        scaleToMap(k, map, entity),
-                        name,
-                        {
+                    if (reinforcement) {         
+                        gameState.reinforcements.push({
+                            name,
                             roomId,
-                            spawned
-                        }
-                    );
+                            pos: scaleToMap(k, map, entity)
+                        });
+                    } else if (!spawned) {
+                        gameState.pendingSpawns.push({
+                            name,
+                            roomId,
+                            pos: scaleToMap(k, map, entity)
+                        });
+                    } else {
+                        makeEnemy(
+                            k,
+                            scaleToMap(k, map, entity),
+                            name,
+                            {
+                                roomId
+                            }
+                        );
+                    }
 
                 } else {
                     const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
@@ -114,7 +130,7 @@ export function spawnObjects(
                         k.anchor("center"),
                         k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
-                        k.offscreen({ hide: true }),
+                        k.offscreen({ hide: true, pause: true }),
                         entity.name,
                         ... boundary ? [
                             k.area({

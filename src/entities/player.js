@@ -4,6 +4,7 @@ import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
 import makeFloatingText from '../utils/floatingText';
+import makeEnemy from './enemy';
 
 export default function makePlayer(k, posVec2) {
 
@@ -37,7 +38,9 @@ export default function makePlayer(k, posVec2) {
             reloading: false,
             invincible: false,
             guns: [
-                { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }
+                { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
+                { name: "smg", ammo: GUNS.smg.maxAmmo, ...GUNS.smg, clip: GUNS.smg.clipSize },
+                { name: "assault rifle", ammo: GUNS["assault rifle"].maxAmmo, ...GUNS["assault rifle"], clip: GUNS["assault rifle"].clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -231,8 +234,8 @@ export default function makePlayer(k, posVec2) {
     });
 
     // gun drop
+    let pickupDelay = 0;
     player.onCollideUpdate("drop", drop => {
-        if (drop.pickupDelay > 0) return;
 
         const dropName = drop.tags[1];
         const gunFound = player.guns.find(gun => gun.name === dropName);
@@ -255,79 +258,84 @@ export default function makePlayer(k, posVec2) {
         );
 
         if (k.isKeyDown("e")) {
-            if (dropName === "coin") {
-                store.set(
-                    gameInfoAtom,
-                    prev => ({
-                        ...prev,
-                        gold: prev.gold + drop.amount
-                    })
-                );
-                makeFloatingText(k, drop.pos, `+${drop.amount}`);
-
-                drop.destroy();
-                return;
-            }
-
-            if (dropName === "heart") {
-                if (player.hp() >= player.maxHP()) {
-                    makeFloatingText(k, drop.pos, "Health is full");
-                    return;
-                }
-                player.heal(1);
-
-                store.set(
-                    gameInfoAtom,
-                    prev => ({
-                        ...prev,
-                        health: player.hp()
-                    })
-                );
-
-                drop.destroy();
-                return;
-            }
-
-            const equippedGun = player.guns[player.gunIndex];
-
-            if (gunFound) {
-                if (gunFound.ammo === gunFound.maxAmmo) {
-                    makeFloatingText(k, drop.pos, "Ammo is full");
-                    return;
-                }
-
-                gunFound.ammo = Math.min(gunFound.ammo + drop.ammo, gunFound.maxAmmo);
-                gunFound.clip = Math.min(gunFound.clip + drop.ammo, gunFound.clipSize);
-
-                if (equippedGun === gunFound) {
+            if (pickupDelay <= 0) {
+                pickupDelay = 0.5;
+                if (dropName === "coin") {
                     store.set(
                         gameInfoAtom,
                         prev => ({
                             ...prev,
-                            cooldwns: { ...prev.cooldwns, reload: gunFound.clip / gunFound.clipSize }
+                            gold: prev.gold + drop.amount
                         })
                     );
-                }
-            } else if (player.guns.length === player.maxGuns) {
-                makeGunDrop(k, equippedGun, player.pos);
-                player.guns[player.gunIndex] = {
-                    name: dropName,
-                    ammo: GUNS[dropName].maxAmmo,
-                    ...GUNS[dropName],
-                    clip: GUNS[dropName].clipSize
-                };
-                player.equipGun(player.gunIndex);
-            } else {
-                player.guns.push({
-                    name: dropName,
-                    ammo: GUNS[dropName].maxAmmo,
-                    ...GUNS[dropName],
-                    clip: GUNS[dropName].clipSize
-                });
-            }
+                    makeFloatingText(k, drop.pos, `+${drop.amount}`);
 
-            drop.destroy();
+                    drop.destroy();
+                    return;
+                }
+
+                if (dropName === "heart") {
+                    if (player.hp() >= player.maxHP()) {
+                        makeFloatingText(k, drop.pos, "Health is full");
+                        return;
+                    }
+                    player.heal(1);
+
+                    store.set(
+                        gameInfoAtom,
+                        prev => ({
+                            ...prev,
+                            health: player.hp()
+                        })
+                    );
+
+                    drop.destroy();
+                    return;
+                }
+
+                const equippedGun = player.guns[player.gunIndex];
+
+                if (gunFound) {
+                    if (gunFound.ammo === gunFound.maxAmmo) {
+                        makeFloatingText(k, drop.pos, "Ammo is full");
+                        return;
+                    }
+
+                    gunFound.ammo = Math.min(gunFound.ammo + drop.ammo, gunFound.maxAmmo);
+                    gunFound.clip = Math.min(gunFound.clip + drop.ammo, gunFound.clipSize);
+
+                    if (equippedGun === gunFound) {
+                        store.set(
+                            gameInfoAtom,
+                            prev => ({
+                                ...prev,
+                                cooldwns: { ...prev.cooldwns, reload: gunFound.clip / gunFound.clipSize }
+                            })
+                        );
+                    }
+                } else if (player.guns.length === player.maxGuns) {
+                    makeGunDrop(k, equippedGun, player.pos);
+                    player.guns[player.gunIndex] = {
+                        name: dropName,
+                        ammo: GUNS[dropName].maxAmmo,
+                        ...GUNS[dropName],
+                        clip: GUNS[dropName].clipSize
+                    };
+                    player.equipGun(player.gunIndex);
+                } else {
+                    player.guns.push({
+                        name: dropName,
+                        ammo: GUNS[dropName].maxAmmo,
+                        ...GUNS[dropName],
+                        clip: GUNS[dropName].clipSize
+                    });
+                }
+
+                drop.destroy();
+            }
         }
+
+
     });
 
     player.onCollideEnd("drop", () => {
@@ -346,11 +354,19 @@ export default function makePlayer(k, posVec2) {
                 ...prev,
                 visible: true,
                 text: "You can right click to slide. You are immune to damage while sliding. "
-                 + "Sliding into enemies will damage them. Your cooldown and duration will get "
-                 + "reduced and increased respectively for each enemy you hit."
+                    + "Sliding into enemies will damage them. Your cooldown and duration will get "
+                    + "reduced and increased respectively for each enemy you hit."
             }));
         }
-        k.get("enemy").filter(e => e.roomId === entrance.rId).forEach(e => e.spawned = true);
+
+        const roomId = entrance.rId;
+        const gameState = k.get("gameState")[0];
+        const toSpawn = gameState.pendingSpawns.filter(e => e.roomId === roomId);
+        toSpawn.forEach(e => makeEnemy(k, e.pos, e.name, { roomId }));
+
+        // Remove them from the pending list so they don't respawn
+        gameState.pendingSpawns = gameState.pendingSpawns.filter(e => e.roomId !== roomId);
+
         k.get("boulder").filter(b => b.roomIds.includes(entrance.rId)).forEach(b => {
             b.opacity = 1;
             b.use(k.body({ isStatic: true }));
@@ -359,6 +375,7 @@ export default function makePlayer(k, posVec2) {
     });
 
     player.onUpdate(() => {
+        if (pickupDelay > 0) pickupDelay -= k.dt();
         // === A. Update Direction (mouse and keyboard) ===
         const worldMousePos = k.toWorld(k.mousePos());
         player.direction = worldMousePos.sub(player.pos).unit();

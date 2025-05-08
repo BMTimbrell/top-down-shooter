@@ -50,7 +50,8 @@ export default function level1(k) {
                     name: "rocky-tileset",
                     width: 9,
                     height: 11
-                }
+                },
+                gameState
             }
         );
 

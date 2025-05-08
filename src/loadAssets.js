@@ -82,6 +82,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("assault rifle", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 120,
+            "firing": { from: 120, to: 122, loop: true, speed: GUNS["assault rifle"].animSpeed }
+        }
+    });
+
     // projectiles
     k.loadSprite("bullet", "./sprites/bullets3.png", {
         sliceX: 25,
@@ -162,13 +171,39 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSpriteAtlas("./sprites/rocky-tileset.png", {
+        "greenPlant": {
+            x: 64,
+            y: 64,
+            width: 32,
+            height: 32
+        }
+    });
+
     // enemies
-    k.loadSprite("bird", "./sprites/bird-sheet.png", {
+    k.loadSprite("bird", "./sprites/bird-sheet2.png", {
         sliceX: 8,
         sliceY: 2,
         anims: {
             "fly": { from: 0, to: 7, loop: true, speed: 7 },
             "dying": { from: 8, to: 10, loop: false, speed: 5 }
+        }
+    });
+
+    k.loadSprite("redbird", "./sprites/red-bird-sheet.png", {
+        sliceX: 8,
+        sliceY: 2,
+        anims: {
+            "fly": { from: 0, to: 7, loop: true, speed: 7 },
+            "dying": { from: 8, to: 10, loop: false, speed: 5 }
+        }
+    });
+
+    k.loadSprite("warning", "./sprites/warning.png", {
+        sliceX: 1,
+        sliceY: 1,
+        anims: {
+            "idle": 0
         }
     });
 }

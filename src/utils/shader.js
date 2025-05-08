@@ -4,19 +4,23 @@ export function useFlash(k, entity) {
     k.loadShader(
         "flash",
         null,
-         `
+        `
             uniform float u_flash;
+            uniform float u_opacity;
+    
             vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
                 vec4 texColor = texture2D(tex, uv);
-                // blend the texture with white based on flash
-                return mix(texColor, vec4(1.0, 1.0, 1.0, texColor.a), u_flash);
+                // blend texture with white based on flash, then apply opacity
+                vec4 blended = mix(texColor, vec4(1.0, 1.0, 1.0, texColor.a), u_flash);
+                blended.a *= u_opacity;
+                return blended;
             }
-        `,
-
+        `
     );
 
     entity.use(k.shader("flash", () => ({
-        u_flash: flashAmount
+        u_flash: flashAmount,
+        u_opacity: entity.opacity
     })));
 
 

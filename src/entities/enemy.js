@@ -4,11 +4,13 @@ import makeProjectile from "./projectile";
 import PathfindingManager from "../utils/PathfindingManager";
 import makeGunDrop from './gunDrop';
 import makeCoin from './coin';
-import { GUNS } from "../constants";
+import { GUNS, ENEMIES } from "../constants";
 import makeHeart from './heart';
 import { store, gameInfoAtom } from "../store";
 
-export default function makeEnemy(k, pos, name, { roomId, spawned }) {
+export default function makeEnemy(k, pos, name, { roomId }) {
+    const enemyData = ENEMIES[name];
+
     const enemy = k.add([
         k.sprite(name, { anim: "fly" }),
         k.scale(4),
@@ -20,20 +22,27 @@ export default function makeEnemy(k, pos, name, { roomId, spawned }) {
         k.body(),
         k.pos(pos),
         k.timer(),
-        k.health(10, 10),
+        k.health(enemyData.health, enemyData.health),
+        k.opacity(1),
+        k.offscreen({ hide: true }),
         "enemy",
         {
             path: [],
             shooting: false,
-            firingSpeed: 3,
-            speed: 100,
+            firingSpeed: enemyData.firingSpeed,
+            speed: enemyData.speed,
             dead: false,
-            roomId,
-            spawned
+            roomId
         }
     ]);
 
     useFlash(k, enemy);
+
+    const room = k.get("room").find(r => r.rId === enemy.roomId);
+    const pf = new PathfindingManager(k, room, enemy);
+    let pathTimer = 0;
+    let shootDistance = k.randi(100, 500);
+    let shootCd = 0;
 
     enemy.on("hurt", () => {
         enemy.flash();
@@ -43,22 +52,24 @@ export default function makeEnemy(k, pos, name, { roomId, spawned }) {
         enemy.dead = true;
         enemy.unuse("body");
         enemy.play("dying");
+        pf.cleanup();
+
     });
 
     enemy.onAnimEnd(anim => {
         if (anim === "dying") {
-            const dropChance = k.randi(1, 3);
-            const gunDropChance = k.randi(1, 4);
+            const dropChance = k.randi(1, 4);
+            const gunDropChance = k.randi(1, 5);
             const gameInfo = store.get(gameInfoAtom);
             const healthDropChance = k.randi(
-                1, 
+                1,
                 Math.min(
-                    11 - (gameInfo.maxHealth - gameInfo.health), 
-                    5
+                    21 - (gameInfo.maxHealth - gameInfo.health),
+                    11
                 )
             );
 
-            if (dropChance === 2) {
+            if (dropChance === 1 || dropChance === 2) {
                 if (healthDropChance === 1) {
                     makeHeart(k, enemy.pos);
                 } else if (gunDropChance === 3) {
@@ -66,38 +77,56 @@ export default function makeEnemy(k, pos, name, { roomId, spawned }) {
                     const gunName = guns[k.randi(0, guns.length)];
 
                     makeGunDrop(
-                        k, 
-                        { 
+                        k,
+                        {
                             name: gunName
-                        }, 
+                        },
                         enemy.pos
                     );
                 } else {
                     makeCoin(k, enemy.pos);
                 }
             }
-        
+
             // remove boulder when all enemies in room are dead
             const enemies = k.get("enemy").filter(e => e.roomId === enemy.roomId);
+            const reinforcements = k.get("gameState")[0].reinforcements.filter(e => e.roomId === enemy.roomId);
             if (enemies.length === 1) {
-                k.get("boulder").filter(b => b.roomIds.includes(enemy.roomId)).forEach(b => {
-                    b.opacity = 0;
-                    b.unuse("body");
-                });
+                if (reinforcements.length) {
+                    reinforcements.forEach(async e => {
+                        const warning = k.add([
+                            k.pos(e.pos),
+                            k.sprite("warning", { anim: "idle" }),
+                            k.scale(4),
+                            "warning",
+                            k.timer()
+                        ]);
+
+                        let t = 0;
+                        warning.onUpdate(() => {
+                            t += k.dt();
+                            warning.opacity = 0.5 + 0.5 * Math.sin(t * 10);
+                        });
+
+                        await warning.wait(1);
+
+                        k.destroy(warning);
+                        makeEnemy(k, e.pos, e.name, { roomId: enemy.roomId });
+                    });
+                    k.get("gameState")[0].reinforcements = k.get("gameState")[0].reinforcements.filter(e => e.roomId !== enemy.roomId);
+                } else {
+                    k.get("boulder").filter(b => b.roomIds.includes(enemy.roomId)).forEach(b => {
+                        b.opacity = 0;
+                        b.unuse("body");
+                    });
+                }
             }
             enemy.destroy();
         }
     });
 
-    const room = k.get("room").find(r => r.rId === enemy.roomId);
-    const pf = new PathfindingManager(k, room, enemy);
-    let pathTimer = 0;
-    let shootDistance = k.randi(100, 500);
-    let shootCd = 0;
-
     enemy.onUpdate(() => {
-        enemy.opacity = enemy.spawned ? 1 : 0;
-        if (enemy.dead || !enemy.spawned) return;
+        if (enemy.dead) return;
 
         const player = k.get("player")[0];
         shootCd -= k.dt();
@@ -152,16 +181,27 @@ export default function makeEnemy(k, pos, name, { roomId, spawned }) {
 
         /*  shooting  */
         if (shootCd <= 0 && hasLineOfSight(k, enemy.pos, player.pos)) {
-            makeProjectile(k, {
-                pos: enemy.pos,
-                damage: 1,
-                projectileSpeed: 200
-            }, {
-                name: "enemyProjectile",
-                friendly: false,
-                lifespan: 5
-            });
-            shootCd = 3;
+            const projectileCount = enemyData.projectileCount ?? 1;
+
+            const angleStep = 15;
+
+            const totalSpread = (projectileCount - 1) * angleStep;
+
+            for (let i = 0; i < projectileCount; i++) {
+                const offset = -totalSpread / 2 + i * angleStep;
+                makeProjectile(k, {
+                    pos: enemy.pos,
+                    damage: ENEMIES[name].damage,
+                    projectileSpeed: 200
+                }, {
+                    name: "enemyProjectile",
+                    spread: offset,
+                    friendly: false,
+                    lifespan: 5
+                });
+            }
+
+            shootCd = enemy.firingSpeed;
         }
 
     });
