@@ -65,23 +65,16 @@ export function spawnObjects(
         if (layer?.data) {
             layer.data.forEach((e, index) => {
                 if (e === 0) return;
-                const spriteName = layer.name;
+                const spriteName = layer.name + e;
                 const pos = { x: index % layer.width * 16, y: Math.floor(index / layer.width) * 16 };
 
-                k.loadSprite(spriteName, `./sprites/${tileset.name}.png`, {
-                    sliceX: tileset.width,
-                    sliceY: tileset.height,
-                    anims: {
-                        "idle": e - 1 // first GID is 1
-                    }
-                });
                 k.add([
-                    k.sprite(spriteName, { anim: "idle" }),
+                    k.sprite(spriteName.toLowerCase(), { anim: "idle" }),
                     k.scale(MAP_SCALE),
                     k.anchor("center"),
                     k.pos(scaleToMap(k, map, pos, { center: false })),
                     k.offscreen({ hide: true, pause: true }),
-                    spriteName
+                    layer.name
                 ]);
             });
         }

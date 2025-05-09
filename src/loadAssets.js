@@ -91,12 +91,46 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("sniper rifle", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 160,
+            "firing": { from: 160, to: 163, loop: true, speed: GUNS["sniper rifle"].animSpeed }
+        }
+    });
+
+    k.loadSprite("RPG", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 184,
+            "firing": { from: 184, to: 188, loop: true, speed: GUNS["RPG"].animSpeed }
+        }
+    });
+
     // projectiles
     k.loadSprite("bullet", "./sprites/bullets3.png", {
         sliceX: 25,
         sliceY: 1,
         anims: {
             "idle": 4
+        }
+    });
+
+    k.loadSprite("rocket", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 23
+        }
+    });
+
+    k.loadSprite("explosion", "./sprites/explosion.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "explode": { from: 0, to: 3, loop: false, speed: 10 }
         }
     });
 
@@ -205,6 +239,45 @@ export default function loadAssets(k) {
         anims: {
             "idle": 0
         }
+    });
+
+    // tiles
+    const tiles = [
+        { layer: "ground", index: 78 },
+        { layer: "ground", index: 59 },
+        { layer: "ground", index: 60 },
+        { layer: "ground", index: 68 },
+        { layer: "ground", index: 69 },
+      
+        { layer: "walls", index: 73 },
+        { layer: "walls", index: 74 },
+        { layer: "walls", index: 75 },
+        { layer: "walls", index: 82 },
+        { layer: "walls", index: 84 },
+        { layer: "walls", index: 92 },
+        { layer: "walls", index: 93 },
+        { layer: "walls", index: 91 },
+      
+        { layer: "props", index: 46 },
+        { layer: "props", index: 56 },
+        { layer: "props", index: 55 },
+        { layer: "props", index: 49 },
+        { layer: "props", index: 58 },
+        { layer: "props", index: 57 },
+        { layer: "props", index: 64 },
+        { layer: "props", index: 65 },
+        { layer: "props", index: 66 },
+        { layer: "props", index: 67 },
+      ];
+
+    tiles.forEach(({ layer, index }) => {
+        k.loadSprite(`${layer}${index}`, "./sprites/rocky-tileset.png", {
+            sliceX: 9,
+            sliceY: 11,
+            anims: {
+                idle: index - 1, // Tiled's first GID is 1
+            },
+        });
     });
 }
 

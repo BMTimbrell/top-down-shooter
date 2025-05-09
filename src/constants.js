@@ -14,6 +14,7 @@ export const DROP_OFFSET = 50;
 
 export const GUNS = {
     pistol: {
+        projectile: "bullet",
         damage: 2,
         firingInterval: 5,
         animSpeed: 10,
@@ -26,10 +27,11 @@ export const GUNS = {
     },
 
     smg: {
+        projectile: "bullet",
         damage: 1.5,
         firingInterval: 0,
         animSpeed: 20,
-        maxAmmo: 200,
+        maxAmmo: 150,
         clipSize: 20,
         pelletSpread: 8,
         projectileLifespan: 1.5,
@@ -38,11 +40,12 @@ export const GUNS = {
     },
 
     shotgun: {
+        projectile: "bullet",
         damage: 2,
         firingInterval: 0,
         animSpeed: 12,
         clipSize: 6,
-        maxAmmo: 100,
+        maxAmmo: 80,
         pelletCount: 5,
         pelletSpread: 17,
         pelletSpeedVariation: 100,
@@ -52,6 +55,7 @@ export const GUNS = {
     },
 
     "assault rifle": {
+        projectile: "bullet",
         damage: 1.5,
         firingInterval: 0,
         animSpeed: 20,
@@ -62,6 +66,32 @@ export const GUNS = {
         projectileSpeed: 700,
         spritePos: { x: 0, y: 2016 }
     },
+
+    "sniper rifle": {
+        projectile: "bullet",
+        damage: 4,
+        firingInterval: 20,
+        animSpeed: 10,
+        clipSize: 8,
+        maxAmmo: 50,
+        pelletSpread: 0,
+        projectileLifespan: 1.5,
+        pierce: 3,
+        projectileSpeed: 1500,
+        spritePos: { x: 0, y: 1536 }
+    },
+
+    "RPG": {
+        projectile: "rocket",
+        damage: 10,
+        firingInterval: 0,
+        animSpeed: 10,
+        clipSize: 1,
+        maxAmmo: 20,
+        projectileLifespan: 1.5,
+        projectileSpeed: 700,
+        spritePos: { x: 0, y: 1248 }
+    }
 };
 
 export const ENEMIES = {

@@ -39,8 +39,8 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                { name: "smg", ammo: GUNS.smg.maxAmmo, ...GUNS.smg, clip: GUNS.smg.clipSize },
-                { name: "assault rifle", ammo: GUNS["assault rifle"].maxAmmo, ...GUNS["assault rifle"], clip: GUNS["assault rifle"].clipSize }
+                // { name: "RPG", ammo: GUNS["RPG"].maxAmmo, ...GUNS["RPG"], clip: GUNS["RPG"].clipSize },
+                // { name: "sniper rifle", ammo: GUNS["sniper rifle"].maxAmmo, ...GUNS["sniper rifle"], clip: GUNS["sniper rifle"].clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,

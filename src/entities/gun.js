@@ -4,6 +4,7 @@ import { GUN_OFFSET, GUNS } from "../constants";
 export default function makeGun(k, player, gunObj) {
     const {
         name,
+        projectile,
         damage,
         firingInterval,
         ammo,
@@ -29,6 +30,7 @@ export default function makeGun(k, player, gunObj) {
             projectileSpeed,
             pulseTimer: 0,
             pulseDuration: 0.3,
+            projectile
         }
     ]);
 
@@ -106,10 +108,11 @@ export default function makeGun(k, player, gunObj) {
                     k, 
                     gun, 
                     { 
-                        name: "bullet", 
+                        name: projectile, 
                         spread: randomSpread,
                         speedOffset: randomSpeedOffset,
-                        lifespan: gunObj.projectileLifespan
+                        lifespan: gunObj.projectileLifespan,
+                        pierce: gunObj.pierce || 0
                     }
                 );
             }
