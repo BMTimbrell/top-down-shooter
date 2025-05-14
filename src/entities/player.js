@@ -19,6 +19,7 @@ export default function makePlayer(k, posVec2) {
         k.pos(posVec2),
         k.timer(),
         "player",
+        "pausable",
         k.health(3, 3),
         {
             speed: 200,
@@ -28,7 +29,7 @@ export default function makePlayer(k, posVec2) {
             dashCd: 2.5,
             dashHitEnemies: new Set(),
             reloadCd: 1.5,
-            dashDamage: 5,
+            dashDamage: 2.5,
             dashOnCd: false,
             dashSpeed: 500,
             dashTimer: 0,
@@ -39,8 +40,8 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                // { name: "RPG", ammo: GUNS["RPG"].maxAmmo, ...GUNS["RPG"], clip: GUNS["RPG"].clipSize },
-                // { name: "sniper rifle", ammo: GUNS["sniper rifle"].maxAmmo, ...GUNS["sniper rifle"], clip: GUNS["sniper rifle"].clipSize }
+                // { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize },
+                // { name: "smg", ammo: GUNS["smg"].maxAmmo, ...GUNS["smg"], clip: GUNS["smg"].clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -448,6 +449,7 @@ export default function makePlayer(k, posVec2) {
             player.move(dashDirection.scale(player.dashSpeed));
 
             k.get("enemy").forEach(e => {
+                if (!e?.area?.shape) return;
                 const enemyScale = e.scale?.x || 1;
                 const enemyOverlap = {
                     x: e.pos.x - (e.area.shape.width * enemyScale) / 2,

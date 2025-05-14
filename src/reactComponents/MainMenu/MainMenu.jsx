@@ -6,18 +6,16 @@ import { playerInfoAtom } from '../../store';
 import { useAtom } from 'jotai';
 import BackButton from '../Button/BackButton';
 import ExpBar from '../ExpBar/ExpBar';
-import { useRef } from 'react';
 import Modal from '../Modal/Modal';
 
 export default function MainMenu({ buttons }) {
     const [playerInfo, setPlayerInfo] = useAtom(playerInfoAtom);
-    const menuRef = useRef(null);
     const mind = playerInfo.data.exp.mind;
     const body = playerInfo.data.exp.body;
     const weaponLvl = playerInfo.data.exp.weaponLvl;
 
     return (
-        <Modal ref={menuRef}>
+        <Modal>
             {playerInfo.visible ? (
                 <div className={styles["player-info"]}>
                     <h1>Player Info</h1>
@@ -39,15 +37,14 @@ export default function MainMenu({ buttons }) {
                     <h2>Guns</h2>
                     <GunContainer>
                         {playerInfo.data.guns.map((gun, index) => (
-                            <Gun 
-                                key={index}
-                                spritePos={gun.spritePos}
-                                name={gun.name}
-                                damage={gun.damage}
-                                firingInterval={gun.firingInterval}
-                                animSpeed={gun.animSpeed} 
-                                parentPos={menuRef?.current?.getBoundingClientRect()}
-                            />
+                            <div className={styles["gun-card"]} key={index}>
+                                <Gun 
+                                    spritePos={gun.spritePos}
+                                />
+                                <div className={styles.ammo}>
+                                    {`${gun.ammo}/${gun.maxAmmo}`}
+                                </div>
+                            </div>
                         ))}
                     </GunContainer>
 

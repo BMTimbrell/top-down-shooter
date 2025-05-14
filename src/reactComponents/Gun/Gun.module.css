@@ -1,32 +1,8 @@
 .gun {
     width: 96px;
     height: 96px; 
-    background-image: url(sprites/weapons.png);
-    background-size: 768px 3456px;
+    background-image: url(sprites/weapon-sprites.png);
+    background-size: 96px 672px;
     background-position: var(--sprite-pos-x) var(--sprite-pos-y);
     border: 1px solid transparent;
-    border-radius: 0.25rem;
-}
-
-.stat-container h3 {
-    font-weight: bold;
-    text-align: left;
-    margin-bottom: 0.5em;
-}
-
-.stat-container {
-    width: 12.5rem;
-}
-
-.gun-stats {
-    display: flex;
-    flex-direction: column;
-    row-gap: 0.5rem;
-    text-align: left;
-    font-size: 0.75rem;
-}
-
-.gun-stats > * {
-    display: flex;
-    justify-content: space-between;
 }

@@ -8,8 +8,6 @@ export const TILE_SIZE = 16;
 
 export const CELL_SIZE = TILE_SIZE * MAP_SCALE;
 
-export const GUN_OFFSET = 5;
-
 export const DROP_OFFSET = 50;
 
 export const GUNS = {
@@ -23,7 +21,8 @@ export const GUNS = {
         pelletSpread: 5,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 0 }
+        spritePos: { x: 0, y: 0 },
+        offset: { x: 0, y: 5 }
     },
 
     smg: {
@@ -36,7 +35,8 @@ export const GUNS = {
         pelletSpread: 8,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 2400 }
+        spritePos: { x: 0, y: 576 },
+        offset: { x: 0, y: 5 }
     },
 
     shotgun: {
@@ -44,14 +44,15 @@ export const GUNS = {
         damage: 2,
         firingInterval: 0,
         animSpeed: 12,
-        clipSize: 6,
+        clipSize: 8,
         maxAmmo: 80,
         pelletCount: 5,
         pelletSpread: 17,
         pelletSpeedVariation: 100,
         projectileLifespan: 0.75,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 960 }
+        spritePos: { x: 0, y: 192 },
+        offset: { x: 0, y: 5 }
     },
 
     "assault rifle": {
@@ -64,21 +65,23 @@ export const GUNS = {
         pelletSpread: 6,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 2016 }
+        spritePos: { x: 0, y: 480 },
+        offset: { x: 0, y: 5 }
     },
 
     "sniper rifle": {
         projectile: "bullet",
-        damage: 4,
+        damage: 5,
         firingInterval: 20,
         animSpeed: 10,
-        clipSize: 8,
+        clipSize: 6,
         maxAmmo: 50,
         pelletSpread: 0,
         projectileLifespan: 1.5,
         pierce: 3,
         projectileSpeed: 1500,
-        spritePos: { x: 0, y: 1536 }
+        spritePos: { x: 0, y: 384 },
+        offset: { x: 0, y: 5 }
     },
 
     "RPG": {
@@ -90,7 +93,22 @@ export const GUNS = {
         maxAmmo: 20,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 1248 }
+        spritePos: { x: 0, y: 288 },
+        offset: { x: 0, y: 5 }
+    },
+
+    "minigun": {
+        projectile: "bullet",
+        damage: 2,
+        firingInterval: 0,
+        animSpeed: 20,
+        clipSize: 100,
+        maxAmmo: 300,
+        projectileLifespan: 1.5,
+        projectileSpeed: 700,
+        pelletSpread: 10,
+        spritePos: { x: 0, y: 96 },
+        offset: { x: 20, y: 5 }
     }
 };
 
@@ -108,5 +126,12 @@ export const ENEMIES = {
         damage: 1,
         firingSpeed: 3,
         projectileCount: 3
+      },
+      mole: {
+        health: 15,
+        speed: 50,
+        damage: 1,
+        firingSpeed: 3,
+        projectileCount: 1
       }
 };

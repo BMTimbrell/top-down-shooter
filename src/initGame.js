@@ -85,19 +85,13 @@ export default function initGame() {
                 }));
             }
 
-            // toggle game pause and menu visibility
+            // toggle menu visibility
             store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible }));
         }
 
-        if (store.get(menuAtom).visible || store.get(infoBoxAtom).visible) {
-            k.query([]).forEach(e => {
-                if (!e.is("gameState") && !e.is("crosshair")) {
-                    e.paused = true;
-                }
-            });
-        } else {
-            k.query([]).forEach(e => e.paused = false);
-        }
+        k.get(['pausable']).forEach(e => {
+            e.paused = store.get(menuAtom).visible || store.get(infoBoxAtom).visible;
+        });
     });
 
     k.go("level1", { player, gameState });

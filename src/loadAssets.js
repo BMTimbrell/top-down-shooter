@@ -109,6 +109,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("minigun", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 200,
+            "firing": { from: 200, to: 202, loop: true, speed: GUNS.minigun.animSpeed }
+        }
+    });
+
     // projectiles
     k.loadSprite("bullet", "./sprites/bullets3.png", {
         sliceX: 25,
@@ -219,7 +228,7 @@ export default function loadAssets(k) {
         sliceX: 8,
         sliceY: 2,
         anims: {
-            "fly": { from: 0, to: 7, loop: true, speed: 7 },
+            "walk": { from: 0, to: 7, loop: true, speed: 7 },
             "dying": { from: 8, to: 10, loop: false, speed: 5 }
         }
     });
@@ -228,8 +237,19 @@ export default function loadAssets(k) {
         sliceX: 8,
         sliceY: 2,
         anims: {
-            "fly": { from: 0, to: 7, loop: true, speed: 7 },
+            "walk": { from: 0, to: 7, loop: true, speed: 7 },
             "dying": { from: 8, to: 10, loop: false, speed: 5 }
+        }
+    });
+
+    k.loadSprite("mole", "./sprites/alien_mole-sheet.png", {
+        sliceX: 4,
+        sliceY: 4,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 7 },
+            "rotate": { from: 4, to: 7, loop: false, speed: 7 },
+            "dig": { from: 8, to: 11, loop: true, speed: 20 },
+            "dying": { from: 12, to: 15, loop: false, speed: 6 }
         }
     });
 
@@ -238,6 +258,23 @@ export default function loadAssets(k) {
         sliceY: 1,
         anims: {
             "idle": 0
+        }
+    });
+
+    k.loadSprite("dirtPuff", "./sprites/dirtpuff.png", {
+        sliceX: 7,
+        sliceY: 1,
+        anims: {
+            "puff": { from: 0, to: 6, loop: true, speed: 10 }
+        }
+    });
+
+    k.loadSprite("crack", "./sprites/crack.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            "crack": { from: 0, to: 3, loop: false, speed: 10 }
         }
     });
 

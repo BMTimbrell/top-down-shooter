@@ -73,7 +73,7 @@ export function spawnObjects(
                     k.scale(MAP_SCALE),
                     k.anchor("center"),
                     k.pos(scaleToMap(k, map, pos, { center: false })),
-                    k.offscreen({ hide: true, pause: true }),
+                    k.offscreen({ hide: true }),
                     layer.name
                 ]);
             });
@@ -123,7 +123,7 @@ export function spawnObjects(
                         k.anchor("center"),
                         k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
-                        k.offscreen({ hide: true, pause: true }),
+                        k.offscreen({ hide: true }),
                         entity.name,
                         ... boundary ? [
                             k.area({
@@ -272,7 +272,7 @@ export function orderByY(k) {
     const exclude = ["Ground", "crosshair", "text"];
 
     k.onUpdate(() => {
-        k.query([]).filter(e => !exclude.some(e2 => e.is(e2)) && Object.hasOwn(e, "pos")).
+        k.get('*').filter(e => !exclude.some(e2 => e.is(e2)) && Object.hasOwn(e, "pos")).
             toSorted((a, b) => a.pos.y - b.pos.y).
             forEach((e, index) => e.z = index + 1);
     });

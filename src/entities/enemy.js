@@ -12,7 +12,7 @@ export default function makeEnemy(k, pos, name, { roomId }) {
     const enemyData = ENEMIES[name];
 
     const enemy = k.add([
-        k.sprite(name, { anim: "fly" }),
+        k.sprite(name, { anim: "walk" }),
         k.scale(4),
         k.anchor("center"),
         k.area({
@@ -21,11 +21,12 @@ export default function makeEnemy(k, pos, name, { roomId }) {
         }),
         k.body(),
         k.pos(pos),
-        k.timer(),
+        name === "mole" ? k.timer() : "",
         k.health(enemyData.health, enemyData.health),
         k.opacity(1),
         k.offscreen({ hide: true }),
         "enemy",
+        "pausable",
         {
             path: [],
             shooting: false,
@@ -36,6 +37,19 @@ export default function makeEnemy(k, pos, name, { roomId }) {
         }
     ]);
 
+    function spawnDirt(k, pos) {
+        const puff = k.add([
+            k.sprite("dirtPuff", { anim: "puff" }),
+            k.pos(pos),
+            k.anchor("center"),
+            k.scale(6),
+            "dirtPuff",
+            k.z(99999)
+        ]);
+        return puff;
+    }
+
+    let dirtPuff, dirtPuff2, crack = null;
     useFlash(k, enemy);
 
     const room = k.get("room").find(r => r.rId === enemy.roomId);
@@ -43,9 +57,15 @@ export default function makeEnemy(k, pos, name, { roomId }) {
     let pathTimer = 0;
     let shootDistance = k.randi(100, 500);
     let shootCd = 0;
+    const isMole = name === "mole";
 
     enemy.on("hurt", () => {
         enemy.flash();
+
+        if (isMole && !enemy.digFlag && enemy.path.length && !enemy.dead) {
+            enemy.digFlag = true;
+            enemy.play("rotate");
+        }
     });
 
     enemy.on("death", () => {
@@ -54,6 +74,10 @@ export default function makeEnemy(k, pos, name, { roomId }) {
         enemy.play("dying");
         pf.cleanup();
 
+        if (dirtPuff || dirtPuff2) {
+            k.destroy(dirtPuff);
+            k.destroy(dirtPuff2);
+        }
     });
 
     enemy.onAnimEnd(anim => {
@@ -121,18 +145,97 @@ export default function makeEnemy(k, pos, name, { roomId }) {
                     });
                 }
             }
-            enemy.destroy();
+            k.destroy(enemy);
+        } else if (anim === "rotate" && !enemy.dead) {
+            enemy.play("dig");
+            dirtPuff = spawnDirt(k, enemy.pos.sub(k.vec2(50, 0)));
+            dirtPuff2 = spawnDirt(k, enemy.pos.add(k.vec2(50, 0)));
+            enemy.digging = true;
+            enemy.digTimer = 1.5;
         }
     });
 
     enemy.onUpdate(() => {
-        if (enemy.dead) return;
+        if (enemy.dead) {
+            enemy.opacity -= k.dt() * 0.5;
+            return;
+        }
 
         const player = k.get("player")[0];
         shootCd -= k.dt();
         pathTimer -= k.dt();
 
         enemy.flipX = player.pos.sub(enemy.pos).x < 0;
+
+        if (enemy?.digging) {
+            if (!enemy.underground) {
+                enemy.digTimer -= k.dt();
+                if (enemy.digTimer <= 0) {
+                    enemy.underground = true;
+                    enemy.opacity = 0;
+                    enemy.undergroundTimer = 3;
+                    k.destroy(dirtPuff2);
+                    dirtPuff.opacity = 0;
+                    crack = k.add([
+                        k.pos(dirtPuff.pos),
+                        k.anchor("center"),
+                        k.sprite("crack", { anim: "idle" }),
+                        k.scale(6),
+                        k.opacity(0),
+                        "crack"
+                    ]);
+                    enemy.unuse("body");
+                    enemy.unuse("area");
+                }
+            } else {
+                enemy.pos = enemy.path[enemy.path.length - 1];
+                dirtPuff.pos = enemy.pos;
+                crack.pos = dirtPuff.pos.add(k.vec2(0, 20));
+                enemy.undergroundTimer -= k.dt();
+                if (enemy.undergroundTimer <= 1) {
+                    dirtPuff.opacity = 1;
+                    crack.opacity = 1;
+                    if (crack.getCurAnim()?.name === "idle") {
+                        crack.play("crack");
+                    }
+                }
+                if (enemy.undergroundTimer <= 0) {
+                    enemy.underground = false;
+                    enemy.digging = false;
+                    enemy.opacity = 1;
+                    k.destroy(dirtPuff);
+                    k.destroy(crack);
+                    enemy.use(k.body());
+                    enemy.use(k.area({
+                        shape: new k.Rect(k.vec2(0, 0), 20, 20),
+                        collisionIgnore: ["enemy"]
+                    }));
+                    enemy.play("walk");
+                    enemy.wait(3, () => enemy.digFlag = false);
+
+                    const projectileCount = 8;
+
+                    const angleStep = 45;
+
+                    const totalSpread = (projectileCount - 1) * angleStep;
+
+                    for (let i = 0; i < projectileCount; i++) {
+                        const offset = -totalSpread / 2 + i * angleStep;
+                        makeProjectile(k, {
+                            pos: enemy.pos,
+                            damage: ENEMIES[name].damage,
+                            projectileSpeed: 200
+                        }, {
+                            name: "enemyProjectile",
+                            spread: offset,
+                            friendly: false,
+                            lifespan: 5
+                        });
+                    }
+                }
+            }
+            return;
+        }
 
         if (
             pathTimer <= 0 &&

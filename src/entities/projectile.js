@@ -25,6 +25,7 @@ export default function makeProjectile(
             shape: new k.Rect(k.vec2(0), 10, 10),
         }),
         name,
+        'pausable',
         k.move(
             target,
             projectileSpeed
@@ -33,12 +34,19 @@ export default function makeProjectile(
         {
             lifespan,
             pierce
-        },
-        k.timer()
+        }
     ]);
 
-    projectile.wait(projectile.lifespan, () => {
-        k.destroy(projectile);
+    // projectile.wait(projectile.lifespan, () => {
+    //     k.destroy(projectile);
+    // });
+
+    projectile.onUpdate(() => {
+        if (projectile.lifespan > 0) {
+            projectile.lifespan -= k.dt();
+        } else {
+            k.destroy(projectile);
+        }
     });
 
     const collisions = ["boulder", "boundary", friendly ? "enemy" : "player"];
@@ -97,5 +105,5 @@ export default function makeProjectile(
     });
 
 
-    return projectile || explosion;
+    return projectile;
 }

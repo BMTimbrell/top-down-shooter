@@ -703,7 +703,7 @@
                 {
                  "height":0,
                  "id":34,
-                 "name":"enemyBird",
+                 "name":"enemyMole",
                  "point":true,
                  "properties":[
                         {
@@ -933,7 +933,7 @@
                 {
                  "height":0,
                  "id":70,
-                 "name":"enemyBird",
+                 "name":"enemyMole",
                  "point":true,
                  "properties":[
                         {

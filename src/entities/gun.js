@@ -1,5 +1,5 @@
 import makeProjectile from "./projectile";
-import { GUN_OFFSET, GUNS } from "../constants";
+import { GUNS } from "../constants";
 
 export default function makeGun(k, player, gunObj) {
     const {
@@ -9,13 +9,14 @@ export default function makeGun(k, player, gunObj) {
         firingInterval,
         ammo,
         clip,
-        projectileSpeed
+        projectileSpeed,
+        offset
     } = gunObj;
 
     const gun = k.add([
         k.sprite(name, { anim: "idle" }),
         k.anchor("center"),
-        k.pos(player.pos.x, player.pos.y + GUN_OFFSET),
+        k.pos(player.pos.x + offset.x, player.pos.y + offset.y),
         k.scale(3),
         k.rotate(0),
         k.opacity(1),
@@ -39,7 +40,7 @@ export default function makeGun(k, player, gunObj) {
     gun.onUpdate(() => {
         if (player.guns[player.gunIndex] !== gunObj) gun.destroy();
 
-        gun.pos = k.vec2(player.pos.x, player.pos.y + GUN_OFFSET);
+        gun.pos = k.vec2(player.pos.x + (gun.flipY ? -offset.x : offset.x), player.pos.y + offset.y);
         if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval--;
 
         // fade gun in and out when dashing

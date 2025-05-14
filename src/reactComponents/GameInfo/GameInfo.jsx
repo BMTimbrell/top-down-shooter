@@ -77,10 +77,6 @@ export default function GameInfo() {
 
                                 <Gun
                                     spritePos={gun.spritePos}
-                                    name={gun.name}
-                                    damage={gun.damage}
-                                    firingInterval={gun.firingInterval}
-                                    animSpeed={gun.animSpeed}
                                 />
                             </div>
                         ))}
