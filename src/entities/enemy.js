@@ -205,6 +205,7 @@ export default function makeEnemy(k, pos, name, { roomId }) {
                     enemy.opacity = 1;
                     k.destroy(dirtPuff);
                     k.destroy(crack);
+                    enemy.path = [];
                     enemy.use(k.body());
                     enemy.use(k.area({
                         shape: new k.Rect(k.vec2(0, 0), 20, 20),

@@ -41,7 +41,7 @@ export default function makePlayer(k, posVec2) {
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
                 // { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize },
-                // { name: "smg", ammo: GUNS["smg"].maxAmmo, ...GUNS["smg"], clip: GUNS["smg"].clipSize }
+                { name: "RPG", ammo: GUNS["RPG"].maxAmmo, ...GUNS["RPG"], clip: GUNS["RPG"].clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,

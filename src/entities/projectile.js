@@ -37,10 +37,6 @@ export default function makeProjectile(
         }
     ]);
 
-    // projectile.wait(projectile.lifespan, () => {
-    //     k.destroy(projectile);
-    // });
-
     projectile.onUpdate(() => {
         if (projectile.lifespan > 0) {
             projectile.lifespan -= k.dt();
@@ -54,7 +50,7 @@ export default function makeProjectile(
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e)) && obj.has("body")) {
             if (obj?.invincible || obj?.dead) return;
-    
+
             if (projectile.is("rocket")) {
                 const explosion = k.add([
                     k.sprite("explosion", { anim: "explode" }),
@@ -66,37 +62,46 @@ export default function makeProjectile(
                     }),
                     "explosion",
                     {
+                        damaged: false,
                         enemiesHit: new Set()
                     }
                 ]);
-    
-                explosion.onCollide(explodee => {
-                    if (collisions.some(e => explodee.is(e)) && explodee.has("body")) {
-                        if (explodee?.invincible || explodee?.dead) return;
-                        if (explosion.enemiesHit.has(explodee)) return;
-                        explosion.enemiesHit.add(explodee);
-    
-                        if (explodee.is("enemy") || explodee.is("player")) {
-                            explodee.hurt(gun.damage);
-                        }
+
+                explosion.onUpdate(() => {
+                    if (explosion.damaged) return;
+
+                    const hits = k.get("enemy").filter(e =>
+                        e.has("body") &&
+                        explosion.isColliding(e) &&
+                        !e.invincible &&
+                        !e.dead
+                    );
+
+                    for (const target of hits) {
+                        if (explosion.enemiesHit.has(target)) continue;
+                        explosion.enemiesHit.add(target);
+                        target.hurt(gun.damage);
                     }
+
+                    // mark as damaged so it doesn’t damage on future frames
+                    explosion.damaged = true;
                 });
-    
+
                 explosion.onAnimEnd(() => {
                     k.destroy(explosion);
                 });
-    
+
                 k.destroy(projectile);
                 return;
             }
-    
+
             if (obj.is("enemy") || obj.is("player")) {
                 obj.hurt(gun.damage);
             } else {
                 k.destroy(projectile);
                 return;
             }
-    
+
             projectile.pierce--;
             if (projectile.pierce <= 0) {
                 k.destroy(projectile);
