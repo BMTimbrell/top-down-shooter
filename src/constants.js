@@ -1,5 +1,6 @@
 import makeBird from "./entities/bird";
 import makeMole from "./entities/mole";
+import makeWisp from "./entities/wisp";
 
 export const PALETTE = {
 
@@ -151,4 +152,5 @@ export const ENEMY_FACTORIES = {
     "bird": makeBird,
     "redbird": makeBird,
     "mole": makeMole,
+    "wisp": makeWisp
 };
