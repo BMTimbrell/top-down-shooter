@@ -127,11 +127,11 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSprite("rocket", "./sprites/bullets3.png", {
-        sliceX: 25,
+    k.loadSprite("rocket", "./sprites/rocket.png", {
+        sliceX: 4,
         sliceY: 1,
         anims: {
-            "idle": 23
+            "idle": { from: 0, to: 3, loop: true, speed: 10 }
         }
     });
 
@@ -250,6 +250,17 @@ export default function loadAssets(k) {
             "rotate": { from: 4, to: 7, loop: false, speed: 7 },
             "dig": { from: 8, to: 11, loop: true, speed: 20 },
             "dying": { from: 12, to: 15, loop: false, speed: 6 }
+        }
+    });
+
+    k.loadSprite("wisp", "./sprites/wisp.png", {
+        sliceX: 11,
+        sliceY: 4,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 6 },
+            "angry": { from: 11, to: 17, loop: false, speed: 6 },
+            "attack": { from: 22, to: 23, loop: true, speed: 6 },
+            "dying": { from: 33, to: 43, loop: false, speed: 9 }
         }
     });
 

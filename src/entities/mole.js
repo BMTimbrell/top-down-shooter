@@ -1,0 +1,112 @@
+import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead } from "./enemy";
+import { hasLineOfSight } from "../utils/collision";
+
+export default function makeMole(k, { pos, roomId }) {
+    const mole = makeEnemy(k, "mole", { pos, roomId });
+
+    let dirtPuff, dirtPuff2, crack;
+
+    const spawnDirt = pos => k.add([
+        k.sprite("dirtPuff", { anim: "puff" }),
+        k.pos(pos),
+        k.anchor("center"),
+        k.scale(6),
+        k.z(99999),
+        "dirtPuff"
+    ]);
+
+    mole.use(k.timer());
+    mole.digTimer = 0;
+    mole.digFlag = true;
+    mole.digging = false;
+    mole.underground = false;
+
+    mole.on("hurt", () => {
+        if (mole.digFlag && mole.path.length && !mole.dead) {
+            mole.digFlag = false;
+            mole.play("rotate");
+        }
+    });
+
+    mole.onDeath(() => {
+        if (dirtPuff || dirtPuff2) {
+            k.destroy(dirtPuff);
+            k.destroy(dirtPuff2);
+        }
+    });
+
+    mole.onAnimEnd(anim => {
+        if (anim === "rotate" && !mole.dead) {
+            mole.play("dig");
+            dirtPuff = spawnDirt(mole.pos.sub(k.vec2(50, 0)));
+            dirtPuff2 = spawnDirt(mole.pos.add(k.vec2(50, 0)));
+            mole.digging = true;
+            mole.digTimer = 1.5;
+        }
+    });
+
+    mole.onUpdate(() => {
+        checkEnemyDead(k, mole);
+
+        if (mole?.digging) {
+            if (!mole.underground) {
+                mole.digTimer -= k.dt();
+                if (mole.digTimer <= 0) {
+                    mole.underground = true;
+                    mole.opacity = 0;
+                    mole.undergroundTimer = 3;
+                    k.destroy(dirtPuff2);
+                    dirtPuff.opacity = 0;
+                    crack = k.add([
+                        k.pos(dirtPuff.pos),
+                        k.anchor("center"),
+                        k.sprite("crack", { anim: "idle" }),
+                        k.scale(6),
+                        k.opacity(0),
+                        "crack"
+                    ]);
+                    mole.unuse("body");
+                    mole.unuse("area");
+                }
+            } else {
+                mole.pos = mole.path[mole.path.length - 1];
+                dirtPuff.pos = mole.pos;
+                crack.pos = dirtPuff.pos.add(k.vec2(0, 20));
+                mole.undergroundTimer -= k.dt();
+                if (mole.undergroundTimer <= 1) {
+                    dirtPuff.opacity = 1;
+                    crack.opacity = 1;
+                    if (crack.getCurAnim()?.name === "idle") {
+                        crack.play("crack");
+                    }
+                }
+                if (mole.undergroundTimer <= 0) {
+                    mole.underground = false;
+                    mole.digging = false;
+                    mole.opacity = 1;
+                    k.destroy(dirtPuff);
+                    k.destroy(crack);
+                    mole.path = [];
+                    mole.use(k.body());
+                    mole.use(k.area({
+                        shape: new k.Rect(k.vec2(0, 0), 20, 20),
+                        collisionIgnore: ["enemy"]
+                    }));
+                    mole.play("walk");
+                    mole.wait(3, () => mole.digFlag = true);
+
+                    shoot(k, mole, { shootCd: mole.firingSpeed, pCount: 8, aStep: 45 });
+                }
+            }
+            return;
+        }
+
+        makeEnemyPath(k, mole);
+
+        /*  shooting  */
+        const player = k.get("player")[0];
+        if (mole.shootCd <= 0 && hasLineOfSight(k, mole.pos, player.pos)) {
+            shoot(k, mole, mole.shootCd);
+        }
+    });
+}

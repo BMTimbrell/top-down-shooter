@@ -1,3 +1,6 @@
+import makeBird from "./entities/bird";
+import makeMole from "./entities/mole";
+
 export const PALETTE = {
 
 };
@@ -74,7 +77,7 @@ export const GUNS = {
         damage: 5,
         firingInterval: 20,
         animSpeed: 10,
-        clipSize: 6,
+        clipSize: 5,
         maxAmmo: 50,
         pelletSpread: 0,
         projectileLifespan: 1.5,
@@ -101,7 +104,7 @@ export const GUNS = {
         projectile: "bullet",
         damage: 2,
         firingInterval: 0,
-        animSpeed: 20,
+        animSpeed: 25,
         clipSize: 100,
         maxAmmo: 300,
         projectileLifespan: 1.5,
@@ -133,5 +136,18 @@ export const ENEMIES = {
         damage: 1,
         firingSpeed: 3,
         projectileCount: 1
+      },
+      wisp: {
+        health: 15,
+        speed: 50,
+        damage: 1,
+        firingSpeed: 3,
+        projectileCount: 1
       }
+};
+
+export const ENEMY_FACTORIES = {
+    "default": makeBird,
+    "bird": makeBird,
+    "mole": makeMole,
 };

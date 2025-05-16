@@ -56,11 +56,12 @@ export default function makeProjectile(
                     k.sprite("explosion", { anim: "explode" }),
                     k.pos(projectile.pos),
                     k.anchor("center"),
-                    k.scale(6),
+                    k.scale(7),
                     k.area({
                         shape: new k.Rect(k.vec2(0), 20, 20),
                     }),
                     "explosion",
+                    k.z(9999),
                     {
                         damaged: false,
                         enemiesHit: new Set()

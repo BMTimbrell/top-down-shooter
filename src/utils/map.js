@@ -4,7 +4,7 @@ import {
     dialogueAtom,
 } from '../store';
 import makeGun from "../entities/gun";
-import { CELL_SIZE, MAP_SCALE, TILE_SIZE } from '../constants';
+import { CELL_SIZE, MAP_SCALE, TILE_SIZE, ENEMY_FACTORIES } from '../constants';
 import makeEnemy from '../entities/enemy';
 
 export function makeMap(k, name, { layers, gameState }) {
@@ -91,7 +91,7 @@ export function spawnObjects(
                     const name = entity.name.replace("enemy", "").replace(" reinforcement", "").toLowerCase();
                     const roomId = entity?.properties?.find(e => e.name === "room")?.value;
 
-                    if (reinforcement) {         
+                    if (reinforcement) {
                         gameState.reinforcements.push({
                             name,
                             roomId,
@@ -104,14 +104,8 @@ export function spawnObjects(
                             pos: scaleToMap(k, map, entity)
                         });
                     } else {
-                        makeEnemy(
-                            k,
-                            scaleToMap(k, map, entity),
-                            name,
-                            {
-                                roomId
-                            }
-                        );
+                        const factory = ENEMY_FACTORIES[name] || ENEMY_FACTORIES["default"];
+                        factory(k, { pos: scaleToMap(k, map, entity), roomId });
                     }
 
                 } else {
@@ -125,7 +119,7 @@ export function spawnObjects(
                         k.pos(scaleToMap(k, map, entity)),
                         k.offscreen({ hide: true }),
                         entity.name,
-                        ... boundary ? [
+                        ...boundary ? [
                             k.area({
                                 shape: new k.Rect(
                                     k.vec2(0),
@@ -269,7 +263,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
 }
 
 export function orderByY(k) {
-    const exclude = ["Ground", "crosshair", "text"];
+    const exclude = ["Ground", "crosshair", "text", "explosion"];
 
     k.onUpdate(() => {
         k.get('*').filter(e => !exclude.some(e2 => e.is(e2)) && Object.hasOwn(e, "pos")).
