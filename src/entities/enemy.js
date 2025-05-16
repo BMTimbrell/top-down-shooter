@@ -10,13 +10,14 @@ import { store, gameInfoAtom } from "../store";
 
 export default function makeEnemy(k, name, { pos, roomId }) {
     const enemyData = ENEMIES[name];
+    const hitbox = enemyData.hitbox ?? { x: 0, y: 0, width: 20, height: 20 };
 
     const enemy = k.add([
         k.sprite(name, { anim: "walk" }),
         k.scale(4),
         k.anchor("center"),
         k.area({
-            shape: new k.Rect(k.vec2(0, 0), 20, 20),
+            shape: new k.Rect(k.vec2(hitbox.x, hitbox.y), hitbox.width, hitbox.height),
             collisionIgnore: ["enemy"]
         }),
         k.body(),
@@ -36,7 +37,9 @@ export default function makeEnemy(k, name, { pos, roomId }) {
             roomId,
             pathTimer: 0,
             shootDistance: k.randi(100, 500),
-            shootCd: 0
+            shootCd: 0,
+            damage: enemyData.damage,
+            shootOffset: enemyData.shootOffset ?? { x: 0, y: 0 }
         }
     ]);
 
@@ -131,6 +134,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
 
 export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0 }) {
     const enemyData = ENEMIES[enemy.name];
+
     const projectileCount = pCount ?? enemyData?.projectileCount ?? 1;
 
     const angleStep = aStep;
@@ -142,8 +146,8 @@ export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0 }) {
         const angle = baseAngle + offset;
 
         makeProjectile(k, {
-            pos: enemy.pos,
-            damage: ENEMIES[enemy.name].damage,
+            pos: enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)),
+            damage: enemy.damage,
             projectileSpeed: 200
         }, {
             name: "enemyProjectile",
@@ -165,7 +169,7 @@ export function makeEnemyPath(k, enemy) {
 
     if (
         enemy.pathTimer <= 0 &&
-        (enemy.pos.dist(player.pos) > enemy.shootDistance || !hasLineOfSight(k, enemy.pos, player.pos))
+        (enemy.pos.dist(player.pos) > enemy.shootDistance || !hasLineOfSight(k, enemy, player.pos))
     ) {
         enemy.path = enemy.pf.findPath(enemy.path?.length ? enemy.path[0] : enemy.pos, player.pos);
         enemy.pathTimer = k.rand(0.5, 1.5);
@@ -189,7 +193,7 @@ export function makeEnemyPath(k, enemy) {
 
     if (
         enemy.path?.length > 0 && (
-            !hasLineOfSight(k, enemy.pos, player.pos) ||
+            !hasLineOfSight(k, enemy, player.pos) ||
             enemy.pos.dist(player.pos) > enemy.shootDistance
         )
     ) {

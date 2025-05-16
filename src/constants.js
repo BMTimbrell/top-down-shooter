@@ -122,7 +122,7 @@ export const ENEMIES = {
         speed: 100,
         damage: 1,
         firingSpeed: 3,
-        projectileCount: 1
+        projectileCount: 1,
     },
     redbird: {
         health: 15,
@@ -143,7 +143,9 @@ export const ENEMIES = {
         speed: 80,
         damage: 1,
         firingSpeed: 0.25,
-        projectileCount: 1
+        projectileCount: 1,
+        shootOffset: { x: 0, y: 40 },
+        hitbox: { x: 0, y: 5, width: 20, height: 15 }
     }
 };
 

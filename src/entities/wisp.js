@@ -27,7 +27,7 @@ export default function makeWisp(k, name, { pos, roomId }) {
             wisp.angryTimer -= k.dt();
         } 
 
-        if (wisp.angryTimer <= 0 && hasLineOfSight(k, wisp.pos, k.get("player")[0].pos)) {
+        if (wisp.angryTimer <= 0 && hasLineOfSight(k, wisp, k.get("player")[0].pos)) {
             wisp.angryTimer = wisp.angryCd;
             wisp.play("angry");
         }

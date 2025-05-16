@@ -11,7 +11,7 @@ export default function makeBird(k, name, { pos, roomId }) {
 
         /*  shooting  */
         const player = k.get("player")[0];
-        if (bird.shootCd <= 0 && hasLineOfSight(k, bird.pos, player.pos)) {
+        if (bird.shootCd <= 0 && hasLineOfSight(k, bird, player.pos)) {
             shoot(k, bird, bird.shootCd);
         }
 

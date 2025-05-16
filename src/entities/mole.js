@@ -105,7 +105,7 @@ export default function makeMole(k, name, { pos, roomId }) {
 
         /*  shooting  */
         const player = k.get("player")[0];
-        if (mole.shootCd <= 0 && hasLineOfSight(k, mole.pos, player.pos)) {
+        if (mole.shootCd <= 0 && hasLineOfSight(k, mole, player.pos)) {
             shoot(k, mole, mole.shootCd);
         }
     });
