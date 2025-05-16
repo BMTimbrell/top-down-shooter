@@ -259,7 +259,7 @@ export default function loadAssets(k) {
         anims: {
             "walk": { from: 0, to: 3, loop: true, speed: 6 },
             "angry": { from: 11, to: 17, loop: false, speed: 6 },
-            "attack": { from: 22, to: 23, loop: true, speed: 6 },
+            "attack": { from: 22, to: 23, loop: true, speed: 8 },
             "dying": { from: 33, to: 43, loop: false, speed: 9 }
         }
     });

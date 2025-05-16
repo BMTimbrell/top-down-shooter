@@ -129,7 +129,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
     return enemy;
 }
 
-export function shoot(k, enemy, { pCount, aStep = 15 }) {
+export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0 }) {
     const enemyData = ENEMIES[enemy.name];
     const projectileCount = pCount ?? enemyData?.projectileCount ?? 1;
 
@@ -139,13 +139,15 @@ export function shoot(k, enemy, { pCount, aStep = 15 }) {
 
     for (let i = 0; i < projectileCount; i++) {
         const offset = -totalSpread / 2 + i * angleStep;
+        const angle = baseAngle + offset;
+
         makeProjectile(k, {
             pos: enemy.pos,
             damage: ENEMIES[enemy.name].damage,
             projectileSpeed: 200
         }, {
             name: "enemyProjectile",
-            spread: offset,
+            spread: angle,
             friendly: false,
             lifespan: 5
         });

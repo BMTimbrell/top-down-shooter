@@ -123,28 +123,28 @@ export const ENEMIES = {
         damage: 1,
         firingSpeed: 3,
         projectileCount: 1
-      },
-      redbird: {
+    },
+    redbird: {
         health: 15,
         speed: 100,
         damage: 1,
         firingSpeed: 3,
         projectileCount: 3
-      },
-      mole: {
+    },
+    mole: {
         health: 15,
         speed: 50,
         damage: 1,
         firingSpeed: 3,
         projectileCount: 1
-      },
-      wisp: {
-        health: 15,
-        speed: 50,
+    },
+    wisp: {
+        health: 12,
+        speed: 80,
         damage: 1,
-        firingSpeed: 3,
+        firingSpeed: 0.25,
         projectileCount: 1
-      }
+    }
 };
 
 export const ENEMY_FACTORIES = {
