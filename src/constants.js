@@ -149,5 +149,6 @@ export const ENEMIES = {
 export const ENEMY_FACTORIES = {
     "default": makeBird,
     "bird": makeBird,
+    "redbird": makeBird,
     "mole": makeMole,
 };

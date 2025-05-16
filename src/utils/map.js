@@ -5,7 +5,6 @@ import {
 } from '../store';
 import makeGun from "../entities/gun";
 import { CELL_SIZE, MAP_SCALE, TILE_SIZE, ENEMY_FACTORIES } from '../constants';
-import makeEnemy from '../entities/enemy';
 
 export function makeMap(k, name, { layers, gameState }) {
     k.add(gameState);
@@ -105,7 +104,7 @@ export function spawnObjects(
                         });
                     } else {
                         const factory = ENEMY_FACTORIES[name] || ENEMY_FACTORIES["default"];
-                        factory(k, { pos: scaleToMap(k, map, entity), roomId });
+                        factory(k, name, { pos: scaleToMap(k, map, entity), roomId });
                     }
 
                 } else {

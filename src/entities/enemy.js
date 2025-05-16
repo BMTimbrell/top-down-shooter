@@ -112,7 +112,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
                         k.destroy(warning);
 
                         const factory = ENEMY_FACTORIES[e.name] || ENEMY_FACTORIES["default"];
-                        factory(k, { pos: e.pos, roomId: enemy.roomId });
+                        factory(k, name, { pos: e.pos, roomId: enemy.roomId });
                     });
                     k.get("gameState")[0].reinforcements = k.get("gameState")[0].reinforcements.filter(e => e.roomId !== enemy.roomId);
                 } else {

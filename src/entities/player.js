@@ -1,10 +1,9 @@
-import { DROP_OFFSET, GUNS } from '../constants';
+import { DROP_OFFSET, GUNS, ENEMY_FACTORIES } from '../constants';
 import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, infoBoxAtom, store } from "../store";
 import { hasOverlap } from "../utils/collision";
 import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
 import makeFloatingText from '../utils/floatingText';
-import makeEnemy from './enemy';
 
 export default function makePlayer(k, posVec2) {
 
@@ -41,7 +40,7 @@ export default function makePlayer(k, posVec2) {
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
                 { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize },
-                { name: "assault rifle", ammo: GUNS["assault rifle"].maxAmmo, ...GUNS["assault rifle"], clip: GUNS["assault rifle"].clipSize }
+                { name: "RPG", ammo: GUNS["RPG"].maxAmmo, ...GUNS["RPG"], clip: GUNS["RPG"].clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -363,7 +362,11 @@ export default function makePlayer(k, posVec2) {
         const roomId = entrance.rId;
         const gameState = k.get("gameState")[0];
         const toSpawn = gameState.pendingSpawns.filter(e => e.roomId === roomId);
-        toSpawn.forEach(e => makeEnemy(k, e.pos, e.name, { roomId }));
+        
+        toSpawn.forEach(e => {
+            const factory = ENEMY_FACTORIES[e.name] || ENEMY_FACTORIES["default"];
+            factory(k, e.name, { pos: e.pos, roomId: e.roomId })}
+        );
 
         // Remove them from the pending list so they don't respawn
         gameState.pendingSpawns = gameState.pendingSpawns.filter(e => e.roomId !== roomId);

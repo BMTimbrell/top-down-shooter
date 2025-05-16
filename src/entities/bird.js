@@ -1,8 +1,8 @@
 import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead } from "./enemy";
 import { hasLineOfSight } from "../utils/collision";
 
-export default function makeBird(k, { pos, roomId }) {
-    const bird = makeEnemy(k, "bird", { pos, roomId });
+export default function makeBird(k, name, { pos, roomId }) {
+    const bird = makeEnemy(k, name, { pos, roomId });
 
     bird.onUpdate(() => {
         checkEnemyDead(k, bird);

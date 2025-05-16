@@ -1,8 +1,8 @@
 import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead } from "./enemy";
 import { hasLineOfSight } from "../utils/collision";
 
-export default function makeMole(k, { pos, roomId }) {
-    const mole = makeEnemy(k, "mole", { pos, roomId });
+export default function makeMole(k, name, { pos, roomId }) {
+    const mole = makeEnemy(k, name, { pos, roomId });
 
     let dirtPuff, dirtPuff2, crack;
 

@@ -71,6 +71,14 @@ export default function makeProjectile(
                 explosion.onUpdate(() => {
                     if (explosion.damaged) return;
 
+                    const player = k.get("player")[0];
+                    if (
+                        player.has("body") &&
+                        explosion.isColliding(player) &&
+                        !player.invincible
+                    ) player.hurt(1);
+                        
+
                     const hits = k.get("enemy").filter(e =>
                         e.has("body") &&
                         explosion.isColliding(e) &&
