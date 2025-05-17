@@ -60,7 +60,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 0,
-            "firing": { from: 0, to: 2, loop: true, speed: GUNS["pistol"].animSpeed }
+            "firing": { from: 0, to: 2, loop: false, speed: GUNS["pistol"].animSpeed }
         }
     });
 
@@ -69,7 +69,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 88,
-            "firing": { from: 88, to: 90, loop: true, speed: GUNS["smg"].animSpeed }
+            "firing": { from: 88, to: 90, loop: false, speed: GUNS["smg"].animSpeed }
         }
     });
 
@@ -78,7 +78,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 208,
-            "firing": { from: 208, to: 215, loop: true, speed: GUNS["shotgun"].animSpeed }
+            "firing": { from: 208, to: 215, loop: false, speed: GUNS["shotgun"].animSpeed }
         }
     });
 
@@ -87,7 +87,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 120,
-            "firing": { from: 120, to: 122, loop: true, speed: GUNS["assault rifle"].animSpeed }
+            "firing": { from: 120, to: 122, loop: false, speed: GUNS["assault rifle"].animSpeed }
         }
     });
 
@@ -96,7 +96,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 160,
-            "firing": { from: 160, to: 163, loop: true, speed: GUNS["sniper rifle"].animSpeed }
+            "firing": { from: 160, to: 163, loop: false, speed: GUNS["sniper rifle"].animSpeed }
         }
     });
 
@@ -105,7 +105,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 184,
-            "firing": { from: 184, to: 188, loop: true, speed: GUNS["RPG"].animSpeed }
+            "firing": { from: 184, to: 188, loop: false, speed: GUNS["RPG"].animSpeed }
         }
     });
 
@@ -114,7 +114,7 @@ export default function loadAssets(k) {
         sliceY: 36,
         anims: {
             "idle": 200,
-            "firing": { from: 200, to: 202, loop: true, speed: GUNS.minigun.animSpeed }
+            "firing": { from: 200, to: 202, loop: false, speed: GUNS.minigun.animSpeed }
         }
     });
 

@@ -37,6 +37,13 @@ export default function makeGun(k, player, gunObj) {
 
     let prevOpacity = gun.opacity;
 
+    gun.onAnimEnd(anim => {
+        if (anim === "firing") {
+            gun.firingInterval = GUNS[name].firingInterval;
+            gun.play("idle");
+        }
+    });
+
     gun.onUpdate(() => {
         if (player.guns[player.gunIndex] !== gunObj) gun.destroy();
 
@@ -51,7 +58,7 @@ export default function makeGun(k, player, gunObj) {
             if (gun.getCurAnim().name !== "firing") {
                 gun.fireTrigger = true;
             }
-        
+
             return;
         }
 
@@ -84,7 +91,7 @@ export default function makeGun(k, player, gunObj) {
         gun.rotateTo((worldMousePos).angle(gun.pos));
 
         if (
-            k.isMouseDown() && 
+            k.isMouseDown() &&
             gun.getCurAnim().name !== "firing" &&
             gun.firingInterval <= 0 &&
             !player.reloading
@@ -106,10 +113,10 @@ export default function makeGun(k, player, gunObj) {
                 const randomSpeedOffset = k.randi(-speedVariation, speedVariation);
 
                 makeProjectile(
-                    k, 
-                    gun, 
-                    { 
-                        name: projectile, 
+                    k,
+                    gun,
+                    {
+                        name: projectile,
                         spread: randomSpread,
                         speedOffset: randomSpeedOffset,
                         lifespan: gunObj.projectileLifespan,
@@ -126,15 +133,9 @@ export default function makeGun(k, player, gunObj) {
             gun.fireTrigger = true;
         }
 
-        if (gun.getCurAnim().name === "firing") {
-            gun.getCurAnim().loop = false;
-            gun.onAnimEnd(anim => {
-                if (anim === "firing") {
-                    gun.firingInterval = GUNS[name].firingInterval;
-                    gun.play("idle");
-                }
-            });
-        }
+        // if (gun.getCurAnim().name === "firing") {
+        //     gun.getCurAnim().loop = false;
+        // }
 
     });
 
