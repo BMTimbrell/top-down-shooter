@@ -41,7 +41,7 @@ export default function makeGun(k, player, gunObj) {
         if (player.guns[player.gunIndex] !== gunObj) gun.destroy();
 
         gun.pos = k.vec2(player.pos.x + (gun.flipY ? -offset.x : offset.x), player.pos.y + offset.y);
-        if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval--;
+        if (gun.fireTrigger && gun.firingInterval > 0) gun.firingInterval -= k.dt();
 
         // fade gun in and out when dashing
         gun.opacity = player.dashing ? Math.max(0, gun.opacity - 5 * k.dt()) : Math.min(1, gun.opacity + 5 * k.dt());

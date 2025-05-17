@@ -227,12 +227,16 @@ export default class PathfindingManager {
                         this.map.pos.x + x * CELL_SIZE, 
                         this.map.pos.y + y * CELL_SIZE
                     );
-    
+
                     if (
                         x >= 0 && x < this.cols &&
                         y >= 0 && y < this.rows &&
                         this.grid[x][y].passable &&
-                        hasLineOfSight(this.k, candidatePos, targetPosVec2)
+                        hasLineOfSight(
+                            this.k, 
+                            candidatePos.add(this.k.vec2(this.enemy.shootOffset.x, this.enemy.shootOffset.y)), 
+                            targetPosVec2
+                        )
                     ) {
                         return this.grid[x][y];
                     }

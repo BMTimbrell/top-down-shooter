@@ -1,5 +1,4 @@
-import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead } from "./enemy";
-import { hasLineOfSight } from "../utils/collision";
+import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead, checkEnemySight } from "./enemy";
 
 export default function makeWisp(k, name, { pos, roomId }) {
     const wisp = makeEnemy(k, name, { pos, roomId });
@@ -23,11 +22,13 @@ export default function makeWisp(k, name, { pos, roomId }) {
 
         const animName = wisp?.getCurAnim()?.name;
         if (animName === "walk") {
+            checkEnemySight(k, wisp);
             makeEnemyPath(k, wisp);
             wisp.angryTimer -= k.dt();
         } 
 
-        if (wisp.angryTimer <= 0 && hasLineOfSight(k, wisp, k.get("player")[0].pos)) {
+        const shootPos = wisp.pos.add(k.vec2(wisp.shootOffset.x, wisp.shootOffset.y));
+        if (wisp.angryTimer <= 0 && wisp.hasSight) {
             wisp.angryTimer = wisp.angryCd;
             wisp.play("angry");
         }

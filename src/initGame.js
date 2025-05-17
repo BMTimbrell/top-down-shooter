@@ -36,11 +36,17 @@ export default function initGame() {
                 "level1": true
             },
             reinforcements: [],
-            pendingSpawns: []
+            pendingSpawns: [],
+            debugTimer: 3
         }
     ]);
 
     gameState.onUpdate(() => {
+        // gameState.debugTimer -= k.dt();
+        // if (gameState.debugTimer <= 0) {
+        //     gameState.debugTimer = 3;
+        //     console.log(k.get("*").length);
+        // }
         if (k.isKeyPressed("escape") && !player.inDialogue) {
             // set data to show in menu
             if (!store.get(menuAtom).visible) {

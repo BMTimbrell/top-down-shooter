@@ -39,7 +39,7 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                // { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize },
+                // { name: "sniper rifle", ammo: GUNS["sniper rifle"].maxAmmo, ...GUNS["sniper rifle"], clip: GUNS["sniper rifle"].clipSize },
                 // { name: "RPG", ammo: GUNS["RPG"].maxAmmo, ...GUNS["RPG"], clip: GUNS["RPG"].clipSize }
             ],
             gunIndex: 0,
@@ -158,6 +158,7 @@ export default function makePlayer(k, posVec2) {
         store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, reload: 0 } }));
 
         player.reloading = true;
+
         store.set(gameInfoAtom, prev => ({
             ...prev,
             reloading: true,

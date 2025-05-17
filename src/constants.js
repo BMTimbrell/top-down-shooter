@@ -18,7 +18,7 @@ export const GUNS = {
     pistol: {
         projectile: "bullet",
         damage: 2,
-        firingInterval: 5,
+        firingInterval: 0.1,
         animSpeed: 10,
         maxAmmo: 300,
         clipSize: 8,
@@ -76,9 +76,9 @@ export const GUNS = {
     "sniper rifle": {
         projectile: "bullet",
         damage: 5,
-        firingInterval: 20,
+        firingInterval: 0.5,
         animSpeed: 10,
-        clipSize: 5,
+        clipSize: 8,
         maxAmmo: 50,
         pelletSpread: 0,
         projectileLifespan: 1.5,
@@ -90,7 +90,7 @@ export const GUNS = {
 
     "RPG": {
         projectile: "rocket",
-        damage: 10,
+        damage: 15,
         firingInterval: 0,
         animSpeed: 10,
         clipSize: 1,

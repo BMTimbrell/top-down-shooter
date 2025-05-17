@@ -16,13 +16,14 @@ export function makeMap(k, name, { layers, gameState }) {
     const mapHeight = layers.find(e => e.name === "Ground")?.height || 0;
 
     const map = k.add([
+        k.sprite("level1Ground"),
         k.pos(k.vec2(k.center())),
         k.scale(MAP_SCALE),
         name
     ]);
 
-    map.width = mapWidth * CELL_SIZE;
-    map.height = mapHeight * CELL_SIZE;
+    // map.width = mapWidth * CELL_SIZE;
+    // map.height = mapHeight * CELL_SIZE;
 
     // center offset
     map.pos = map.pos.sub(map.width / 2, map.height / 2);
@@ -61,7 +62,7 @@ export function spawnObjects(
 
     for (const layer of layers) {
         // draw all tiles
-        if (layer?.data) {
+        if (layer.name !== "Ground" && layer?.data) {
             layer.data.forEach((e, index) => {
                 if (e === 0) return;
                 const spriteName = layer.name + e;
@@ -152,6 +153,7 @@ export function makeBoundaries(k, map, layer) {
             }),
             k.body({ isStatic: true }),
             k.pos(scaleToMap(k, map, boundary)),
+            k.offscreen({ hide: true }),
             "boundary"
         ]);
     }
@@ -164,6 +166,7 @@ export function makeRooms(k, map, layer) {
                 shape: new k.Rect(k.vec2(0), room.width * MAP_SCALE, room.height * MAP_SCALE)
             }),
             k.pos(scaleToMap(k, map, room)),
+            k.offscreen({ hide: true }),
             "room",
             {
                 rId: room.name

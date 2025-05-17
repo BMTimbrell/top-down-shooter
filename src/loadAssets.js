@@ -290,6 +290,8 @@ export default function loadAssets(k) {
     });
 
     // tiles
+    k.loadSprite("level1Ground", "./sprites/level1.png");
+
     const tiles = [
         { layer: "ground", index: 78 },
         { layer: "ground", index: 59 },

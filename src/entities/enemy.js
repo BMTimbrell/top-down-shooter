@@ -39,7 +39,9 @@ export default function makeEnemy(k, name, { pos, roomId }) {
             shootDistance: k.randi(100, 500),
             shootCd: 0,
             damage: enemyData.damage,
-            shootOffset: enemyData.shootOffset ?? { x: 0, y: 0 }
+            shootOffset: enemyData.shootOffset ?? { x: 0, y: 0 },
+            hasSight: false,
+            losTimer: 0.2
         }
     ]);
 
@@ -169,7 +171,10 @@ export function makeEnemyPath(k, enemy) {
 
     if (
         enemy.pathTimer <= 0 &&
-        (enemy.pos.dist(player.pos) > enemy.shootDistance || !hasLineOfSight(k, enemy, player.pos))
+        (
+            enemy.pos.dist(player.pos) > enemy.shootDistance ||
+            !enemy.hasSight
+        )
     ) {
         enemy.path = enemy.pf.findPath(enemy.path?.length ? enemy.path[0] : enemy.pos, player.pos);
         enemy.pathTimer = k.rand(0.5, 1.5);
@@ -193,7 +198,7 @@ export function makeEnemyPath(k, enemy) {
 
     if (
         enemy.path?.length > 0 && (
-            !hasLineOfSight(k, enemy, player.pos) ||
+            !enemy.hasSight ||
             enemy.pos.dist(player.pos) > enemy.shootDistance
         )
     ) {
@@ -218,4 +223,17 @@ export function checkEnemyDead(k, enemy) {
         enemy.opacity -= k.dt() * 0.5;
         return;
     }
+}
+
+export function checkEnemySight(k, enemy) {
+    const player = k.get("player")[0];
+    if (enemy.losTimer <= 0) {
+        enemy.hasSight = hasLineOfSight(
+            k, 
+            enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)), 
+            player.pos
+        );
+        enemy.losTimer = 0.2;
+    }
+    enemy.losTimer -= k.dt();
 }

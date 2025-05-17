@@ -7,8 +7,7 @@ export function hasOverlap(obj1, obj2) {
     );
 }
 
-export function hasLineOfSight(k, enemy, to) {
-    const from = enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y));
+export function hasLineOfSight(k, from, to) {
     const blockers = k.get("*").filter(
         obj => obj.has("body") && obj.has("area") && !obj.is("player") && !obj.is("enemy")
     );

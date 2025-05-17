@@ -1,5 +1,4 @@
-import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead } from "./enemy";
-import { hasLineOfSight } from "../utils/collision";
+import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead, checkEnemySight } from "./enemy";
 
 export default function makeMole(k, name, { pos, roomId }) {
     const mole = makeEnemy(k, name, { pos, roomId });
@@ -101,11 +100,13 @@ export default function makeMole(k, name, { pos, roomId }) {
             return;
         }
 
+        checkEnemySight(k, mole);
         makeEnemyPath(k, mole);
 
         /*  shooting  */
         const player = k.get("player")[0];
-        if (mole.shootCd <= 0 && hasLineOfSight(k, mole, player.pos)) {
+        const shootPos = mole.pos.add(k.vec2(mole.shootOffset.x, mole.shootOffset.y));
+        if (mole.shootCd <= 0 && mole.hasSight) {
             shoot(k, mole, mole.shootCd);
         }
     });
