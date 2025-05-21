@@ -18,7 +18,7 @@ export default function makeWisp(k, name, { pos, roomId }) {
     });
 
     wisp.onUpdate(() => {
-        checkEnemyDead(k, wisp);
+        if (checkEnemyDead(k, wisp)) return;
 
         const animName = wisp?.getCurAnim()?.name;
         if (animName === "walk") {
@@ -27,7 +27,6 @@ export default function makeWisp(k, name, { pos, roomId }) {
             wisp.angryTimer -= k.dt();
         } 
 
-        const shootPos = wisp.pos.add(k.vec2(wisp.shootOffset.x, wisp.shootOffset.y));
         if (wisp.angryTimer <= 0 && wisp.hasSight) {
             wisp.angryTimer = wisp.angryCd;
             wisp.play("angry");

@@ -37,7 +37,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
             roomId,
             pathTimer: 0,
             shootDistance: k.randi(100, 500),
-            shootCd: 0,
+            shootCd: 0.5,
             damage: enemyData.damage,
             shootOffset: enemyData.shootOffset ?? { x: 0, y: 0 },
             hasSight: false,
@@ -134,7 +134,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
     return enemy;
 }
 
-export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0 }) {
+export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0 } = {}) {
     const enemyData = ENEMIES[enemy.name];
 
     const projectileCount = pCount ?? enemyData?.projectileCount ?? 1;
@@ -221,8 +221,9 @@ export function makeEnemyPath(k, enemy) {
 export function checkEnemyDead(k, enemy) {
     if (enemy.dead) {
         enemy.opacity -= k.dt() * 0.5;
-        return;
     }
+
+     return enemy.dead;
 }
 
 export function checkEnemySight(k, enemy) {

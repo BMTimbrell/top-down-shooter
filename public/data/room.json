@@ -199,8 +199,14 @@
                  "height":16.75,
                  "id":49,
                  "name":"check main lobby",
+                 "properties":[
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"main lobby"
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":32,
                  "x":64,
@@ -280,7 +286,7 @@
                 {
                  "height":0,
                  "id":50,
-                 "name":"main lobby",
+                 "name":"door",
                  "point":true,
                  "rotation":0,
                  "type":"",

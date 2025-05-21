@@ -9,15 +9,13 @@ import {
     orderByY
 } from '../utils/map';
 
-export default function level1(k) {
-    k.scene("level1", async ({ player, gameState }) => {
-
+export default function boss1(k) {
+    k.scene("1-boss", async ({ player, gameState }) => {
         player.setOnMission(true);
-
-        const roomData = await (await fetch("../data/level1.json")).json();
+        const roomData = await (await fetch("../data/1-boss.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "level1", { layers, gameState, spriteName: "level1Ground" });
+        const map = makeMap(k, "1-boss", { layers, gameState, spriteName: "level1BossGround" });
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {
@@ -52,15 +50,5 @@ export default function level1(k) {
 
         // draw in order of y coordinate
         orderByY(k);
-
-        k.wait(0.1, () => {
-            store.set(infoBoxAtom, prev => ({
-                ...prev,
-                visible: true,
-                text: "W, A, S, D to move; left click to shoot; number keys and mouse wheel to switch weapons."
-            }));
-
-        });
-
     });
 }

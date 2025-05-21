@@ -45,7 +45,7 @@ export default function makeMole(k, name, { pos, roomId }) {
     });
 
     mole.onUpdate(() => {
-        checkEnemyDead(k, mole);
+        if (checkEnemyDead(k, mole)) return;
 
         if (mole?.digging) {
             if (!mole.underground) {
@@ -104,8 +104,6 @@ export default function makeMole(k, name, { pos, roomId }) {
         makeEnemyPath(k, mole);
 
         /*  shooting  */
-        const player = k.get("player")[0];
-        const shootPos = mole.pos.add(k.vec2(mole.shootOffset.x, mole.shootOffset.y));
         if (mole.shootCd <= 0 && mole.hasSight) {
             shoot(k, mole, mole.shootCd);
         }

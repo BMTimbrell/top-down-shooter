@@ -223,6 +223,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSpriteAtlas("./sprites/rocky-tileset.png", {
+        "redPlant": {
+            x: 32,
+            y: 48,
+            width: 32,
+            height: 32
+        }
+    });
+
     // enemies
     k.loadSprite("bird", "./sprites/bird-sheet2.png", {
         sliceX: 8,
@@ -264,11 +273,28 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("birdboss", "./sprites/bird-boss.png", {
+        sliceX: 4,
+        sliceY: 2,
+        anims: {
+            "fly": { from: 0, to: 3, loop: true, speed: 7 },
+            "dying": { from: 4, to: 7, loop: false, speed: 5 }
+        }
+    });
+
     k.loadSprite("warning", "./sprites/warning.png", {
         sliceX: 1,
         sliceY: 1,
         anims: {
             "idle": 0
+        }
+    });
+
+    k.loadSprite("portal", "./sprites/portal.png", {
+        sliceX: 6,
+        sliceY: 1,
+        anims: {
+            "idle": { from: 0, to: 5, loop: true, speed: 8 }
         }
     });
 
@@ -291,6 +317,7 @@ export default function loadAssets(k) {
 
     // tiles
     k.loadSprite("level1Ground", "./sprites/level1.png");
+    k.loadSprite("level1BossGround", "./sprites/1-boss.png");
 
     const tiles = [
         { layer: "ground", index: 78 },
@@ -307,6 +334,23 @@ export default function loadAssets(k) {
         { layer: "walls", index: 92 },
         { layer: "walls", index: 93 },
         { layer: "walls", index: 91 },
+        { layer: "walls", index: 105 },
+        { layer: "walls", index: 106 },
+        { layer: "walls", index: 103 },
+        { layer: "walls", index: 101 },
+        { layer: "walls", index: 100 },
+        { layer: "walls", index: 102 },
+        { layer: "walls", index: 104 },
+        { layer: "walls", index: 97 },
+        { layer: "walls", index: 98 },
+        { layer: "walls", index: 96 },
+        { layer: "walls", index: 87 },
+        { layer: "walls", index: 88 },
+        { layer: "walls", index: 99 },
+        { layer: "walls", index: 108 },
+        { layer: "walls", index: 89 },
+        { layer: "walls", index: 90 },
+        { layer: "walls", index: 107 },
       
         { layer: "props", index: 46 },
         { layer: "props", index: 56 },
@@ -323,7 +367,7 @@ export default function loadAssets(k) {
     tiles.forEach(({ layer, index }) => {
         k.loadSprite(`${layer}${index}`, "./sprites/rocky-tileset.png", {
             sliceX: 9,
-            sliceY: 11,
+            sliceY: 12,
             anims: {
                 idle: index - 1, // Tiled's first GID is 1
             },

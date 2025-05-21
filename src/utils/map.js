@@ -4,9 +4,9 @@ import {
     dialogueAtom,
 } from '../store';
 import makeGun from "../entities/gun";
-import { CELL_SIZE, MAP_SCALE, TILE_SIZE, ENEMY_FACTORIES } from '../constants';
+import { MAP_SCALE, TILE_SIZE, ENEMY_FACTORIES } from '../constants';
 
-export function makeMap(k, name, { layers, gameState }) {
+export function makeMap(k, name, { layers, gameState, spriteName }) {
     k.add(gameState);
 
     // reset popup
@@ -16,7 +16,7 @@ export function makeMap(k, name, { layers, gameState }) {
     const mapHeight = layers.find(e => e.name === "Ground")?.height || 0;
 
     const map = k.add([
-        k.sprite("level1Ground"),
+        k.sprite(spriteName),
         k.pos(k.vec2(k.center())),
         k.scale(MAP_SCALE),
         name
@@ -111,9 +111,10 @@ export function spawnObjects(
                 } else {
                     const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
                     const roomIds = entity?.properties?.find(e => e.name === "rooms")?.value;
+                    const animation = entity.name === "portal" ? "idle" : ""
 
                     k.add([
-                        k.sprite(doors.some(e => e === entity.name) ? "door" : entity.name),
+                        k.sprite(entity.name, { anim: animation }),
                         k.anchor("center"),
                         k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
@@ -201,8 +202,9 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                 entity.name
             ]);
 
-            const name = entity.name.substring(6);
-            const sceneName = k.getSceneName();
+            const name = entity.properties.find(e => e.name === "name").value;
+            const destination = entity.properties?.find(e => e.name === "destination")?.value || null;
+            const action = entity.type === "door" ? "Go To" : "Check";
 
             k.onCollideUpdate("player", entity.name, () => {
                 // show popup if not showing dialogue box
@@ -213,8 +215,8 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                             ...prev,
                             visible: true,
                             text: {
-                                action: doors.some(e => e === name) ? "Go To" : "Check",
-                                name,
+                                action,
+                                name: destination ? destination: name,
                                 key: "E"
                             },
                             pos: {
@@ -247,12 +249,17 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                         store.set(dialogueAtom, prev => ({ ...prev, text: description }));
                         store.set(popupAtom, prev => ({ ...prev, visible: false }));
                         store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
-                    } else if (doors.some(e => e === name)) {
+                    } else if (action === "Go To") {
                         const sceneName = k.getSceneName();
+                        const scene = entity.properties.find(e => e.name === "scene").value;
+
                         if (gameState.firstScene[sceneName]) {
                             gameState.firstScene[sceneName] = false;
                         }
-                        k.go(name, { player, gameState });
+
+                        gameState.reinforcements = [];
+                        gameState.pendingSpawns = [];
+                        k.go(scene, { player, gameState });
                     }
                 }
             });

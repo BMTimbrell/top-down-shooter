@@ -1,4 +1,5 @@
 import makeBird from "./entities/bird";
+import makeBirdBoss from "./entities/birdBoss";
 import makeMole from "./entities/mole";
 import makeWisp from "./entities/wisp";
 
@@ -75,10 +76,10 @@ export const GUNS = {
 
     "sniper rifle": {
         projectile: "bullet",
-        damage: 5,
+        damage: 8,
         firingInterval: 0.5,
         animSpeed: 10,
-        clipSize: 8,
+        clipSize: 6,
         maxAmmo: 50,
         pelletSpread: 0,
         projectileLifespan: 1.5,
@@ -94,16 +95,17 @@ export const GUNS = {
         firingInterval: 0,
         animSpeed: 10,
         clipSize: 1,
-        maxAmmo: 20,
+        maxAmmo: 25,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 288 },
-        offset: { x: 0, y: 5 }
+        pOffset: { x: 0, y: -6 },
+        offset: { x: 0, y: 1 }
     },
 
     "minigun": {
         projectile: "bullet",
-        damage: 2,
+        damage: 1.5,
         firingInterval: 0,
         animSpeed: 25,
         clipSize: 100,
@@ -154,5 +156,6 @@ export const ENEMY_FACTORIES = {
     "bird": makeBird,
     "redbird": makeBird,
     "mole": makeMole,
-    "wisp": makeWisp
+    "wisp": makeWisp,
+    "birdboss": makeBirdBoss
 };

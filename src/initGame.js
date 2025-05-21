@@ -4,8 +4,8 @@ import loadAssets from './loadAssets';
 import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
 import level1 from './scenes/level1';
-
 import { menuAtom, playerInfoAtom, infoBoxAtom, store } from "./store";
+import boss1 from './scenes/1-boss';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -22,6 +22,8 @@ export default function initGame() {
     mainLobby(k);
 
     level1(k);
+
+    boss1(k);
 
     const player = makePlayer(k, k.vec2(0));
 

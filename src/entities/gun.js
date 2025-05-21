@@ -31,7 +31,8 @@ export default function makeGun(k, player, gunObj) {
             projectileSpeed,
             pulseTimer: 0,
             pulseDuration: 0.3,
-            projectile
+            projectile,
+            ...(gunObj?.pOffset ? { pOffset: gunObj.pOffset } : "")
         }
     ]);
 
@@ -132,10 +133,6 @@ export default function makeGun(k, player, gunObj) {
         if (gun.animFrame === 2) {
             gun.fireTrigger = true;
         }
-
-        // if (gun.getCurAnim().name === "firing") {
-        //     gun.getCurAnim().loop = false;
-        // }
 
     });
 

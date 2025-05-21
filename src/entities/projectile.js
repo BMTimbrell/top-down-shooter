@@ -12,10 +12,11 @@ export default function makeProjectile(
 
     const target = (friendly ? k.toWorld(k.mousePos()) : k.get("player")[0].pos).angle(gun.pos) + spread;
     const projectileSpeed = gun.projectileSpeed + speedOffset;
+    const pos = gun?.pOffset ? gun.pos.add(k.vec2(gun.pOffset.x, gun.pOffset.y)) : gun.pos
 
     const projectile = k.add([
         k.sprite(name, { anim: "idle" }),
-        k.pos(gun.pos),
+        k.pos(pos),
         k.rotate(
             friendly ? k.toWorld(k.mousePos()).angle(gun.worldPos()) + spread : 0
         ),

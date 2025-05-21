@@ -39,8 +39,8 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                // { name: "sniper rifle", ammo: GUNS["sniper rifle"].maxAmmo, ...GUNS["sniper rifle"], clip: GUNS["sniper rifle"].clipSize },
-                // { name: "RPG", ammo: GUNS["RPG"].maxAmmo, ...GUNS["RPG"], clip: GUNS["RPG"].clipSize }
+                // { name: "assault rifle", ammo: GUNS["assault rifle"].maxAmmo, ...GUNS["assault rifle"], clip: GUNS["assault rifle"].clipSize },
+                // { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -234,11 +234,26 @@ export default function makePlayer(k, posVec2) {
         }
     });
 
-    // gun drop
+    // drops
     let pickupDelay = 0;
     player.onCollideUpdate("drop", drop => {
 
         const dropName = drop.tags[1];
+
+        if (dropName === "coin") {
+            store.set(
+                gameInfoAtom,
+                prev => ({
+                    ...prev,
+                    gold: prev.gold + drop.amount
+                })
+            );
+            makeFloatingText(k, drop.pos, `+${drop.amount}`);
+
+            drop.destroy();
+            return;
+        }
+
         const gunFound = player.guns.find(gun => gun.name === dropName);
         const action = gunFound ? "Get Ammo" : "Pick Up";
         store.set(
@@ -261,19 +276,6 @@ export default function makePlayer(k, posVec2) {
         if (k.isKeyDown("e")) {
             if (pickupDelay <= 0) {
                 pickupDelay = 0.5;
-                if (dropName === "coin") {
-                    store.set(
-                        gameInfoAtom,
-                        prev => ({
-                            ...prev,
-                            gold: prev.gold + drop.amount
-                        })
-                    );
-                    makeFloatingText(k, drop.pos, `+${drop.amount}`);
-
-                    drop.destroy();
-                    return;
-                }
 
                 if (dropName === "heart") {
                     if (player.hp() >= player.maxHP()) {
@@ -358,15 +360,24 @@ export default function makePlayer(k, posVec2) {
                     + "Sliding into enemies will damage them. Your cooldown and duration will get "
                     + "reduced and increased respectively for each enemy you hit."
             }));
+        } else if (entrance.rId === "1-9") {
+            store.set(infoBoxAtom, prev => ({
+                ...prev,
+                visible: true,
+                text: "Portals lead to a boss. You can't return after starting a boss fight, so make sure "
+                    + "you are prepared first."
+            }));
         }
+
 
         const roomId = entrance.rId;
         const gameState = k.get("gameState")[0];
         const toSpawn = gameState.pendingSpawns.filter(e => e.roomId === roomId);
-        
+
         toSpawn.forEach(e => {
             const factory = ENEMY_FACTORIES[e.name] || ENEMY_FACTORIES["default"];
-            factory(k, e.name, { pos: e.pos, roomId: e.roomId })}
+            factory(k, e.name, { pos: e.pos, roomId: e.roomId })
+        }
         );
 
         // Remove them from the pending list so they don't respawn
@@ -376,7 +387,10 @@ export default function makePlayer(k, posVec2) {
             b.opacity = 1;
             b.use(k.body({ isStatic: true }));
         });
-        entrance.destroy();
+
+        k.get("entrance").filter(e => e.rId === entrance.rId).forEach(e => {
+            e.destroy();
+        });
     });
 
     player.onUpdate(() => {

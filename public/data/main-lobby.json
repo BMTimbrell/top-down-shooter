@@ -94,7 +94,7 @@
                 {
                  "height":0,
                  "id":1,
-                 "name":"room",
+                 "name":"door",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -196,8 +196,14 @@
                  "height":16.75,
                  "id":11,
                  "name":"check room",
+                 "properties":[
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"room"
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":32,
                  "x":240.125,
