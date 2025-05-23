@@ -46,7 +46,8 @@ export default function level1(k) {
                 layers,
                 player,
                 firstScene: gameState.firstScene["level1"],
-                gameState
+                gameState,
+                tileset: "rocky-tileset"
             }
         );
 

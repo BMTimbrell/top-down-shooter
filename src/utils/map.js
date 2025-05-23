@@ -4,7 +4,7 @@ import {
     dialogueAtom,
 } from '../store';
 import makeGun from "../entities/gun";
-import { MAP_SCALE, TILE_SIZE, ENEMY_FACTORIES } from '../constants';
+import { MAP_SCALE, TILE_SIZE, CELL_SIZE, ENEMY_FACTORIES } from '../constants';
 
 export function makeMap(k, name, { layers, gameState, spriteName }) {
     k.add(gameState);
@@ -17,7 +17,8 @@ export function makeMap(k, name, { layers, gameState, spriteName }) {
 
     const map = k.add([
         k.sprite(spriteName),
-        k.pos(k.vec2(k.center())),
+        k.pos(k.vec2(0, 0)),
+        // k.pos(k.vec2(k.center())),
         k.scale(MAP_SCALE),
         name
     ]);
@@ -25,17 +26,17 @@ export function makeMap(k, name, { layers, gameState, spriteName }) {
     // map.width = mapWidth * CELL_SIZE;
     // map.height = mapHeight * CELL_SIZE;
 
-    // center offset
-    map.pos = map.pos.sub(map.width / 2, map.height / 2);
+    // center offsets
+    // map.pos = map.pos.sub(map.width / 2, map.height / 2);
 
     return map;
 }
 
-export function scaleToMap(k, map, entity, { center = true } = {}) {
+export function scaleToMap(k, map, entity, { center = false } = {}) {
 
     return k.vec2(
-        map.pos.x + ((entity.x - (center ? TILE_SIZE / 2 : 0)) * MAP_SCALE),
-        map.pos.y + ((entity.y - (center ? TILE_SIZE / 2 : 0)) * MAP_SCALE)
+        map.pos.x + (entity.x * MAP_SCALE),
+        map.pos.y + (entity.y * MAP_SCALE)
     );
 }
 
@@ -45,8 +46,6 @@ export function spawnObjects(
     {
         layers,
         player,
-        firstScene,
-        doors = [],
         tileset,
         gameState = null
     }
@@ -65,25 +64,27 @@ export function spawnObjects(
         if (layer.name !== "Ground" && layer?.data) {
             layer.data.forEach((e, index) => {
                 if (e === 0) return;
-                const spriteName = layer.name + e;
+                const spriteName = tileset + layer.name + e;
                 const pos = { x: index % layer.width * 16, y: Math.floor(index / layer.width) * 16 };
 
-                k.add([
+                const tile = k.add([
                     k.sprite(spriteName.toLowerCase(), { anim: "idle" }),
                     k.scale(MAP_SCALE),
                     k.anchor("center"),
-                    k.pos(scaleToMap(k, map, pos, { center: false })),
+                    k.pos(scaleToMap(k, map, pos)),
                     k.offscreen({ hide: true }),
                     layer.name
                 ]);
+
+                tile.pos = tile.pos.add(k.vec2((tile.width / 2) * MAP_SCALE, (tile.height / 2) * MAP_SCALE));
+
             });
         }
 
         if (layer.name === "spawn points") {
             for (const entity of layer.objects) {
                 if (entity.name === "player") {
-                    const pos = firstScene || map.tags[1] !== "room" ? entity : k.vec2(entity.x, entity.y - 40);
-                    player.pos = scaleToMap(k, map, pos);
+                    player.pos = scaleToMap(k, map, entity);
                     k.add(player);
                 } else if (entity.name.includes("enemy")) {
                     const spawned = entity?.properties?.find(e => e.name === "spawned")?.value;
@@ -153,7 +154,7 @@ export function makeBoundaries(k, map, layer) {
                 shape: new k.Rect(k.vec2(0), boundary.width * MAP_SCALE, boundary.height * MAP_SCALE)
             }),
             k.body({ isStatic: true }),
-            k.pos(scaleToMap(k, map, boundary)),
+            k.pos(scaleToMap(k, map, boundary, { center: false })),
             k.offscreen({ hide: true }),
             "boundary"
         ]);
@@ -166,7 +167,7 @@ export function makeRooms(k, map, layer) {
             k.area({
                 shape: new k.Rect(k.vec2(0), room.width * MAP_SCALE, room.height * MAP_SCALE)
             }),
-            k.pos(scaleToMap(k, map, room)),
+            k.pos(scaleToMap(k, map, room, { center: false })),
             k.offscreen({ hide: true }),
             "room",
             {
@@ -182,7 +183,7 @@ export function makeEntrances(k, map, layer) {
             k.area({
                 shape: new k.Rect(k.vec2(0), entrance.width * MAP_SCALE, entrance.height * MAP_SCALE)
             }),
-            k.pos(scaleToMap(k, map, entrance)),
+            k.pos(scaleToMap(k, map, entrance, { center: false })),
             "entrance",
             {
                 rId: entrance.name
@@ -198,7 +199,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                 k.area({
                     shape: new k.Rect(k.vec2(0), entity.width * MAP_SCALE, entity.height * MAP_SCALE)
                 }),
-                k.pos(scaleToMap(k, map, entity)),
+                k.pos(scaleToMap(k, map, entity, { center: false })),
                 entity.name
             ]);
 

@@ -160,7 +160,7 @@ export default function loadAssets(k) {
     });
 
     // objects
-    k.loadSpriteAtlas("./sprites/Tileset.png", {
+    k.loadSpriteAtlas("./sprites/ship-tileset.png", {
         "bed": {
             x: 240,
             y: 0,
@@ -169,7 +169,7 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSpriteAtlas("./sprites/Tileset.png", {
+    k.loadSpriteAtlas("./sprites/ship-tileset.png", {
         "chair": {
             x: 224,
             y: 0,
@@ -178,7 +178,7 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSpriteAtlas("./sprites/Tileset.png", {
+    k.loadSpriteAtlas("./sprites/ship-tileset.png", {
         "desk": {
             x: 208,
             y: 0,
@@ -187,7 +187,7 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSpriteAtlas("./sprites/Tileset.png", {
+    k.loadSpriteAtlas("./sprites/ship-tileset.png", {
         "pullup bar": {
             x: 320,
             y: 224,
@@ -196,7 +196,7 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSpriteAtlas("./sprites/Tileset.png", {
+    k.loadSpriteAtlas("./sprites/ship-tileset.png", {
         "door": {
             x: 256,
             y: 96,
@@ -318,14 +318,15 @@ export default function loadAssets(k) {
     // tiles
     k.loadSprite("level1Ground", "./sprites/level1.png");
     k.loadSprite("level1BossGround", "./sprites/1-boss.png");
+    k.loadSprite("room", "./sprites/room.png");
 
-    const tiles = [
+    const rockyTiles = [
         { layer: "ground", index: 78 },
         { layer: "ground", index: 59 },
         { layer: "ground", index: 60 },
         { layer: "ground", index: 68 },
         { layer: "ground", index: 69 },
-      
+
         { layer: "walls", index: 73 },
         { layer: "walls", index: 74 },
         { layer: "walls", index: 75 },
@@ -351,7 +352,7 @@ export default function loadAssets(k) {
         { layer: "walls", index: 89 },
         { layer: "walls", index: 90 },
         { layer: "walls", index: 107 },
-      
+
         { layer: "props", index: 46 },
         { layer: "props", index: 56 },
         { layer: "props", index: 55 },
@@ -362,14 +363,43 @@ export default function loadAssets(k) {
         { layer: "props", index: 65 },
         { layer: "props", index: 66 },
         { layer: "props", index: 67 },
-      ];
+    ];
 
-    tiles.forEach(({ layer, index }) => {
-        k.loadSprite(`${layer}${index}`, "./sprites/rocky-tileset.png", {
+    rockyTiles.forEach(({ layer, index }) => {
+        k.loadSprite(`rocky-tileset${layer}${index}`, "./sprites/rocky-tileset.png", {
             sliceX: 9,
             sliceY: 12,
             anims: {
                 idle: index - 1, // Tiled's first GID is 1
+            },
+        });
+    });
+
+    const shipTiles = [
+        { layer: "ground", index: 179 },
+
+        { layer: "walls", index: 116 },
+        { layer: "walls", index: 117 },
+        { layer: "walls", index: 118 },
+        { layer: "walls", index: 147 },
+        { layer: "walls", index: 148 },
+        { layer: "walls", index: 149 },
+        { layer: "walls", index: 178 },
+        { layer: "walls", index: 180 },
+        { layer: "walls", index: 209 },
+        { layer: "walls", index: 210 },
+        { layer: "walls", index: 211 },
+        { layer: "walls", index: 241 },
+
+        { layer: "props", index: 85 },
+    ];
+
+    shipTiles.forEach(({ layer, index }) => {
+        k.loadSprite(`ship-tileset${layer}${index}`, "./sprites/ship-tileset.png", {
+            sliceX: 31,
+            sliceY: 16,
+            anims: {
+                idle: index - 1, // Convert Tiled GID (starting at 1) to 0-based frame index
             },
         });
     });

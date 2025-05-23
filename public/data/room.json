@@ -3,15 +3,15 @@
  "infinite":false,
  "layers":[
         {
-         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 179, 179, 179, 179, 179, 179, 179, 179, 0,
-            0, 179, 179, 179, 179, 179, 179, 179, 179, 0,
-            0, 179, 179, 179, 179, 179, 179, 179, 179, 0,
-            0, 179, 179, 179, 179, 179, 179, 179, 179, 0,
-            0, 179, 179, 179, 179, 179, 179, 179, 179, 0,
-            0, 179, 179, 179, 179, 179, 179, 179, 179, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[271, 271, 271, 271, 271, 271, 271, 271, 271, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271,
+            271, 179, 179, 179, 179, 179, 179, 179, 179, 271],
          "height":9,
          "id":1,
          "name":"Ground",
@@ -123,7 +123,7 @@
                  "y":128
                 }, 
                 {
-                 "height":20.25,
+                 "height":18.75,
                  "id":40,
                  "name":"",
                  "rotation":0,
@@ -131,7 +131,7 @@
                  "visible":true,
                  "width":14,
                  "x":16,
-                 "y":82.25
+                 "y":83.75
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -153,6 +153,11 @@
                          "name":"description",
                          "type":"string",
                          "value":"I can do pullups to train my body.\nBut now's not the time for working out."
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"pullup bar"
                         }],
                  "rotation":0,
                  "type":"",
@@ -170,6 +175,11 @@
                          "name":"description",
                          "type":"string",
                          "value":"I can read books here when I have the time."
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"desk"
                         }],
                  "rotation":0,
                  "type":"",
@@ -187,6 +197,11 @@
                          "name":"description",
                          "type":"string",
                          "value":"I can sleep here to pass the time.\nBut now's not the time for sleeping."
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"bed"
                         }],
                  "rotation":0,
                  "type":"",
@@ -201,6 +216,16 @@
                  "name":"check main lobby",
                  "properties":[
                         {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"main lobby"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
                          "name":"scene",
                          "type":"string",
                          "value":"main lobby"
@@ -214,7 +239,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 

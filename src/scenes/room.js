@@ -11,7 +11,7 @@ export default function room(k) {
             const roomData = await (await fetch("./data/room.json")).json();
             const layers = roomData.layers;
             
-            const map = makeMap(k, "room", { gameState, layers });
+            const map = makeMap(k, "room", { gameState, layers, spriteName: "room" });
     
             spawnObjects(
                 k,
@@ -20,12 +20,8 @@ export default function room(k) {
                     layers, 
                     player, 
                     firstScene: gameState.firstScene["room"], 
-                    doors: ["main lobby"] ,
-                    tileset: {
-                        name: "Tileset",
-                        width: 31,
-                        height: 16
-                    }
+                    gameState,
+                    tileset: "ship-tileset"
                 });
             
             // draw in order of y coordinate

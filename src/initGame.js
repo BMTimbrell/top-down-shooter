@@ -111,5 +111,5 @@ export default function initGame() {
         });
     });
 
-    k.go("1-boss", { player, gameState });
+    k.go("level1", { player, gameState });
 }

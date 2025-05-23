@@ -64,10 +64,9 @@ export default function makePlayer(k, posVec2) {
 
     // on mission
     function setOnMission(onMission = false) {
-        if (onMission) {
-            player.onMission = true;
-            store.set(gameInfoAtom, prev => ({ ...prev, onMission: true }));
-        }
+        player.onMission = onMission;
+        store.set(gameInfoAtom, prev => ({ ...prev, onMission: onMission }));
+        k.setCursor(onMission ? "none" : "default")
     }
 
     // dash
