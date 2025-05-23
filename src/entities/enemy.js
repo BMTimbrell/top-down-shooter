@@ -62,6 +62,10 @@ export default function makeEnemy(k, name, { pos, roomId }) {
 
     enemy.onAnimEnd(anim => {
         if (anim === "dying") {
+            if (k.getSceneName().includes("boss")) {
+                k.destroy(enemy);
+                return;
+            }
             const dropChance = k.randi(1, 4);
             const gunDropChance = k.randi(1, 5);
             const gameInfo = store.get(gameInfoAtom);

@@ -21,6 +21,7 @@ export default function makeGun(k, player, gunObj) {
         k.rotate(0),
         k.opacity(1),
         name,
+        "pausable",
         {
             direction: k.vec2(0),
             fireTrigger: true,

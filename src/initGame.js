@@ -4,7 +4,13 @@ import loadAssets from './loadAssets';
 import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
 import level1 from './scenes/level1';
-import { menuAtom, playerInfoAtom, infoBoxAtom, store } from "./store";
+import { 
+    menuAtom, 
+    playerInfoAtom, 
+    infoBoxAtom, 
+    victoryScreenAtom, 
+    store 
+} from "./store";
 import boss1 from './scenes/1-boss';
 
 export default function initGame() {
@@ -44,6 +50,9 @@ export default function initGame() {
     ]);
 
     gameState.onUpdate(() => {
+        const paused = store.get(menuAtom).visible || 
+                store.get(infoBoxAtom).visible ||
+                store.get(victoryScreenAtom).visible;
         // gameState.debugTimer -= k.dt();
         // if (gameState.debugTimer <= 0) {
         //     gameState.debugTimer = 3;
@@ -51,7 +60,7 @@ export default function initGame() {
         // }
         if (k.isKeyPressed("escape") && !player.inDialogue) {
             // set data to show in menu
-            if (!store.get(menuAtom).visible) {
+            if (!paused) {
                 store.set(
                     menuAtom,
                     prev => ({
@@ -94,13 +103,13 @@ export default function initGame() {
             }
 
             // toggle menu visibility
-            store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible }));
+            store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible && !paused }));
         }
 
         k.get(['pausable']).forEach(e => {
-            e.paused = store.get(menuAtom).visible || store.get(infoBoxAtom).visible;
+            e.paused = paused;
         });
     });
 
-    k.go("level1", { player, gameState });
+    k.go("1-boss", { player, gameState });
 }

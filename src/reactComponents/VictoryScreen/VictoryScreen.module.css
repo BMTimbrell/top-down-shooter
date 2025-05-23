@@ -1,0 +1,19 @@
+.container h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1em;
+}
+
+.container h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75em;
+}
+
+.container {
+    margin-bottom: 1.25rem;
+}
+
+.rewards {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}

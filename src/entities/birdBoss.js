@@ -1,7 +1,8 @@
 import { useFlash } from "../utils/shader";
 import PathfindingManager from "../utils/PathfindingManager";
-import { CELL_SIZE, ENEMY_FACTORIES } from "../constants";
+import { ENEMY_FACTORIES } from "../constants";
 import { shoot, makeEnemyPath, checkEnemySight } from "./enemy";
+import { store, victoryScreenAtom, gameInfoAtom } from "../store";
 
 export default function makeBirdBoss(k, name, { pos, roomId }) {
     const boss = k.add([
@@ -14,7 +15,7 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
         }),
         k.body(),
         k.pos(pos),
-        k.health(200, 200),
+        k.health(1, 200),
         k.opacity(1),
         k.offscreen({ hide: true }),
         "enemy",
@@ -86,6 +87,32 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
     boss.onAnimEnd(anim => {
         if (anim === "dying") {
             k.destroy(boss);
+
+            store.set(victoryScreenAtom, prev => ({
+                ...prev,
+                visible: true,
+                onClick: () => {
+                    store.set(victoryScreenAtom, prev => ({
+                        ...prev,
+                        visible: false
+                    }))
+                    k.go("room", {
+                        player: k.get("player")[0],
+                        gameState: k.get("gameState")[0]
+                    });
+                },
+                rewards: ["500", "+10 weapon xp"]
+            }));
+
+            store.set(
+                gameInfoAtom,
+                prev => ({
+                    ...prev,
+                    gold: prev.gold + 500
+                })
+            );
+
+            k.get("player")[0].weaponLvl.exp += 10;
         }
     });
 
