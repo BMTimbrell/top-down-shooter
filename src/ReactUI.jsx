@@ -3,7 +3,8 @@ import DialogueBox from './reactComponents/DialogueBox/DialogueBox';
 import MainMenu from './reactComponents/MainMenu/MainMenu';
 import GameInfo from './reactComponents/GameInfo/GameInfo';
 import InfoBox from './reactComponents/InfoBox/InfoBox';
-import { dialogueAtom, popupAtom, menuAtom, infoBoxAtom } from './store';
+import VictoryScreen from './reactComponents/VictoryScreen/VictoryScreen';
+import { dialogueAtom, popupAtom, menuAtom, infoBoxAtom, victoryScreenAtom } from './store';
 import { useAtom } from 'jotai';
 
 export default function ReactUI() {
@@ -11,6 +12,7 @@ export default function ReactUI() {
     const [dialogue, setDialogue] = useAtom(dialogueAtom);
     const [menu] = useAtom(menuAtom);
     const [infoBox] = useAtom(infoBoxAtom);
+    const [victoryScreen] = useAtom(victoryScreenAtom);
 
     return (
         <>
@@ -29,6 +31,10 @@ export default function ReactUI() {
 
              {infoBox.visible &&
                 <InfoBox />
+             }
+
+             {victoryScreen.visible &&
+                <VictoryScreen />
              }
 
              {menu.visible && 

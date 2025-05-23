@@ -24,6 +24,7 @@ export default function makePlayer(k, posVec2) {
             speed: 200,
             direction: k.vec2(0),
             directionVector: k.vec2(0),
+            dashJustStarted: false,
             dashing: false,
             dashCd: 2.5,
             dashHitEnemies: new Set(),
@@ -71,6 +72,7 @@ export default function makePlayer(k, posVec2) {
 
     // dash
     function setPlayerDashing(dashing) {
+        player.dashing = dashing;
         if (!dashing) return;
         player.dashHitEnemies.clear();
         player.use(k.area({
@@ -82,7 +84,6 @@ export default function makePlayer(k, posVec2) {
         player.dashTimer = player.dashDuration;
         player.dashElapsed = 0;
         player.play("dash");
-        player.dashing = true;
         player.dashOnCd = true;
         player.invincible = true;
         store.set(gameInfoAtom, prev => ({ ...prev, cooldwns: { ...prev.cooldwns, dash: 0 } }));
@@ -357,8 +358,9 @@ export default function makePlayer(k, posVec2) {
                 ...prev,
                 visible: true,
                 text: "You can right click to slide. You are immune to damage while sliding. "
-                    + "Sliding into enemies will damage them. Your cooldown and duration will get "
-                    + "reduced and increased respectively for each enemy you hit."
+                    + "Sliding into enemies will damage them, and your cooldown and duration will get "
+                    + "reduced and increased respectively for each enemy you hit. You can right click again "
+                    + "to end your slide early."
             }));
         } else if (entrance.rId === "1-9") {
             store.set(infoBoxAtom, prev => ({
@@ -447,6 +449,15 @@ export default function makePlayer(k, posVec2) {
                 player.flipX = player.directionVector.x < 0;
             }
             player.setPlayerDashing(true);
+            player.dashJustStarted = true;
+        }
+
+        if (k.isMouseReleased("right")) {
+            if (player.dashing && !player.dashJustStarted) {
+                player.setPlayerDashing(false);
+            }
+
+            player.dashJustStarted = false;
         }
 
         if (player.dashing) {

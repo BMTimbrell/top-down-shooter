@@ -25,6 +25,11 @@ export const infoBoxAtom = atom({
     text: ""
 });
 
+export const victoryScreenAtom = atom({
+    visible: false,
+    rewards: []
+});
+
 export const menuAtom = atom({
     visible: false,
     buttons: []

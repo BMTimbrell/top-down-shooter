@@ -1,7 +1,7 @@
 import { useFlash } from "../utils/shader";
 import PathfindingManager from "../utils/PathfindingManager";
-import { ENEMY_FACTORIES } from "../constants";
-import { shoot, makeEnemyPath, checkEnemyDead, checkEnemySight } from "./enemy";
+import { CELL_SIZE, ENEMY_FACTORIES } from "../constants";
+import { shoot, makeEnemyPath, checkEnemySight } from "./enemy";
 
 export default function makeBirdBoss(k, name, { pos, roomId }) {
     const boss = k.add([
@@ -38,6 +38,35 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
             phase: 1
         }
     ]);
+
+    const healthBarBg = k.add([
+        k.pos(pos),
+        k.scale(4),
+        k.rect(boss.area.shape.width, 5),
+        k.color(k.rgb(78, 78, 78))
+    ]);
+
+    const healthBar = k.add([
+        k.pos(pos),
+        k.scale(4),
+        k.rect(boss.area.shape.width, 5),
+        k.color(k.rgb(0, 202, 0)),
+        {
+            updateFill(current, max) {
+                this.width = boss.area.shape.width * (current / max);
+            }
+        }
+
+    ]);
+
+    healthBarBg.onUpdate(() => {
+        healthBarBg.pos = boss.pos.sub(k.vec2((healthBarBg.width * 4) / 2, 140));
+    });
+
+    healthBar.onUpdate(() => {
+        healthBar.pos = boss.pos.sub(k.vec2((healthBarBg.width * 4) / 2, 140));
+        healthBar.updateFill(boss.hp(), boss.maxHP());
+    });
 
     useFlash(k, boss);
 
@@ -98,6 +127,8 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
 
     boss.onUpdate(() => {
         if (boss.dead) {
+            k.destroy(healthBar);
+            k.destroy(healthBarBg);
             boss.opacity -= k.dt() * 0.5;
             k.get("enemy").filter(e => !e.is("birdboss")).forEach(e => e.hurt(e.hp()));
             k.get("enemyProjectile").forEach(e => k.destroy(e));

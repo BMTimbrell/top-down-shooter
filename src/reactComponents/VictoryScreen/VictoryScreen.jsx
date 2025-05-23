@@ -1,20 +1,23 @@
-import styles from './InfoBox.module.css';
+
 import Modal from '../Modal/Modal';
-import { infoBoxAtom } from '../../store';
+import { victoryScreenAtom } from '../../store';
 import { useAtom } from 'jotai';
 import PrimaryButton from '../Button/PrimaryButton';
 
-export default function InfoBox() {
-    const [infoBox, setInfoBox] = useAtom(infoBoxAtom);
+export default function VictoryScreen() {
+    const [victoryScreen, setVictoryScreen] = useAtom(victoryScreenAtom);
+    const rewards = victoryScreen.rewards;
 
     return (
         <Modal color={"ui-transparent"}>
-            <div className={styles["info-box"]}>
-                {infoBox.text}
-            </div>
+            {rewards.map((reward, index) => (
+                <div key={index}>
+                    +{reward}
+                </div>
+            ))}
             
             <PrimaryButton onClick={() => {
-                setInfoBox(prev => ({
+                setVictoryScreen(prev => ({
                     ...prev,
                     visible: false
                 }));
