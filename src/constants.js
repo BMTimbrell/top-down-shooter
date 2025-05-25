@@ -50,7 +50,7 @@ export const GUNS = {
         firingInterval: 0,
         animSpeed: 12,
         clipSize: 8,
-        maxAmmo: 80,
+        maxAmmo: 60,
         pelletCount: 5,
         pelletSpread: 17,
         pelletSpeedVariation: 100,

@@ -4,6 +4,7 @@ import loadAssets from './loadAssets';
 import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
 import level1 from './scenes/level1';
+import exposition from './scenes/exposition';
 import { 
     menuAtom, 
     playerInfoAtom, 
@@ -31,6 +32,8 @@ export default function initGame() {
 
     boss1(k);
 
+    exposition(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = k.make([
@@ -38,10 +41,15 @@ export default function initGame() {
         {
             day: 1,
             time: 1,
-            firstScene: {
-                "room": true,
-                "main lobby": true,
-                "level1": true
+            events: {
+                skillExplanations: {
+                    overview: true,
+                    "pullup bar": true,
+                    bed: true,
+                    desk: true
+                }
+
+
             },
             reinforcements: [],
             pendingSpawns: [],
@@ -111,5 +119,5 @@ export default function initGame() {
         });
     });
 
-    k.go("level1", { player, gameState });
+    k.go("1-boss", { player, gameState });
 }

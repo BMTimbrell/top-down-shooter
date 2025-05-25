@@ -30,6 +30,12 @@ export const victoryScreenAtom = atom({
     rewards: []
 });
 
+export const promptAtom = atom({
+    visible: false,
+    text: "",
+    onClick: () => {}
+});
+
 export const menuAtom = atom({
     visible: false,
     buttons: []

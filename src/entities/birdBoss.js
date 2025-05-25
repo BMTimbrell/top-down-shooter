@@ -15,7 +15,7 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
         }),
         k.body(),
         k.pos(pos),
-        k.health(200, 200),
+        k.health(1, 200),
         k.opacity(1),
         k.offscreen({ hide: true }),
         "enemy",
@@ -95,8 +95,19 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
                     store.set(victoryScreenAtom, prev => ({
                         ...prev,
                         visible: false
-                    }))
-                    k.go("room", {
+                    }));
+
+                    const time = k.get("gameState")[0].time += 2;
+
+                    store.set(
+                        gameInfoAtom,
+                        prev => ({
+                            ...prev,
+                            time
+                        })
+                    );
+
+                    k.go("exposition", {
                         player: k.get("player")[0],
                         gameState: k.get("gameState")[0]
                     });
@@ -104,6 +115,8 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
                 rewards: ["500", "+15 weapon xp"]
             }));
 
+            const player = k.get("player")[0];
+            player.weaponLvl.exp += 15;
             store.set(
                 gameInfoAtom,
                 prev => ({
@@ -111,9 +124,6 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
                     gold: prev.gold + 500
                 })
             );
-
-            const player = k.get("player")[0]
-            player.weaponLvl.exp += 10;
             player.setOnMission(false);
         }
     });

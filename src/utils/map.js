@@ -32,7 +32,7 @@ export function makeMap(k, name, { layers, gameState, spriteName }) {
     return map;
 }
 
-export function scaleToMap(k, map, entity, { center = false } = {}) {
+export function scaleToMap(k, map, entity) {
 
     return k.vec2(
         map.pos.x + (entity.x * MAP_SCALE),
@@ -154,7 +154,7 @@ export function makeBoundaries(k, map, layer) {
                 shape: new k.Rect(k.vec2(0), boundary.width * MAP_SCALE, boundary.height * MAP_SCALE)
             }),
             k.body({ isStatic: true }),
-            k.pos(scaleToMap(k, map, boundary, { center: false })),
+            k.pos(scaleToMap(k, map, boundary)),
             k.offscreen({ hide: true }),
             "boundary"
         ]);
@@ -167,7 +167,7 @@ export function makeRooms(k, map, layer) {
             k.area({
                 shape: new k.Rect(k.vec2(0), room.width * MAP_SCALE, room.height * MAP_SCALE)
             }),
-            k.pos(scaleToMap(k, map, room, { center: false })),
+            k.pos(scaleToMap(k, map, room)),
             k.offscreen({ hide: true }),
             "room",
             {
@@ -183,7 +183,7 @@ export function makeEntrances(k, map, layer) {
             k.area({
                 shape: new k.Rect(k.vec2(0), entrance.width * MAP_SCALE, entrance.height * MAP_SCALE)
             }),
-            k.pos(scaleToMap(k, map, entrance, { center: false })),
+            k.pos(scaleToMap(k, map, entrance)),
             "entrance",
             {
                 rId: entrance.name
@@ -192,14 +192,14 @@ export function makeEntrances(k, map, layer) {
     }
 }
 
-export function makeObjectInteractions(k, map, { layer, player, gameState, doors }) {
+export function makeObjectInteractions(k, map, { layer, player, gameState }) {
     for (const entity of layer.objects) {
         if (entity.name) {
             k.add([
                 k.area({
                     shape: new k.Rect(k.vec2(0), entity.width * MAP_SCALE, entity.height * MAP_SCALE)
                 }),
-                k.pos(scaleToMap(k, map, entity, { center: false })),
+                k.pos(scaleToMap(k, map, entity)),
                 entity.name
             ]);
 
@@ -217,7 +217,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                             visible: true,
                             text: {
                                 action,
-                                name: destination ? destination: name,
+                                name: destination ? destination : name,
                                 key: "E"
                             },
                             pos: {
@@ -230,7 +230,11 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
 
                 // dialogue
                 if (k.isKeyPressed("e")) {
-                    let description = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
+                    const sceneName = k.getSceneName();
+                    const tiledDescription = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
+                    let description = tiledDescription ? tiledDescription :
+                        sceneName === "room" && gameState.time === 3 ? 
+                        ["It's late. I should stay inside."] : null;
 
                     if (player.inDialogue) {
                         if (store.get(dialogueAtom).skip) {
@@ -244,20 +248,28 @@ export function makeObjectInteractions(k, map, { layer, player, gameState, doors
                         } else {
                             store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
                         }
-                    } else if (description) {
+                    } else if (description && gameState.events.skillExplanations[name]) {
                         player.inDialogue = true;
 
                         store.set(dialogueAtom, prev => ({ ...prev, text: description }));
                         store.set(popupAtom, prev => ({ ...prev, visible: false }));
                         store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
+                        gameState.events.skillExplanations[name] = false;
                     } else if (action === "Go To") {
-                        const sceneName = k.getSceneName();
-                        const scene = entity.properties.find(e => e.name === "scene").value;
+   
+                        if (sceneName === "room" && gameState.time === 3) {
+                            player.inDialogue = true;
+                            store.set(dialogueAtom, prev => ({ ...prev, text: description }));
+                            store.set(popupAtom, prev => ({ ...prev, visible: false }));
+                            store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
+                            return;
+                        }
 
                         if (gameState.firstScene[sceneName]) {
                             gameState.firstScene[sceneName] = false;
                         }
 
+                        const scene = entity.properties.find(e => e.name === "scene").value;
                         gameState.reinforcements = [];
                         gameState.pendingSpawns = [];
                         k.go(scene, { player, gameState });

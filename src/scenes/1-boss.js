@@ -43,7 +43,6 @@ export default function boss1(k) {
             {
                 layers,
                 player,
-                firstScene: gameState.firstScene["level1"],
                 gameState,
                 tileset: "rocky-tileset"
             }
