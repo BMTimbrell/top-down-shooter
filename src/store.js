@@ -33,8 +33,16 @@ export const victoryScreenAtom = atom({
 export const promptAtom = atom({
     visible: false,
     text: "",
-    onClick: () => {}
+    handleYes: null,
+    handleNo: null
 });
+
+export const bookMenuAtom = atom({
+    visible: false,
+    books: [],
+    handleClose: null
+});
+
 
 export const menuAtom = atom({
     visible: false,
@@ -48,7 +56,7 @@ export const playerInfoAtom = atom({
         exp: {
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
-            weaponLvl: { level: 1, exp: 0, maxExp: 50 }
+            weapon: { level: 1, exp: 0, maxExp: 50 }
         }
     }
 });

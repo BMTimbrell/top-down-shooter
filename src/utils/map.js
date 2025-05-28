@@ -265,10 +265,6 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                             return;
                         }
 
-                        if (gameState.firstScene[sceneName]) {
-                            gameState.firstScene[sceneName] = false;
-                        }
-
                         const scene = entity.properties.find(e => e.name === "scene").value;
                         gameState.reinforcements = [];
                         gameState.pendingSpawns = [];

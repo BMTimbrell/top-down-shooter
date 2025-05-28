@@ -116,7 +116,7 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
             }));
 
             const player = k.get("player")[0];
-            player.weaponLvl.exp += 15;
+            player.weapon.exp += 15;
             store.set(
                 gameInfoAtom,
                 prev => ({

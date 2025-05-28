@@ -12,7 +12,7 @@ export default function MainMenu({ buttons }) {
     const [playerInfo, setPlayerInfo] = useAtom(playerInfoAtom);
     const mind = playerInfo.data.exp.mind;
     const body = playerInfo.data.exp.body;
-    const weaponLvl = playerInfo.data.exp.weaponLvl;
+    const weaponLvl = playerInfo.data.exp.weapon;
 
     return (
         <Modal>

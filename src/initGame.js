@@ -13,6 +13,7 @@ import {
     store 
 } from "./store";
 import boss1 from './scenes/1-boss';
+import timeTransition from './scenes/timeTransition';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -33,6 +34,8 @@ export default function initGame() {
     boss1(k);
 
     exposition(k);
+
+    timeTransition(k);
 
     const player = makePlayer(k, k.vec2(0));
 
@@ -93,7 +96,7 @@ export default function initGame() {
                                         exp: {
                                             mind: player.mind,
                                             body: player.body,
-                                            weaponLvl: player.weaponLvl
+                                            weapon: player.weapon
                                         }
                                     }
                                 })

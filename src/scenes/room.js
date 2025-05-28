@@ -6,7 +6,7 @@ import {
     orderByY
 } from '../utils/map';
 import { spendTime } from '../utils/daySystem';
-import { store, infoBoxAtom, promptAtom } from '../store';
+import { store, infoBoxAtom, promptAtom, popupAtom, bookMenuAtom } from '../store';
 
 export default function room(k) {
     k.scene("room", async ({ player, gameState }) => {
@@ -62,22 +62,148 @@ export default function room(k) {
         }
 
         k.onUpdate(() => {
-            if (!skillExplanations["pullup bar"]) {
-                if (player.isColliding(k.get("check pullup bar")[0]) && k.isKeyPressed("e")) {
-                    store.set(promptAtom, prev => ({
-                        ...prev,
-                        visible: true,
-                        text: "Do pullups?",
-                        onClick: () => {
-                            player.body.exp += 5;
-                            spendTime(gameState);
-                            store.set(promptAtom, prev => ({
-                                ...prev,
-                                visible: false
-                            }));
-                        }
-                    }));
-                }
+            if (!skillExplanations["pullup bar"] &&
+                !player.inDialogue &&
+                player.isColliding(k.get("check pullup bar")[0]) &&
+                k.isKeyDown("e")
+            ) {
+                player.inDialogue = true;
+                store.set(popupAtom, prev => ({
+                    ...prev,
+                    visible: false
+                }));
+                store.set(promptAtom, prev => ({
+                    ...prev,
+                    visible: true,
+                    text: "Do pullups?",
+                    handleYes: () => {
+                        store.set(promptAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
+                        player.inDialogue = false;
+                        k.go("timeTransition", {
+                            player,
+                            gameState,
+                            event: {
+                                text: ["As you lift your chin to the bar, you feel your muscles grow stronger."],
+                                exp: { type: "body", amount: 5 }
+                            }
+                        });
+                    },
+                    handleNo: () => {
+                        store.set(promptAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
+                        player.inDialogue = false;
+                    }
+                }));
+
+            } else if (!skillExplanations["bed"] &&
+                !player.inDialogue &&
+                player.isColliding(k.get("check bed")[0]) &&
+                k.isKeyDown("e")
+            ) {
+                player.inDialogue = true;
+                store.set(popupAtom, prev => ({
+                    ...prev,
+                    visible: false
+                }));
+                store.set(promptAtom, prev => ({
+                    ...prev,
+                    visible: true,
+                    text: "Sleep?",
+                    handleYes: () => {
+                        store.set(promptAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
+                        player.inDialogue = false;
+
+                        const dreams = [
+                            { 
+                                text: [
+                                    "You are trying to run away from a giant spider, but for some reason you are moving at a snail's pace.", 
+                                    "You awaken feeling more athletic."
+                                ],
+                                exp: { type: "body", amount: 3 }
+                            },
+                            { 
+                                text: [
+                                    "You wander a vast, infinite library, absorbing forgotten knowledge just by touching the books.", 
+                                    "You awaken with a clearer understanding of the universe."
+                                ],
+                                exp: { type: "mind", amount: 3 }
+                            },
+                            { 
+                                text: [
+                                    "Symbols and shapes fall from the sky like notes in a puzzle.",
+                                    "You arrange them into harmonious patterns and awaken with a clearer mind."
+                                ],
+                                exp: { type: "mind", amount: 3 }
+                            },
+                            { 
+                                text: [
+                                    "You stand in a glowing void with infinite targets appearing at random angles and distances. Time slows, focus sharpens. Every shot hits.",
+                                    "You wake up remembering how the grip felt in your hand."
+                                ],
+                                exp: { type: "weapon", amount: 3 }
+                            },
+                            { 
+                                text: [
+                                    "You are in a tense standoff against a mysterious, shadowy figure. You draw your gun and fire with perfect timing, winning in a single, clean shot.",
+                                    "You wake up remembering how the grip felt in your hand."
+                                ],
+                                exp: { type: "weapon", amount: 3 }
+                            },
+                        ];
+                        const dream = dreams[k.randi(0, dreams.length)];
+                        k.go("timeTransition", {
+                            player,
+                            gameState,
+                            event: {
+                                text: dream.text,
+                                exp: { type: dream.exp.type, amount: dream.exp.amount },
+                                action() { player.heal(1) }
+                            }
+                        });
+                    },
+                    handleNo: () => {
+                        store.set(promptAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
+                        player.inDialogue = false;
+                    }
+                }));
+
+            } else if (!skillExplanations["desk"] &&
+                !player.inDialogue &&
+                player.isColliding(k.get("check desk")[0]) &&
+                k.isKeyDown("e")
+            ) {
+                player.inDialogue = true;
+                store.set(popupAtom, prev => ({
+                    ...prev,
+                    visible: false
+                }));
+
+
+                store.set(bookMenuAtom, prev => ({
+                    ...prev,
+                    visible: true,
+                    books: player.books,
+                    handleClose: () => {
+                        store.set(bookMenuAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
+                        player.inDialogue = false;
+                    }
+                }));
+
+
             }
         });
     });

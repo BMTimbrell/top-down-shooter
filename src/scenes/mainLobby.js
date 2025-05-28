@@ -12,7 +12,7 @@ export default function mainLobby(k) {
         const roomData = await (await fetch("./data/main-lobby.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "main lobby", { layers, gameState });
+        const map = makeMap(k, "main lobby", { layers, gameState, spriteName: "mainLobby" });
 
         spawnObjects(
             k,

@@ -47,7 +47,25 @@ export default function makePlayer(k, posVec2) {
             maxGuns: 3,
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
-            weaponLvl: { level: 1, exp: 0, maxExp: 50 }
+            weapon: { level: 1, exp: 0, maxExp: 50 },
+            // books: [{ title: "The Art of War", description: "A book about strategy and tactics in warfare.", exp: {
+            //     weaponLvl: 10
+            // }, progress: {
+            //     current: 1, max: 2
+            // } },
+            //     { title: "The Prince", description: "A book about political power and leadership.",  exp: {
+            //     weaponLvl: 10
+            // }, progress: {
+            //     current: 0, max: 2
+            // } },
+            //     { title: "Meditations", description: "A book about Stoic philosophy and self-improvement.",  exp: {
+            //     weaponLvl: 10
+            // }, progress: {
+            //     current: 0, max: 2
+            // } },
+
+            // ],
+            books: []
         }
     ]);
 
@@ -228,6 +246,10 @@ export default function makePlayer(k, posVec2) {
         player.hidden = false;
     });
 
+    player.on("heal", () => {
+        store.set(gameInfoAtom, prev => ({ ...prev, health: player.hp() }));
+    });
+
     player.onAnimEnd(anim => {
         if (anim === "dash" && player.dashing) {
             player.frame = player.frame;
@@ -283,14 +305,6 @@ export default function makePlayer(k, posVec2) {
                         return;
                     }
                     player.heal(1);
-
-                    store.set(
-                        gameInfoAtom,
-                        prev => ({
-                            ...prev,
-                            health: player.hp()
-                        })
-                    );
 
                     drop.destroy();
                     return;
@@ -423,7 +437,10 @@ export default function makePlayer(k, posVec2) {
         }
 
         // === D. Prevent movement during dialogue ===
-        if (player.inDialogue) return;
+        if (player.inDialogue) {
+            player.play("idle");
+            return;
+        }
 
         // === E. Dashing ===
         if (player.dashOnCd) {
