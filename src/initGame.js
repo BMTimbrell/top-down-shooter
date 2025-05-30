@@ -5,12 +5,13 @@ import room from './scenes/room';
 import mainLobby from './scenes/mainLobby';
 import level1 from './scenes/level1';
 import exposition from './scenes/exposition';
-import { 
-    menuAtom, 
-    playerInfoAtom, 
-    infoBoxAtom, 
-    victoryScreenAtom, 
-    store 
+import shop from './scenes/shop';
+import {
+    menuAtom,
+    playerInfoAtom,
+    infoBoxAtom,
+    victoryScreenAtom,
+    store
 } from "./store";
 import boss1 from './scenes/1-boss';
 import timeTransition from './scenes/timeTransition';
@@ -37,6 +38,8 @@ export default function initGame() {
 
     timeTransition(k);
 
+    shop(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = k.make([
@@ -56,14 +59,96 @@ export default function initGame() {
             },
             reinforcements: [],
             pendingSpawns: [],
-            debugTimer: 3
+            debugTimer: 3,
+            shop: {
+                books: [
+                    {
+                        title: "Tactical Precision: A Shooter's Manual", 
+                        description: "Learn to breathe, aim, and fire like a pro.", 
+                        text: [
+                            [
+                                "A rookie sees the target. A marksman sees the field.",
+                                "The first rule of tactical shooting is awareness. Every element in the field can help or hinder your shot."
+                            ], 
+                            [
+                                "When aiming exhale slowly. A calm breath steadies the hand.",
+                                "Trigger discipline is not about reaction speed. It's about control.",
+                                "You finish reading the book, and feel more confident in your combat abilities."
+                            ]
+                        ],
+                        exp: {
+                            weapon: 20
+                        }, progress: {
+                            current: 0, max: 2
+                        },
+                        price: 100,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
+                    },
+                    {
+                        title: "Epistemology", 
+                        description: "A book about how we know.", 
+                        text: [
+                            [
+                                "All knowledge starts with sense perception.", 
+                                "The senses can't make errors as they make no judgement and are just cause and effect."
+                            ],
+                            [
+                                "We use our minds to integrate data from the senses and form concepts.",
+                                "Errors can be made on the conceptual level, so make sure you have no logical fallacies.",
+                                "You finished the book and gained clarity."
+                            ]
+                        ],
+                        exp: {
+                            mind: 20
+                        }, progress: {
+                            current: 0, max: 2
+                        },
+                        price: 120,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
+                    },
+                    {
+                        title: "SWEAT", 
+                        description: "A book with special workouts, exercises and advanced techniques.", 
+                        text: [
+                            [
+                                "As you read, you see examples of different exercises and workout plans."
+                            ],
+                            [
+                                "You read about different lifting techniques and the value of getting tension on the muscles when it's lengthened.",
+                                "You now feel like you might be able to get more out of your workouts."
+                            ]
+                        ],
+                        exp: null,
+                        action() {
+                            player.improvedWorkouts = true;
+                        },
+                        progress: {
+                            current: 0, max: 2
+                        },
+                        price: 100,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
+                    },
+                ]
+            }
         }
     ]);
 
     gameState.onUpdate(() => {
-        const paused = store.get(menuAtom).visible || 
-                store.get(infoBoxAtom).visible ||
-                store.get(victoryScreenAtom).visible;
+        const paused = store.get(menuAtom).visible ||
+            store.get(infoBoxAtom).visible ||
+            store.get(victoryScreenAtom).visible;
         // gameState.debugTimer -= k.dt();
         // if (gameState.debugTimer <= 0) {
         //     gameState.debugTimer = 3;
@@ -78,7 +163,7 @@ export default function initGame() {
                         ...prev,
                         buttons: [
                             {
-                                name: "Resume", 
+                                name: "Resume",
                                 onClick: () => {
                                     store.set(menuAtom, prev => ({ ...prev, visible: false }));
                                     k.query({

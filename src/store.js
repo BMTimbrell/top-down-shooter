@@ -43,6 +43,12 @@ export const bookMenuAtom = atom({
     handleClose: null
 });
 
+export const shopAtom = atom({
+    visible: false,
+    products: [],
+    handleClose: null
+});
+
 
 export const menuAtom = atom({
     visible: false,
@@ -64,8 +70,8 @@ export const playerInfoAtom = atom({
 export const gameInfoAtom = atom({
     day: 1,
     time: 1,
-    health: 3,
-    maxHealth: 3,
+    health: 4,
+    maxHealth: 4,
     gold: 0,
     cooldwns: {
         dash: 1,

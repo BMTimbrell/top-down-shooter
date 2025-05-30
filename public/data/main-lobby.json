@@ -3,27 +3,6 @@
  "infinite":false,
  "layers":[
         {
-         "data":[116, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 118,
-            147, 148, 148, 148, 148, 148, 148, 148, 148, 148, 148, 148, 148, 148, 148, 0, 0, 148, 148, 149,
-            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
-            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
-            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
-            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
-            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
-            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
-            178, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 241, 241, 241, 241, 0, 180,
-            209, 210, 210, 210, 210, 210, 210, 210, 210, 210, 210, 210, 0, 0, 210, 210, 210, 210, 210, 211],
-         "height":10,
-         "id":1,
-         "name":"Walls",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":20,
-         "x":0,
-         "y":0
-        }, 
-        {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 179, 0,
@@ -45,19 +24,19 @@
          "y":0
         }, 
         {
-         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 0, 0, 241, 241, 241, 241, 241, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[116, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 117, 118,
+            147, 148, 148, 0, 0, 148, 0, 0, 148, 0, 0, 148, 0, 0, 148, 0, 0, 148, 148, 149,
+            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
+            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
+            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
+            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
+            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
+            147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 149,
+            178, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 241, 180,
+            209, 210, 210, 210, 210, 0, 0, 210, 0, 0, 210, 0, 0, 210, 210, 0, 0, 210, 210, 211],
          "height":10,
-         "id":6,
-         "name":"Walls2",
+         "id":1,
+         "name":"Walls",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -112,8 +91,104 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":256.458333333333,
-                 "y":46.7916666666667
+                 "x":256,
+                 "y":48
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":256,
+                 "y":144
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":208,
+                 "y":16
+                }, 
+                {
+                 "height":0,
+                 "id":15,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":160,
+                 "y":16
+                }, 
+                {
+                 "height":0,
+                 "id":16,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":112,
+                 "y":16
+                }, 
+                {
+                 "height":0,
+                 "id":17,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":64,
+                 "y":16
+                }, 
+                {
+                 "height":0,
+                 "id":25,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":192,
+                 "y":144
+                }, 
+                {
+                 "height":0,
+                 "id":26,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":144,
+                 "y":144
+                }, 
+                {
+                 "height":0,
+                 "id":27,
+                 "name":"door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":96,
+                 "y":144
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -160,30 +235,19 @@
                  "y":14
                 }, 
                 {
-                 "height":12.6666666666667,
-                 "id":8,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":178.5,
-                 "x":14,
-                 "y":147
-                }, 
-                {
-                 "height":12.6667,
+                 "height":14.6667,
                  "id":12,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":78.8333333333333,
-                 "x":224.416666666667,
-                 "y":146.66665
+                 "width":290.5,
+                 "x":12.7500000000003,
+                 "y":144.66665
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -198,6 +262,16 @@
                  "name":"check room",
                  "properties":[
                         {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"room"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
                          "name":"scene",
                          "type":"string",
                          "value":"room"
@@ -208,15 +282,231 @@
                  "width":32,
                  "x":240.125,
                  "y":19.875
+                }, 
+                {
+                 "height":16.75,
+                 "id":20,
+                 "name":"check shop",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"shop"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"shop"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":192.458333333333,
+                 "y":19.875
+                }, 
+                {
+                 "height":16.75,
+                 "id":21,
+                 "name":"check engineering",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"Engineering"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"engineering"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":144,
+                 "y":19.2916666666667
+                }, 
+                {
+                 "height":16.75,
+                 "id":22,
+                 "name":"check psi lab",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"Psi Lab"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"psi lab"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":96.3333333333333,
+                 "y":19.2916666666667
+                }, 
+                {
+                 "height":16.75,
+                 "id":23,
+                 "name":"check gene lab",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"Gene Lab"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"gene lab"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":48,
+                 "y":19.2916666666667
+                }, 
+                {
+                 "height":16.75,
+                 "id":24,
+                 "name":"check exit",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"Exit"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"level2"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":240.333333333333,
+                 "y":137.625
+                }, 
+                {
+                 "height":16.75,
+                 "id":29,
+                 "name":"check synth-garden",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"Synth-Garden"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"garden"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":176.333333333333,
+                 "y":137.625
+                }, 
+                {
+                 "height":16.75,
+                 "id":30,
+                 "name":"check gym",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"Gym"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"gym"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":128.333333333333,
+                 "y":137.958333333333
+                }, 
+                {
+                 "height":16.75,
+                 "id":31,
+                 "name":"check holorange",
+                 "properties":[
+                        {
+                         "name":"destination",
+                         "type":"string",
+                         "value":"HoloRange"
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"door"
+                        }, 
+                        {
+                         "name":"scene",
+                         "type":"string",
+                         "value":"holorange"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":32,
+                 "x":80,
+                 "y":137.958333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":13,
+ "nextobjectid":32,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -225,6 +515,19 @@
         {
          "firstgid":1,
          "source":"..\/..\/..\/Hotel-Laboratory-Sprites\/Tileset2.tsj"
+        }, 
+        {
+         "columns":31,
+         "firstgid":497,
+         "image":"..\/sprites\/ship-tileset.png",
+         "imageheight":256,
+         "imagewidth":496,
+         "margin":0,
+         "name":"ship-tileset",
+         "spacing":0,
+         "tilecount":496,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":16,
  "type":"map",

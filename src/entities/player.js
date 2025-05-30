@@ -19,7 +19,7 @@ export default function makePlayer(k, posVec2) {
         k.timer(),
         "player",
         "pausable",
-        k.health(3, 3),
+        k.health(4, 4),
         {
             speed: 200,
             direction: k.vec2(0),
@@ -52,7 +52,9 @@ export default function makePlayer(k, posVec2) {
             //     weaponLvl: 10
             // }, progress: {
             //     current: 1, max: 2
-            // } },
+            // },
+                //button: { onClick: ()=>, name: "read" }
+            //  },
             //     { title: "The Prince", description: "A book about political power and leadership.",  exp: {
             //     weaponLvl: 10
             // }, progress: {

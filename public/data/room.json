@@ -163,7 +163,7 @@
                         {
                          "name":"description",
                          "type":"string",
-                         "value":"I can do pullups to train my body."
+                         "value":"If I do pullups, I'm sure my body will grow stronger."
                         }, 
                         {
                          "name":"name",
@@ -185,7 +185,7 @@
                         {
                          "name":"description",
                          "type":"string",
-                         "value":"I can read books here."
+                         "value":"I can read books here.\nI'm sure there was a shop that sells them."
                         }, 
                         {
                          "name":"name",
@@ -207,7 +207,7 @@
                         {
                          "name":"description",
                          "type":"string",
-                         "value":"If I sleep early I might recover faster.\nWho knows what dreams I may have."
+                         "value":"If I go to sleep early I might recover faster.\nWho knows what dreams I may have."
                         }, 
                         {
                          "name":"name",

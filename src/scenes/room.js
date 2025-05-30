@@ -5,7 +5,6 @@ import {
     makeObjectInteractions,
     orderByY
 } from '../utils/map';
-import { spendTime } from '../utils/daySystem';
 import { store, infoBoxAtom, promptAtom, popupAtom, bookMenuAtom } from '../store';
 
 export default function room(k) {

@@ -1,0 +1,9 @@
+.price-container {
+    display: flex;
+    align-items: center;
+    column-gap: 0.25rem;
+}
+
+.unaffordable {
+    color: rgb(255, 0, 0);
+}

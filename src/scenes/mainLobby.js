@@ -7,31 +7,12 @@ import {
 } from '../utils/map';
 
 export default function mainLobby(k) {
-    k.scene("main lobby", async ({ player, gameState }) => {
+    k.scene("main lobby", async ({ player, gameState, prevRoom = null }) => {
 
         const roomData = await (await fetch("./data/main-lobby.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "main lobby", { layers, gameState, spriteName: "mainLobby" });
-
-        spawnObjects(
-            k,
-            map,
-            {
-                layers,
-                player,
-                doors: ["room"],
-                firstScene: gameState.firstScene["main lobby"],
-                tileset: {
-                    name: "Tileset",
-                    width: 31,
-                    height: 16
-                }
-            }
-        );
-
-        // draw in order of y coordinate
-        orderByY(k);
+        const map = makeMap(k, "main lobby", { layers, gameState, spriteName: "mainLobby" }); 
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {
@@ -43,11 +24,25 @@ export default function mainLobby(k) {
                     {
                         layer,
                         player,
-                        gameState,
-                        doors: ["room"]
+                        gameState
                     }
                 );
             }
         }
+
+        spawnObjects(
+            k,
+            map,
+            {
+                layers,
+                player,
+                gameState,
+                tileset: "ship-tileset",
+                prevRoom
+            }
+        );
+
+        // draw in order of y coordinate
+        orderByY(k);
     });
 }

@@ -1,28 +1,31 @@
 import { bookMenuAtom } from '../../store';
 import { useAtom } from 'jotai';
 import PrimaryButton from '../Button/PrimaryButton';
-import Book from '../Book/Book';
-import styles from './BookMenu.module.css';
+import Book, { BookProgress } from '../Book/Book';
+import Menu, { MenuContainer } from '../Menu/Menu';
 
 export default function BookMenu() {
     const [bookMenu] = useAtom(bookMenuAtom);
     const books = bookMenu.books;
+
     return (
-        <div className={styles.menu}>
+        <Menu>
             <h1>Books</h1>
-            <div className={styles.container}>
+            <MenuContainer>
                 {books.length ? books.map((book, index) => (
-                    <Book key={index} book={book} />
+                    <Book key={index} book={book} button={book.button}>
+                        <BookProgress book={book} />
+                    </Book>
                 )) : (
                     <div>You have no books to read.</div>
                 )}
-            </div>
+            </MenuContainer>
             
-            <div className={styles.footer}>
+            <div>
                 <PrimaryButton onClick={bookMenu.handleClose}>
                     Close
                 </PrimaryButton>
             </div>
-        </div>
+        </Menu>
     );
 }

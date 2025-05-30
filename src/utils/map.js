@@ -47,7 +47,8 @@ export function spawnObjects(
         layers,
         player,
         tileset,
-        gameState = null
+        gameState = null,
+        prevRoom = null
     }
 ) {
     const crosshair = k.make([
@@ -84,7 +85,12 @@ export function spawnObjects(
         if (layer.name === "spawn points") {
             for (const entity of layer.objects) {
                 if (entity.name === "player") {
-                    player.pos = scaleToMap(k, map, entity);
+                    if (prevRoom) {
+                        const rPos = k.get(`check ${prevRoom}`)[0].pos
+                        const pos = k.vec2(rPos.x, rPos.y).add(k.vec2(60, 120));
+                        player.pos = pos;
+                    } else player.pos = scaleToMap(k, map, entity);
+
                     k.add(player);
                 } else if (entity.name.includes("enemy")) {
                     const spawned = entity?.properties?.find(e => e.name === "spawned")?.value;
@@ -208,6 +214,11 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
             const action = entity.type === "door" ? "Go To" : "Check";
 
             k.onCollideUpdate("player", entity.name, () => {
+                const popupPos = {
+                    x: k.get(name === "door" ? entity.name : name)[0].screenPos().x,
+                    y: k.get(name === "door" ? entity.name : name)[0].screenPos().y - 20
+                };
+
                 // show popup if not showing dialogue box
                 if (!player.inDialogue) {
                     store.set(
@@ -220,10 +231,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                                 name: destination ? destination : name,
                                 key: "E"
                             },
-                            pos: {
-                                x: k.get(name)[0].screenPos().x,
-                                y: k.get(name)[0].screenPos().y
-                            }
+                            pos: popupPos
                         })
                     );
                 }
@@ -233,8 +241,8 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                     const sceneName = k.getSceneName();
                     const tiledDescription = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
                     let description = tiledDescription ? tiledDescription :
-                        sceneName === "room" && gameState.time === 3 ? 
-                        ["It's late. I should stay inside."] : null;
+                        sceneName === "room" && gameState.time === 3 ?
+                            ["It's late. I should stay inside."] : null;
 
                     if (player.inDialogue) {
                         if (store.get(dialogueAtom).skip) {
@@ -256,7 +264,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                         store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
                         gameState.events.skillExplanations[name] = false;
                     } else if (action === "Go To") {
-   
+
                         if (sceneName === "room" && gameState.time === 3) {
                             player.inDialogue = true;
                             store.set(dialogueAtom, prev => ({ ...prev, text: description }));

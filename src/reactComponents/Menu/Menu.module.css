@@ -1,4 +1,4 @@
-/* .menu {
+.menu {
     --padding: 1.5rem;
     position: absolute;
     top: 50%;
@@ -20,13 +20,13 @@
 .menu h1 {
     margin-bottom: 1em;
     font-size: 1.5rem;
-} */
+}
 
-/* .container {
+.container {
     max-height: 31.25rem;
     margin-bottom: 1rem;
     overflow: auto;
     display: flex;
     flex-direction: column;
     row-gap: 3rem;
-} */
+}

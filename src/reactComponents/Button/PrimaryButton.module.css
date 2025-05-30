@@ -11,3 +11,10 @@
     background-color: var(--primary-hover);
     color: var(--ui-bg);
 }
+
+.button:disabled {
+    cursor: default;
+    background-color: #04041f;
+    color: white;
+    opacity: 0.5;
+}

@@ -23,9 +23,17 @@ export default function timeTransition(k) {
                 if (store.get(dialogueAtom).index === text.length - 1) {
                     pressEvent.cancel();
                     store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
-                    makeFloatingText(k, k.center(), `+${event.exp.amount} ${event.exp.type} xp`);
-                    player[event.exp.type].exp += event.exp.amount;
+
+                    if (event.exp) {
+                        let bonusExp = 0;
+                        if (event.exp.type === "body" && player.improvedWorkouts) bonusExp = 5;
+
+                        makeFloatingText(k, k.center(), `+${event.exp.amount + bonusExp} ${event.exp.type} xp`);
+                        player[event.exp.type].exp += event.exp.amount + bonusExp;
+                    }
+
                     event?.action && event.action();
+
                     k.wait(0.75, () => {
                         spendTime(gameState, player);
                         k.go("room", { player, gameState });
