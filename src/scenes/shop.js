@@ -1,8 +1,23 @@
 import { store, shopAtom, popupAtom, gameInfoAtom, bookMenuAtom } from '../store';
 
+function disableButtons(products) {
+    products.books.forEach(book => {
+        book.button.disabled = book.price > store.get(gameInfoAtom).gold;
+    });
+
+    products.electronics.forEach(e => {
+        e.button.disabled = e.price > store.get(gameInfoAtom).gold;
+    });
+}
+
 export default function shop(k) {
     k.scene("shop", async ({ player, gameState }) => {
+
+        disableButtons({ books: gameState.shop.books, electronics: gameState.shop.electronics });
+
         gameState.shop.books.forEach(book => {
+            if (player.discount) book.price *= 0.8;
+
             book.button.onClick = () => {
                 if (book.price <= store.get(gameInfoAtom).gold) {
                     store.set(gameInfoAtom, prev => ({
@@ -44,16 +59,38 @@ export default function shop(k) {
                     };
                     player.books.push(book);
                     gameState.shop.books = gameState.shop.books.filter(b => b !== book);
-                    gameState.shop.books.forEach(
-                        book => book.button.disabled = book.price > store.get(gameInfoAtom).gold
-                    );
+
+                    disableButtons({ books: gameState.shop.books, electronics: gameState.shop.electronics });
+
                     store.set(shopAtom, prev => ({
                         ...prev,
                         products: gameState.shop
                     }));
                 }
             }
-            book.button.disabled = book.price > store.get(gameInfoAtom).gold;
+        });
+
+        gameState.shop.electronics.forEach(e => {
+            if (player.discount) e.price *= 0.8;
+
+            e.button.onClick = () => {
+                if (e.price <= store.get(gameInfoAtom).gold) {
+                    store.set(gameInfoAtom, prev => ({
+                        ...prev,
+                        gold: prev.gold - e.price
+                    }));
+
+                    player.electronics.push(e);
+                    gameState.shop.electronics = gameState.shop.electronics.filter(el => el !== e);
+
+                    disableButtons({ books: gameState.shop.books, electronics: gameState.shop.electronics });
+
+                    store.set(shopAtom, prev => ({
+                        ...prev,
+                        products: gameState.shop
+                    }));
+                }
+            }
         });
 
         store.set(popupAtom, prev => ({

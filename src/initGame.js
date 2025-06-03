@@ -140,6 +140,73 @@ export default function initGame() {
                             name: "Buy" 
                         }
                     },
+                    {
+                        title: "Cognitive Warefare and You", 
+                        description: "A guide to defending your thoughts and outmaneuvering manipulative foes.", 
+                        text: [
+                            [
+                                "The most effective weapon is the one that convinces you it isn’t a weapon at all",
+                                "Cognitive threats creep in as subtle suggestions, reframed truths, or emotional triggers designed to bypass logic."
+                            ],
+                            [
+                                "Remember, the mind's greatest defense is intentional thought.",
+                                "A sharpened mind is a secure one. Train it like you would train a weapon.",
+                                "You finish the book and gain clarity."
+                            ]
+                        ],
+                        exp: {
+                            mind: 20
+                        },
+                        progress: {
+                            current: 0, max: 2
+                        },
+                        price: 120,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
+                    },
+                    {
+                        title: "Smiles, Lies, and Subtle Eyes", 
+                        description: "The Psychology of Persuasion", 
+                        text: [
+                            [
+                                'Your body speaks long before your voice enters the conversation.',
+                                 'A confident stance—shoulders relaxed, spine aligned, gaze steady—tells the room, "I am here, and I belong"',
+                            ],
+                            [
+                                "Adjust your expression, your breath, your pace. Let people feel seen without a word.",
+                                "Never forget: charisma isn't about overpowering the room—it's about anchoring it.",
+                                "You finish the book and feel like you could use these techniques at shops."
+                            ]
+                        ],
+                        exp: null,
+                        action() {
+                            player.discount = true;
+                        },
+                        progress: {
+                            current: 0, max: 2
+                        },
+                        price: 150,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
+                    },
+                ],
+                electronics: [
+                    {
+                        name: "VR Headset",
+                        description: "Comes with a free game.",
+                        price: 400,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
+                    }
                 ]
             }
         }

@@ -1,21 +1,19 @@
 import PrimaryButton from '../Button/PrimaryButton';
 import styles from './Book.module.css';
+import Product, { ProductHeader } from '../Product/Product';
 
 export default function Book({ book, button, children }) {
 
     return (
-        <div className={styles.container}>
-            <div className={styles.description}>
+        <Product button={button}>
+            <ProductHeader>
                 <h2>{book.title}</h2>
                 <div>{book.description}</div>
-            </div>
+            </ProductHeader>
 
             {children}
 
-            <PrimaryButton onClick={button.onClick} disabled={button.disabled}>
-                {button.name}
-            </PrimaryButton>
-        </div>
+        </Product>
     );
 }
 

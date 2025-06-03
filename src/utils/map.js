@@ -84,6 +84,10 @@ export function spawnObjects(
 
         if (layer.name === "spawn points") {
             for (const entity of layer.objects) {
+                if (
+                    entity.name === "VR Headset" && 
+                    !player.electronics.some(e => e.name === "VR Headset")
+                ) return;
                 if (entity.name === "player") {
                     if (prevRoom) {
                         const rPos = k.get(`check ${prevRoom}`)[0].pos

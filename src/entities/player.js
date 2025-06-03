@@ -48,26 +48,8 @@ export default function makePlayer(k, posVec2) {
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
             weapon: { level: 1, exp: 0, maxExp: 50 },
-            // books: [{ title: "The Art of War", description: "A book about strategy and tactics in warfare.", exp: {
-            //     weaponLvl: 10
-            // }, progress: {
-            //     current: 1, max: 2
-            // },
-                //button: { onClick: ()=>, name: "read" }
-            //  },
-            //     { title: "The Prince", description: "A book about political power and leadership.",  exp: {
-            //     weaponLvl: 10
-            // }, progress: {
-            //     current: 0, max: 2
-            // } },
-            //     { title: "Meditations", description: "A book about Stoic philosophy and self-improvement.",  exp: {
-            //     weaponLvl: 10
-            // }, progress: {
-            //     current: 0, max: 2
-            // } },
-
-            // ],
-            books: []
+            books: [],
+            electronics: []
         }
     ]);
 

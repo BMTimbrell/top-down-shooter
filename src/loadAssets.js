@@ -196,6 +196,8 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("VR Headset", "./sprites/vr-headset.png");
+
     k.loadSpriteAtlas("./sprites/ship-tileset.png", {
         "door": {
             x: 256,
