@@ -206,6 +206,17 @@ export default function initGame() {
                             disabled: false,
                             name: "Buy" 
                         }
+                    },
+                    {
+                        name: "Echo Tactica",
+                        description: "A turn-based tactics game where you command a clone squad.",
+                        exp: { mind: 5 },
+                        price: 100,
+                        button: { 
+                            onClick: null, 
+                            disabled: false,
+                            name: "Buy" 
+                        }
                     }
                 ]
             }

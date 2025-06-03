@@ -5,7 +5,7 @@ import {
     makeObjectInteractions,
     orderByY
 } from '../utils/map';
-import { store, infoBoxAtom, promptAtom, popupAtom, bookMenuAtom } from '../store';
+import { store, infoBoxAtom, promptAtom, popupAtom, bookMenuAtom, gameMenuAtom } from '../store';
 
 export default function room(k) {
     k.scene("room", async ({ player, gameState }) => {
@@ -203,6 +203,33 @@ export default function room(k) {
                 }));
 
 
+            }
+
+            if (
+                player.electronics.some(e => e.name === "VR Headset") &&
+                !player.inDialogue &&
+                player.isColliding(k.get("check VR Headset")[0]) &&
+                k.isKeyDown("e")
+            ) {
+               player.inDialogue = true;
+                store.set(popupAtom, prev => ({
+                    ...prev,
+                    visible: false
+                }));
+
+
+                store.set(gameMenuAtom, prev => ({
+                    ...prev,
+                    visible: true,
+                    games: player.electronics.filter(e => e.name !== "VR Headset"),
+                    handleClose: () => {
+                        store.set(gameMenuAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
+                        player.inDialogue = false;
+                    }
+                }));
             }
         });
     });

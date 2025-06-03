@@ -43,6 +43,13 @@ export const bookMenuAtom = atom({
     handleClose: null
 });
 
+export const gameMenuAtom = atom({
+    visible: false,
+    games: [],
+    handleClose: null
+});
+
+
 export const shopAtom = atom({
     visible: false,
     products: [],

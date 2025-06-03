@@ -7,6 +7,7 @@ import VictoryScreen from './reactComponents/VictoryScreen/VictoryScreen';
 import Prompt from './reactComponents/Prompt/Pompt';
 import BookMenu from './reactComponents/BookMenu/BookMenu';
 import Shop from './reactComponents/Shop/Shop';
+import GameMenu from './reactComponents/GameMenu/GameMenu';
 import { 
     dialogueAtom, 
     popupAtom, 
@@ -15,6 +16,7 @@ import {
     victoryScreenAtom,
     promptAtom,
     bookMenuAtom,
+    gameMenuAtom,
     shopAtom
 } from './store';
 import { useAtom } from 'jotai';
@@ -27,6 +29,7 @@ export default function ReactUI() {
     const [victoryScreen] = useAtom(victoryScreenAtom);
     const [prompt] = useAtom(promptAtom);
     const [bookMenu] = useAtom(bookMenuAtom);
+    const [gameMenu] = useAtom(gameMenuAtom);
     const [shop] = useAtom(shopAtom);
 
     return (
@@ -58,6 +61,13 @@ export default function ReactUI() {
 
              {bookMenu.visible &&
                 <BookMenu />
+             }
+
+             {gameMenu.visible &&
+                <GameMenu
+                    games={gameMenu.games}
+                    handleClose={gameMenu.handleClose}
+                />
              }
 
              {shop.visible &&

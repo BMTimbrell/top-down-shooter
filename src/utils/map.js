@@ -85,7 +85,7 @@ export function spawnObjects(
         if (layer.name === "spawn points") {
             for (const entity of layer.objects) {
                 if (
-                    entity.name === "VR Headset" && 
+                    entity.name === "VR Headset" &&
                     !player.electronics.some(e => e.name === "VR Headset")
                 ) return;
                 if (entity.name === "player") {
@@ -204,6 +204,11 @@ export function makeEntrances(k, map, layer) {
 
 export function makeObjectInteractions(k, map, { layer, player, gameState }) {
     for (const entity of layer.objects) {
+        if (
+            entity.properties.find(e => e.name === "name").value === "VR Headset" &&
+            !player.electronics.some(e => e.name === "VR Headset")
+        ) return;
+
         if (entity.name) {
             k.add([
                 k.area({
@@ -257,7 +262,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                             } else {
                                 store.set(dialogueAtom, prev => ({ ...prev, index: prev.index + 1 }));
                             }
-                        } else {
+                        } else if (store.get(dialogueAtom).visible) {
                             store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
                         }
                     } else if (description && gameState.events.skillExplanations[name]) {
@@ -271,9 +276,8 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
 
                         if (sceneName === "room" && gameState.time === 3) {
                             player.inDialogue = true;
-                            store.set(dialogueAtom, prev => ({ ...prev, text: description }));
+                            store.set(dialogueAtom, prev => ({ ...prev, text: description, visible: true, skip: false }));
                             store.set(popupAtom, prev => ({ ...prev, visible: false }));
-                            store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
                             return;
                         }
 
