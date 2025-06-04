@@ -3,7 +3,7 @@ import PrimaryButton from "../Button/PrimaryButton";
 import { shopAtom } from '../../store';
 import { useAtom } from 'jotai';
 import Book from '../Book/Book';
-import Product, { ProductHeader } from "../Product/Product";
+import MenuItem, { MenuItemHeader } from "../MenuItem/MenuItem";
 import styles from './Shop.module.css';
 
 export default function Shop() {
@@ -17,17 +17,17 @@ export default function Shop() {
 
             <MenuContainer>
                 {electronics.map((e, index) => (
-                    <Product key={index} button={e.button}>
-                        <ProductHeader>
+                    <MenuItem key={index} button={e.button}>
+                        <MenuItemHeader>
                             <h2>{e.name}</h2>
                             <div>{e.description}</div>
-                        </ProductHeader>
+                        </MenuItemHeader>
 
                         <div className={styles["price-container"]}>
                             <img width="27" src="./sprites/coin2.png" />
                             <span className={e.button.disabled ? styles.unaffordable : ""}>{e.price}</span>
                         </div>
-                    </Product>
+                    </MenuItem>
                 ))}
 
                 {books.map((book, index) => (

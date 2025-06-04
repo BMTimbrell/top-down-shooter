@@ -15,7 +15,7 @@ export default function makeFloatingText(k, pos, text) {
     fText.onUpdate(() => {
         fText.pos = fText.pos.sub(k.vec2(0, k.dt() * 10));
         fText.opacity -= k.dt() * 2;
-
+        
         if (fText.opacity <= 0) {
             fText.destroy();
         }

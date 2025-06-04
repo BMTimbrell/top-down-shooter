@@ -1,19 +1,18 @@
-import PrimaryButton from '../Button/PrimaryButton';
 import styles from './Book.module.css';
-import Product, { ProductHeader } from '../Product/Product';
+import MenuItem, { MenuItemHeader } from '../MenuItem/MenuItem';
 
 export default function Book({ book, button, children }) {
 
     return (
-        <Product button={button}>
-            <ProductHeader>
+        <MenuItem button={button}>
+            <MenuItemHeader>
                 <h2>{book.title}</h2>
                 <div>{book.description}</div>
-            </ProductHeader>
+            </MenuItemHeader>
 
             {children}
 
-        </Product>
+        </MenuItem>
     );
 }
 

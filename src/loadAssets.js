@@ -323,6 +323,7 @@ export default function loadAssets(k) {
     k.loadSprite("room", "./sprites/room.png");
     k.loadSprite("mainLobby", "./sprites/main-lobby.png");
     k.loadSprite("shop", "./sprites/shop.png");
+    k.loadSprite("garden", "./sprites/garden.png");
 
     // tiles
     const rockyTiles = [

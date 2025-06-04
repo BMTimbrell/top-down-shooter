@@ -6,6 +6,7 @@ import mainLobby from './scenes/mainLobby';
 import level1 from './scenes/level1';
 import exposition from './scenes/exposition';
 import shop from './scenes/shop';
+import garden from './scenes/garden';
 import {
     menuAtom,
     playerInfoAtom,
@@ -39,6 +40,8 @@ export default function initGame() {
     timeTransition(k);
 
     shop(k);
+
+    garden(k);
 
     const player = makePlayer(k, k.vec2(0));
 

@@ -1,7 +1,7 @@
 import PrimaryButton from '../Button/PrimaryButton';
-import styles from './Product.module.css';
+import styles from './MenuItem.module.css';
 
-export default function Product({ button, children }) {
+export default function MenuItem({ button, children }) {
 
     return (
         <div className={styles.container}>
@@ -15,7 +15,7 @@ export default function Product({ button, children }) {
     );
 }
 
-export function ProductHeader({ children }) {
+export function MenuItemHeader({ children }) {
     return (
         <div className={styles.header}>
             {children}

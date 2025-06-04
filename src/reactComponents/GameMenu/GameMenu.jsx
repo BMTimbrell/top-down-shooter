@@ -1,6 +1,6 @@
 import Menu, { MenuContainer } from "../Menu/Menu";
 import PrimaryButton from "../Button/PrimaryButton";
-import Product, { ProductHeader } from "../Product/Product";
+import MenuItem, { MenuItemHeader } from "../MenuItem/MenuItem";
 
 export default function GameMenu({ games, handleClose }) {
 
@@ -10,12 +10,12 @@ export default function GameMenu({ games, handleClose }) {
 
             <MenuContainer>
                 {games.map((game, index) => (
-                    <Product key={index} button={game.button}>
-                        <ProductHeader>
+                    <MenuItem key={index} button={game.button}>
+                        <MenuItemHeader>
                             <h2>{game.name}</h2>
                             <div>{game.description}</div>
-                        </ProductHeader>
-                    </Product>
+                        </MenuItemHeader>
+                    </MenuItem>
                 ))}
             </MenuContainer>
 

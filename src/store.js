@@ -56,6 +56,13 @@ export const shopAtom = atom({
     handleClose: null
 });
 
+export const gardenAtom = atom({
+    visible: false,
+    options: [],
+    harvestReady: false,
+    handleClose: null
+});
+
 
 export const menuAtom = atom({
     visible: false,

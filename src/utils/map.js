@@ -4,7 +4,7 @@ import {
     dialogueAtom,
 } from '../store';
 import makeGun from "../entities/gun";
-import { MAP_SCALE, TILE_SIZE, CELL_SIZE, ENEMY_FACTORIES } from '../constants';
+import { MAP_SCALE, ENEMY_FACTORIES } from '../constants';
 
 export function makeMap(k, name, { gameState, spriteName, center = false }) {
     k.add(gameState);
@@ -91,8 +91,10 @@ export function spawnObjects(
                 ) return;
                 if (entity.name === "player") {
                     if (prevRoom) {
-                        const rPos = k.get(`check ${prevRoom}`)[0].pos
-                        const pos = k.vec2(rPos.x, rPos.y).add(k.vec2(60, 120));
+                        const rPos = k.get(`check ${prevRoom}`)[0].pos;
+                        const southRooms = ["garden", "gym", "holorange"];
+                        const offset = southRooms.includes(prevRoom) ? k.vec2(60, -60): k.vec2(60, 120); 
+                        const pos = k.vec2(rPos.x, rPos.y).add(offset);
                         player.pos = pos;
                     } else player.pos = scaleToMap(k, map, entity);
 
