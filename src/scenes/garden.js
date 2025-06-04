@@ -63,7 +63,8 @@ export default function shop(k) {
                                             ...prev,
                                             gold: prev.gold + 50
                                         }));
-                                        makeFloatingText(k, k.vec2(-755, -120), '+50');
+                                        const fText = makeFloatingText(k, k.vec2(0, 0), '+50');
+                                        fText.screenPos(k.vec2(220, 180));
 
                                         if (text.length > 1) player.heal(1);
 
