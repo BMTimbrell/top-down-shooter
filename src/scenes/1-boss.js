@@ -15,7 +15,7 @@ export default function boss1(k) {
         const roomData = await (await fetch("../data/1-boss.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "1-boss", { layers, gameState, spriteName: "level1BossGround" });
+        const map = makeMap(k, "1-boss", { gameState, spriteName: "level1BossGround" });
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {

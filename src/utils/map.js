@@ -6,23 +6,24 @@ import {
 import makeGun from "../entities/gun";
 import { MAP_SCALE, TILE_SIZE, CELL_SIZE, ENEMY_FACTORIES } from '../constants';
 
-export function makeMap(k, name, { layers, gameState, spriteName }) {
+export function makeMap(k, name, { gameState, spriteName, center = false }) {
     k.add(gameState);
 
     // reset popup
     store.set(popupAtom, prev => ({ ...prev, visible: false }));
 
-    const mapWidth = layers.find(e => e.name === "Ground")?.width || 0;
-    const mapHeight = layers.find(e => e.name === "Ground")?.height || 0;
+    // const mapWidth = layers.find(e => e.name === "Ground")?.width || 0;
+    // const mapHeight = layers.find(e => e.name === "Ground")?.height || 0;
 
     const map = k.add([
         k.sprite(spriteName),
         k.pos(k.vec2(0, 0)),
-        // k.pos(k.vec2(k.center())),
+        center ? k.anchor("center") : "",
         k.scale(MAP_SCALE),
         name
     ]);
 
+    if (center) k.setCamPos(map.pos);
     // map.width = mapWidth * CELL_SIZE;
     // map.height = mapHeight * CELL_SIZE;
 

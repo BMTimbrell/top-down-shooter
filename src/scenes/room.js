@@ -12,7 +12,7 @@ export default function room(k) {
         const roomData = await (await fetch("./data/room.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "room", { gameState, layers, spriteName: "room" });
+        const map = makeMap(k, "room", { gameState, spriteName: "room" });
 
         spawnObjects(
             k,

@@ -1,4 +1,13 @@
-import { store, shopAtom, popupAtom, gameInfoAtom, bookMenuAtom, gameMenuAtom } from '../store';
+import { 
+    store, 
+    shopAtom, 
+    popupAtom, 
+    gameInfoAtom, 
+    bookMenuAtom, 
+    gameMenuAtom
+} from '../store';
+
+import { makeMap } from '../utils/map';
 
 function disableButtons(products) {
     products.books.forEach(book => {
@@ -12,6 +21,8 @@ function disableButtons(products) {
 
 export default function shop(k) {
     k.scene("shop", async ({ player, gameState }) => {
+
+        makeMap(k, "shop", { gameState, spriteName: "shop", center: true });
 
         disableButtons({ books: gameState.shop.books, electronics: gameState.shop.electronics });
 
@@ -118,7 +129,7 @@ export default function shop(k) {
                                             text: [
                                                 "WELCOME TO AUTOHELL EXPANSE™. V1.6.6 - PATCH NOTES: NOTHING FIXED.",
                                                 "Loading chaos... Please remain seated.",
-                                                "Enemy wave detected: 73% rage, 12% teeth, 100% hungry.",
+                                                "Enemy wave detected: 73% rage, 34% gnashing teeth, 100% hungry.",
                                                 ...gameText,
                                                 "You finish the game and feel more confident in your combat skills."
                                             ],

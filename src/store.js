@@ -79,7 +79,7 @@ export const gameInfoAtom = atom({
     time: 1,
     health: 4,
     maxHealth: 4,
-    gold: 0,
+    gold: 2500,
     cooldwns: {
         dash: 1,
         reload: 1

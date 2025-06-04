@@ -17,7 +17,7 @@ export default function level1(k) {
         const roomData = await (await fetch("../data/level1.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "level1", { layers, gameState, spriteName: "level1Ground" });
+        const map = makeMap(k, "level1", { gameState, spriteName: "level1Ground" });
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {

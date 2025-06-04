@@ -317,12 +317,14 @@ export default function loadAssets(k) {
         }
     });
 
-    // tiles
+    // maps
     k.loadSprite("level1Ground", "./sprites/level1.png");
     k.loadSprite("level1BossGround", "./sprites/1-boss.png");
     k.loadSprite("room", "./sprites/room.png");
     k.loadSprite("mainLobby", "./sprites/main-lobby.png");
+    k.loadSprite("shop", "./sprites/shop.png");
 
+    // tiles
     const rockyTiles = [
         { layer: "ground", index: 78 },
         { layer: "ground", index: 59 },

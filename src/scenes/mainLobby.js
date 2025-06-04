@@ -12,7 +12,7 @@ export default function mainLobby(k) {
         const roomData = await (await fetch("./data/main-lobby.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "main lobby", { layers, gameState, spriteName: "mainLobby" }); 
+        const map = makeMap(k, "main lobby", { gameState, spriteName: "mainLobby" }); 
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {

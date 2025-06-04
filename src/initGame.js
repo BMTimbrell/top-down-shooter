@@ -122,7 +122,7 @@ export default function initGame() {
                                 "As you read, you see examples of different exercises and workout plans."
                             ],
                             [
-                                "You read about different lifting techniques and the value of getting tension on the muscles when it's lengthened.",
+                                "You read about different lifting techniques and the value of getting tension on the muscle when it's lengthened.",
                                 "You now feel like you might be able to get more out of your workouts."
                             ]
                         ],
@@ -200,7 +200,7 @@ export default function initGame() {
                     {
                         name: "VR Headset",
                         description: "Comes with a free game.",
-                        price: 400,
+                        price: 1000,
                         button: { 
                             onClick: null, 
                             disabled: false,
@@ -285,5 +285,5 @@ export default function initGame() {
         });
     });
 
-    k.go("1-boss", { player, gameState });
+    k.go("room", { player, gameState });
 }
