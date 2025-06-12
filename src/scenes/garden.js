@@ -9,8 +9,9 @@ import makeFloatingText from '../utils/floatingText';
 
 import { makeMap } from '../utils/map';
 
-export default function shop(k) {
+export default function garden(k) {
     k.scene("garden", async ({ player, gameState }) => {
+        player.inDialogue = true;
 
         makeMap(k, "garden", { gameState, spriteName: "garden", center: true });
 
@@ -137,7 +138,8 @@ export default function shop(k) {
 
                         },
                         disabled: false,
-                        name: "Tend to Crops"
+                        name: "Tend to Crops",
+                        icon: true
                     }
                 }
             ]

@@ -32,10 +32,7 @@ export default function Shop() {
 
                 {books.map((book, index) => (
                     <Book key={index} book={book} button={book.button}>
-                        <div className={styles["price-container"]}>
-                            <img width="27" src="./sprites/coin2.png" />
-                            <span className={book.button.disabled ? styles.unaffordable : ""}>{book.price}</span>
-                        </div>
+                        <Price price={book.price} disabled={book.button.disabled} />
                     </Book>
                 ))}
             </MenuContainer>
@@ -44,5 +41,14 @@ export default function Shop() {
                 <PrimaryButton onClick={shop.handleExit}>Exit</PrimaryButton>
             </div>
         </Menu>
+    );
+}
+
+export function Price({ price, disabled }) {
+    return (
+        <div className={styles["price-container"]}>
+            <img width="27" src="./sprites/coin2.png" />
+            <span className={disabled ? styles.unaffordable : ""}>{price}</span>
+        </div>
     );
 }

@@ -8,7 +8,10 @@ import Prompt from './reactComponents/Prompt/Pompt';
 import BookMenu from './reactComponents/BookMenu/BookMenu';
 import Shop from './reactComponents/Shop/Shop';
 import Garden from './reactComponents/Garden/Garden';
+import Gym from './reactComponents/Gym/Gym';
 import GameMenu from './reactComponents/GameMenu/GameMenu';
+import Holorange from './reactComponents/Holorange/Holorange';
+import Engineering from './reactComponents/Engineering/Engineering';
 import { 
     dialogueAtom, 
     popupAtom, 
@@ -19,7 +22,10 @@ import {
     bookMenuAtom,
     gameMenuAtom,
     shopAtom,
-    gardenAtom
+    gardenAtom,
+    gymAtom,
+    holorangeAtom,
+    engineeringAtom
 } from './store';
 import { useAtom } from 'jotai';
 
@@ -34,6 +40,9 @@ export default function ReactUI() {
     const [gameMenu] = useAtom(gameMenuAtom);
     const [shop] = useAtom(shopAtom);
     const [garden] = useAtom(gardenAtom);
+    const [gym] = useAtom(gymAtom);
+    const [holorange] = useAtom(holorangeAtom);
+    const [engineering] = useAtom(engineeringAtom);
 
     return (
         <>
@@ -79,6 +88,18 @@ export default function ReactUI() {
 
              {garden.visible &&
                 <Garden />
+             }
+
+             {gym.visible &&
+                <Gym />
+             }
+
+             {holorange.visible &&
+                <Holorange />
+             }
+
+             {engineering.visible &&
+                <Engineering />
              }
 
              {menu.visible && 

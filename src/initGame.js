@@ -7,6 +7,8 @@ import level1 from './scenes/level1';
 import exposition from './scenes/exposition';
 import shop from './scenes/shop';
 import garden from './scenes/garden';
+import gym from './scenes/Gym';
+import engineering from './scenes/engineering';
 import {
     menuAtom,
     playerInfoAtom,
@@ -16,6 +18,7 @@ import {
 } from "./store";
 import boss1 from './scenes/1-boss';
 import timeTransition from './scenes/timeTransition';
+import holorange from './scenes/holorange';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -42,6 +45,12 @@ export default function initGame() {
     shop(k);
 
     garden(k);
+
+    gym(k);
+
+    holorange(k);
+
+    engineering(k);
 
     const player = makePlayer(k, k.vec2(0));
 

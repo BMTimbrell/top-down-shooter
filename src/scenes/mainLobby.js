@@ -8,6 +8,7 @@ import {
 
 export default function mainLobby(k) {
     k.scene("main lobby", async ({ player, gameState, prevRoom = null }) => {
+        player.inDialogue = false;
 
         const roomData = await (await fetch("./data/main-lobby.json")).json();
         const layers = roomData.layers;

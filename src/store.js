@@ -63,6 +63,27 @@ export const gardenAtom = atom({
     handleClose: null
 });
 
+export const gymAtom = atom({
+    visible: false,
+    options: [],
+    handleClose: null
+});
+
+export const holorangeAtom = atom({
+    visible: false,
+    options: [],
+    handleClose: null
+});
+
+export const engineeringAtom = atom({
+    visible: false,
+    screen: "main",
+    options: [],
+    guns: [],
+    armour: [],
+    handleClose: null,
+    gunModal: false
+});
 
 export const menuAtom = atom({
     visible: false,
@@ -86,7 +107,7 @@ export const gameInfoAtom = atom({
     time: 1,
     health: 4,
     maxHealth: 4,
-    gold: 2500,
+    gold: 2000,
     cooldwns: {
         dash: 1,
         reload: 1

@@ -27,7 +27,8 @@ export const GUNS = {
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 0 },
-        offset: { x: 0, y: 5 }
+        offset: { x: 0, y: 5 },
+        price: 50
     },
 
     smg: {
@@ -41,7 +42,8 @@ export const GUNS = {
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 576 },
-        offset: { x: 0, y: 5 }
+        offset: { x: 0, y: 5 },
+        price: 100
     },
 
     shotgun: {
@@ -57,7 +59,8 @@ export const GUNS = {
         projectileLifespan: 0.75,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 192 },
-        offset: { x: 0, y: 5 }
+        offset: { x: 0, y: 5 },
+        price: 200
     },
 
     "assault rifle": {
@@ -71,7 +74,8 @@ export const GUNS = {
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 480 },
-        offset: { x: 0, y: 5 }
+        offset: { x: 0, y: 5 },
+        price: 200
     },
 
     "sniper rifle": {
@@ -86,7 +90,8 @@ export const GUNS = {
         pierce: 3,
         projectileSpeed: 1500,
         spritePos: { x: 0, y: 384 },
-        offset: { x: 0, y: 5 }
+        offset: { x: 0, y: 5 },
+        price: 400
     },
 
     "RPG": {
@@ -100,7 +105,8 @@ export const GUNS = {
         projectileSpeed: 700,
         spritePos: { x: 0, y: 288 },
         pOffset: { x: 0, y: -6 },
-        offset: { x: 0, y: 1 }
+        offset: { x: 0, y: 1 },
+        price: 400
     },
 
     "minigun": {
@@ -114,7 +120,8 @@ export const GUNS = {
         projectileSpeed: 700,
         pelletSpread: 10,
         spritePos: { x: 0, y: 96 },
-        offset: { x: 20, y: 5 }
+        offset: { x: 20, y: 5 },
+        price: 800
     }
 };
 

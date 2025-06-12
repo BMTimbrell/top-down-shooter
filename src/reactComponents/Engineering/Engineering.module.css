@@ -1,0 +1,15 @@
+.ammo {
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.gun-card {
+    padding: 0.5rem;
+    margin-block: 1rem;
+    border-radius: 0.25rem;
+}
+
+.gun-card:hover {
+    background-color: #ffffff80;
+    cursor: pointer;
+}

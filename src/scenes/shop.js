@@ -21,7 +21,8 @@ function disableButtons(products) {
 
 export default function shop(k) {
     k.scene("shop", async ({ player, gameState }) => {
-
+        player.inDialogue = true;
+        
         makeMap(k, "shop", { gameState, spriteName: "shop", center: true });
 
         disableButtons({ books: gameState.shop.books, electronics: gameState.shop.electronics });
@@ -66,7 +67,8 @@ export default function shop(k) {
                             });
                         },
                         disabled: book.progress.current === book.progress.max,
-                        name: "Read"
+                        name: "Read",
+                        icon: true
                     };
                     player.books.push(book);
                     gameState.shop.books = gameState.shop.books.filter(b => b !== book);
@@ -141,7 +143,8 @@ export default function shop(k) {
                                     });
                                 },
                                 disabled: false,
-                                name: "Play"
+                                name: "Play",
+                                icon: true
                             }
                         });
 
@@ -198,7 +201,8 @@ export default function shop(k) {
                                 });
                             },
                             name: "Play",
-                            disabled: false
+                            disabled: false,
+                            icon: true
                         }
                     }
 
