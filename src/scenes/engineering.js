@@ -12,7 +12,8 @@ import { makeMap } from '../utils/map';
 
 function disableButtons(products) {
     products.forEach(product => {
-        product.button.disabled = product.price > store.get(gameInfoAtom).gold;
+        product.button.disabled = product.price > store.get(gameInfoAtom).gold || 
+            store.get(playerInfoAtom).data.exp.weapon.level < product.level;
     });
     return products;
 }
@@ -73,6 +74,8 @@ export default function engineering(k) {
             guns: Object.keys(GUNS).map(gun => ({
                 name: gun,
                 price: GUNS[gun].price,
+                level: GUNS[gun].level,
+                spritePos: GUNS[gun].spritePos,
                 button: {
                     onClick: () => {
 
@@ -144,7 +147,8 @@ export default function engineering(k) {
                         }
 
                     },
-                    disabled: store.get(gameInfoAtom).gold < GUNS[gun].price,
+                    disabled: store.get(gameInfoAtom).gold < GUNS[gun].price || 
+                        store.get(playerInfoAtom).data.exp.weapon.level < GUNS[gun].level,
                     name: "Buy",
                     icon: false
                 }

@@ -17,22 +17,41 @@ export default function Engineering() {
 
     return (
         <Menu>
-            <h1>Engineering</h1>
+            <h1>
+                {
+                    screen === "main" ? "Engineering" :
+                        screen === "weapons" ? "Weapons" : "Armour"
+                }
+            </h1>
 
             {screen === "main" ?
-                engineering.options.map((e, index) => (
-                    <PrimaryButton key={index} onClick={e.button.onClick}>
-                        {e.button.name}
-                    </PrimaryButton>
-                )) : screen === "weapons" ?
+                <>
+                    {engineering.options.map((e, index) => (
+                        <PrimaryButton key={index} onClick={e.button.onClick}>
+                            {e.button.name}
+                        </PrimaryButton>
+                    ))}
+                    <PrimaryButton onClick={engineering.handleExit}>Exit</PrimaryButton>
+                </> : screen === "weapons" ?
                     <MenuContainer>
                         {engineering.guns.map((gun, index) => (
-                            <MenuItem key={index} button={gun.button}>
+                            <div key={index} className={styles["weapon-menu-item"]}>
                                 <MenuItemHeader>
                                     <h2>{gun.name}</h2>
+                                    <Gun
+                                        spritePos={gun.spritePos}
+                                    />
                                 </MenuItemHeader>
-                                <Price price={gun.price} disabled={gun.button.disabled} />
-                            </MenuItem>
+
+                                <div>Weapon Lvl 1</div>
+
+                                <Price price={gun.price} />
+
+                                <PrimaryButton onClick={gun.button.onClick} disabled={gun.button.disabled}>
+                                    Buy
+                                </PrimaryButton>
+                            </div>
+
                         ))}
                     </MenuContainer> :
                     <MenuContainer>
@@ -52,9 +71,9 @@ export default function Engineering() {
                     <h3>Replace a Gun</h3>
                     <GunContainer>
                         {playerInfo.data.guns.map((gun, index) => (
-                            <div 
-                                onClick={() => engineering.replaceGun(index)} 
-                                className={styles["gun-card"]} 
+                            <div
+                                onClick={() => engineering.replaceGun(index)}
+                                className={styles["gun-card"]}
                                 key={index}
                             >
                                 <Gun
@@ -71,12 +90,13 @@ export default function Engineering() {
                 </Modal>
             }
 
-            <div>
-                {screen === "main" ?
-                    <PrimaryButton onClick={engineering.handleExit}>Exit</PrimaryButton> :
+
+            {screen !== "main" &&
+                <div>
                     <BackButton onClick={() => setEngineering(prev => ({ ...prev, screen: "main" }))} />
-                }
-            </div>
+                </div>
+            }
+
         </Menu>
     );
 }

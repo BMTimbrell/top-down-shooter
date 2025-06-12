@@ -1,6 +1,6 @@
 import Menu, { MenuContainer } from "../Menu/Menu";
 import PrimaryButton from "../Button/PrimaryButton";
-import { shopAtom } from '../../store';
+import { shopAtom, gameInfoAtom } from '../../store';
 import { useAtom } from 'jotai';
 import Book from '../Book/Book';
 import MenuItem, { MenuItemHeader } from "../MenuItem/MenuItem";
@@ -32,7 +32,7 @@ export default function Shop() {
 
                 {books.map((book, index) => (
                     <Book key={index} book={book} button={book.button}>
-                        <Price price={book.price} disabled={book.button.disabled} />
+                        <Price price={book.price} />
                     </Book>
                 ))}
             </MenuContainer>
@@ -44,7 +44,10 @@ export default function Shop() {
     );
 }
 
-export function Price({ price, disabled }) {
+export function Price({ price }) {
+    const [gameInfo] = useAtom(gameInfoAtom);
+    const disabled = gameInfo.gold < price;
+
     return (
         <div className={styles["price-container"]}>
             <img width="27" src="./sprites/coin2.png" />
