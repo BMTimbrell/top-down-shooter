@@ -22,6 +22,10 @@
     width: 100%;
 }
 
+.weapon-menu-item h2::first-letter {
+    text-transform: uppercase;
+}
+
 .weapon-menu-item h2 {
     font-size: 1.125rem;
     margin-bottom: 0.75em;

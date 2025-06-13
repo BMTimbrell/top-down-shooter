@@ -1,3 +1,4 @@
+import { DISCOUNT } from '../constants';
 import { 
     store, 
     shopAtom, 
@@ -21,14 +22,22 @@ function disableButtons(products) {
 
 export default function shop(k) {
     k.scene("shop", async ({ player, gameState }) => {
-        player.inDialogue = true;
         
         makeMap(k, "shop", { gameState, spriteName: "shop", center: true });
 
         disableButtons({ books: gameState.shop.books, electronics: gameState.shop.electronics });
 
+        if (player.discount) {
+            gameState.shop.electronics.forEach(e => {
+                e.price *= DISCOUNT;
+            });
+            gameState.shop.books.forEach(book => {
+                book.price *= DISCOUNT;
+            });
+            player.discount = false;
+        }
+
         gameState.shop.books.forEach(book => {
-            if (player.discount) book.price *= 0.8;
 
             book.button.onClick = () => {
                 if (book.price <= store.get(gameInfoAtom).gold) {
@@ -84,7 +93,6 @@ export default function shop(k) {
         });
 
         gameState.shop.electronics.forEach(e => {
-            if (player.discount) e.price *= 0.8;
 
             e.button.onClick = () => {
                 if (e.price <= store.get(gameInfoAtom).gold) {

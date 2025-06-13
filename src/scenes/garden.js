@@ -11,7 +11,6 @@ import { makeMap } from '../utils/map';
 
 export default function garden(k) {
     k.scene("garden", async ({ player, gameState }) => {
-        player.inDialogue = true;
 
         makeMap(k, "garden", { gameState, spriteName: "garden", center: true });
 

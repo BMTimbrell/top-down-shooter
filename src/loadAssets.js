@@ -64,12 +64,12 @@ export default function loadAssets(k) {
         }
     });
 
-    k.loadSprite("smg", "./sprites/weapons.png", {
+    k.loadSprite("SMG", "./sprites/weapons.png", {
         sliceX: 8,
         sliceY: 36,
         anims: {
             "idle": 88,
-            "firing": { from: 88, to: 90, loop: false, speed: GUNS["smg"].animSpeed }
+            "firing": { from: 88, to: 90, loop: false, speed: GUNS["SMG"].animSpeed }
         }
     });
 

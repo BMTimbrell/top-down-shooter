@@ -8,7 +8,6 @@ import { makeMap } from '../utils/map';
 
 export default function gym(k) {
     k.scene("gym", async ({ player, gameState }) => {
-        player.inDialogue = true;
 
         makeMap(k, "gym", { gameState, spriteName: "gym", center: true });
 

@@ -8,7 +8,6 @@ import { makeMap } from '../utils/map';
 
 export default function holorange(k) {
     k.scene("holorange", async ({ player, gameState }) => {
-        player.inDialogue = true;
 
         makeMap(k, "holorange", { gameState, spriteName: "holorange", center: true });
 

@@ -32,7 +32,7 @@ export const GUNS = {
         level: 1
     },
 
-    smg: {
+    "SMG": {
         projectile: "bullet",
         damage: 1.5,
         firingInterval: 0,
@@ -173,3 +173,5 @@ export const ENEMY_FACTORIES = {
     "wisp": makeWisp,
     "birdboss": makeBirdBoss
 };
+
+export const DISCOUNT = 0.8;

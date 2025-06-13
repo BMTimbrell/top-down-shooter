@@ -244,7 +244,7 @@ export default function initGame() {
         //     gameState.debugTimer = 3;
         //     console.log(k.get("*").length);
         // }
-        if (k.isKeyPressed("escape") && !player.inDialogue) {
+        if (k.isKeyPressed("escape")) {
             // set data to show in menu
             if (!paused) {
                 store.set(

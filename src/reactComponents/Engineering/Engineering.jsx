@@ -43,7 +43,7 @@ export default function Engineering() {
                                     />
                                 </MenuItemHeader>
 
-                                <div>Weapon Lvl 1</div>
+                                <div>Weapon Lvl {gun.level}</div>
 
                                 <Price price={gun.price} />
 
@@ -56,12 +56,15 @@ export default function Engineering() {
                     </MenuContainer> :
                     <MenuContainer>
                         {engineering.armour.map((e, index) => (
-                            <MenuItem key={index} button={e.button}>
-                                <MenuItemHeader>
-                                    <h2>{e.name}</h2>
-                                    <div>{e.description}</div>
-                                </MenuItemHeader>
-                            </MenuItem>
+                            engineering.showArmour[e.name] && 
+                                <MenuItem key={index} button={e.button}>
+                                    <MenuItemHeader>
+                                        <h2>{e.name}</h2>
+                                        <div>{e.description}</div>
+                                    </MenuItemHeader>
+
+                                    <Price price={e.price} />
+                                </MenuItem>
                         ))}
                     </MenuContainer>
             }

@@ -82,7 +82,11 @@ export const engineeringAtom = atom({
     guns: [],
     armour: [],
     handleClose: null,
-    gunModal: false
+    gunModal: false,
+    showArmour: {
+        "Predator Armour": true,
+        "Titan Armour": false
+    }
 });
 
 export const menuAtom = atom({
@@ -107,7 +111,7 @@ export const gameInfoAtom = atom({
     time: 1,
     health: 4,
     maxHealth: 4,
-    gold: 2000,
+    gold: 20000,
     cooldwns: {
         dash: 1,
         reload: 1
