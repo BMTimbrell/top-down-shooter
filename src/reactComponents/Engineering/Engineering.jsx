@@ -9,6 +9,7 @@ import GunContainer from "../Gun/GunContainer";
 import Modal from "../Modal/Modal";
 import BackButton from "../Button/BackButton";
 import styles from "./Engineering.module.css";
+import LevelReq from "../LevelReq/LevelReq";
 
 export default function Engineering() {
     const [engineering, setEngineering] = useAtom(engineeringAtom);
@@ -43,7 +44,7 @@ export default function Engineering() {
                                     />
                                 </MenuItemHeader>
 
-                                <div>Weapon Lvl {gun.level}</div>
+                                <LevelReq type="weapon" level={gun.level}>Weapon Lvl {gun.level}</LevelReq>
 
                                 <Price price={gun.price} />
 

@@ -49,7 +49,21 @@ export default function makePlayer(k, posVec2) {
             body: { level: 1, exp: 0, maxExp: 50 },
             weapon: { level: 1, exp: 0, maxExp: 50 },
             books: [],
-            electronics: []
+            electronics: [],
+            passives: {
+                "Increased Slide Damage": false,
+                "Faster Movement": false,
+                "Improved Sleep": false,
+                "Improved Slide": false,
+                "Rapid Recovery": false
+            },
+            abilities: [
+                {
+                    name: "Psi Beam",
+                    available: false,
+                    cooldown: 10
+                }
+            ]
         }
     ]);
 

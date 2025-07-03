@@ -196,7 +196,7 @@ export default function engineering(k) {
 
                         },
                         name: "Buy",
-                        disabled: store.get(gameInfoAtom).gold < player.discount ? 1000 * DISCOUNT : 1000
+                        disabled: store.get(gameInfoAtom).gold < (player.discount ? 1000 * DISCOUNT : 1000)
                     }
                 },
                 {
@@ -241,7 +241,7 @@ export default function engineering(k) {
 
                         },
                         name: "Buy",
-                        disabled: store.get(gameInfoAtom).gold < player.discount ? 3000 * DISCOUNT : 3000
+                        disabled: store.get(gameInfoAtom).gold < (player.discount ? 3000 * DISCOUNT : 3000)
                     }
                 }
             ]

@@ -46,10 +46,16 @@ export default function makeProjectile(
         }
     });
 
-    const collisions = ["boulder", "boundary", friendly ? "enemy" : "player"];
+    let collisions = ["boulder", "boundary", friendly ? "enemy" : "player"];
 
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e)) && obj.has("body")) {
+            if (obj?.dashing && obj?.passives["Improved Slide"]) {
+                collisions = collisions.filter(e => e !== "player");
+                collisions.push("enemy");
+                projectile.use(k.move(target, -projectileSpeed))
+            }
+
             if (obj?.invincible || obj?.dead) return;
 
             if (projectile.is("rocket")) {
@@ -105,8 +111,10 @@ export default function makeProjectile(
                 return;
             }
 
-            if (obj.is("enemy") || obj.is("player")) {
+            if (obj.is("enemy")) {
                 obj.hurt(gun.damage);
+            } else if (obj.is("player")) {
+                obj.hurt(1);
             } else {
                 k.destroy(projectile);
                 return;

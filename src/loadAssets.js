@@ -118,12 +118,29 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("laser pistol", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 8,
+            "firing": { from: 8, to: 10, loop: false, speed: GUNS["laser pistol"].animSpeed }
+        }
+    });
+
     // projectiles
     k.loadSprite("bullet", "./sprites/bullets3.png", {
         sliceX: 25,
         sliceY: 1,
         anims: {
             "idle": 4
+        }
+    });
+
+    k.loadSprite("laser", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 0
         }
     });
 
@@ -327,6 +344,8 @@ export default function loadAssets(k) {
     k.loadSprite("gym", "./sprites/gym.png");
     k.loadSprite("holorange", "./sprites/holorange.png");
     k.loadSprite("engineering", "./sprites/engineering.png");
+    k.loadSprite("psi-lab", "./sprites/psi-lab.png");
+    k.loadSprite("gene-lab", "./sprites/gene-lab.png");
 
     // tiles
     const rockyTiles = [

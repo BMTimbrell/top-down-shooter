@@ -4,6 +4,7 @@ import { useState } from 'react';
 export default function ExpBar({ stat }) {
     const statPercent = Math.round((stat.exp / stat.maxExp) * 100);
     const [showFraction, setShowFraction] = useState(false);
+    const hoverText = stat.level < 3 ? `${stat.exp}/${stat.maxExp}` : "Max";
 
     return (
         <div 
@@ -12,7 +13,7 @@ export default function ExpBar({ stat }) {
             onMouseEnter={() => setShowFraction(true)}
             onMouseLeave={() => setShowFraction(false)}
         >
-            {showFraction ? `${stat.exp}/${stat.maxExp}` : `Lvl ${stat.level}`}
+            {showFraction ? hoverText : `Lvl ${stat.level}`}
         </div>
     );
 }

@@ -31,6 +31,13 @@ export default function GameInfo() {
                 <div className={styles.time}>
                     <div>Day {gameInfo.day}</div>
                     <div>{time}</div>
+                    {!gameInfo.onMission && 
+                        <div>
+                            {gameInfo.daysUntilMission > 0 && 
+                                `Days until mission: ${gameInfo.daysUntilMission}`
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div className={styles.hearts}>

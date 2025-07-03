@@ -42,7 +42,7 @@ export const GUNS = {
         pelletSpread: 8,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 576 },
+        spritePos: { x: 0, y: 672 },
         offset: { x: 0, y: 5 },
         price: 100,
         level: 1
@@ -60,7 +60,7 @@ export const GUNS = {
         pelletSpeedVariation: 100,
         projectileLifespan: 0.75,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 192 },
+        spritePos: { x: 0, y: 288 },
         offset: { x: 0, y: 5 },
         price: 200,
         level: 1
@@ -76,7 +76,7 @@ export const GUNS = {
         pelletSpread: 6,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 480 },
+        spritePos: { x: 0, y: 576 },
         offset: { x: 0, y: 5 },
         price: 200,
         level: 1
@@ -93,7 +93,7 @@ export const GUNS = {
         projectileLifespan: 1.5,
         pierce: 3,
         projectileSpeed: 1500,
-        spritePos: { x: 0, y: 384 },
+        spritePos: { x: 0, y: 480 },
         offset: { x: 0, y: 5 },
         price: 400,
         level: 1
@@ -108,7 +108,8 @@ export const GUNS = {
         maxAmmo: 25,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
-        spritePos: { x: 0, y: 288 },
+        pelletSpread: 10,
+        spritePos: { x: 0, y: 384 },
         pOffset: { x: 0, y: -6 },
         offset: { x: 0, y: 1 },
         price: 400,
@@ -125,10 +126,27 @@ export const GUNS = {
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         pelletSpread: 10,
-        spritePos: { x: 0, y: 96 },
+        spritePos: { x: 0, y: 192 },
         offset: { x: 20, y: 5 },
         price: 800,
         level: 1
+    },
+
+    "laser pistol": {
+        projectile: "laser",
+        damage: 3,
+        firingInterval: 0.1,
+        animSpeed: 10,
+        maxAmmo: 300,
+        clipSize: 8,
+        pelletSpread: 5,
+        projectileLifespan: 1.5,
+        projectileSpeed: 700,
+        spritePos: { x: 0, y: 96 },
+        pOffset: { x: 0, y: -10 },
+        offset: { x: 0, y: 5 },
+        price: 150,
+        level: 2
     }
 };
 
@@ -136,28 +154,28 @@ export const ENEMIES = {
     bird: {
         health: 10,
         speed: 100,
-        damage: 1,
+        damage: 5,
         firingSpeed: 3,
         projectileCount: 1,
     },
     redbird: {
         health: 15,
         speed: 100,
-        damage: 1,
+        damage: 5,
         firingSpeed: 3,
         projectileCount: 3
     },
     mole: {
         health: 15,
         speed: 50,
-        damage: 1,
+        damage: 5,
         firingSpeed: 3,
         projectileCount: 1
     },
     wisp: {
         health: 12,
         speed: 80,
-        damage: 1,
+        damage: 5,
         firingSpeed: 0.25,
         projectileCount: 1,
         shootOffset: { x: 0, y: 40 },

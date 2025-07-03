@@ -12,6 +12,8 @@ import Gym from './reactComponents/Gym/Gym';
 import GameMenu from './reactComponents/GameMenu/GameMenu';
 import Holorange from './reactComponents/Holorange/Holorange';
 import Engineering from './reactComponents/Engineering/Engineering';
+import PsiLab from './reactComponents/PsiLab/PsiLab';
+import GeneLab from './reactComponents/GeneLab/GeneLab';
 import { 
     dialogueAtom, 
     popupAtom, 
@@ -25,7 +27,9 @@ import {
     gardenAtom,
     gymAtom,
     holorangeAtom,
-    engineeringAtom
+    engineeringAtom,
+    psiLabAtom,
+    geneLabAtom
 } from './store';
 import { useAtom } from 'jotai';
 
@@ -43,6 +47,8 @@ export default function ReactUI() {
     const [gym] = useAtom(gymAtom);
     const [holorange] = useAtom(holorangeAtom);
     const [engineering] = useAtom(engineeringAtom);
+    const [psiLab] = useAtom(psiLabAtom);
+    const [geneLab] = useAtom(geneLabAtom);
 
     return (
         <>
@@ -100,6 +106,14 @@ export default function ReactUI() {
 
              {engineering.visible &&
                 <Engineering />
+             }
+
+             {psiLab.visible &&
+                <PsiLab />
+             }
+
+             {geneLab.visible &&
+                <GeneLab />
              }
 
              {menu.visible && 

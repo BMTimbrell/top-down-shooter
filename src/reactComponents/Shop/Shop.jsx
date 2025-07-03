@@ -46,12 +46,12 @@ export default function Shop() {
 
 export function Price({ price }) {
     const [gameInfo] = useAtom(gameInfoAtom);
-    const disabled = gameInfo.gold < price;
+    const unaffordable = gameInfo.gold < price;
 
     return (
         <div className={styles["price-container"]}>
             <img width="27" src="./sprites/coin2.png" />
-            <span className={disabled ? styles.unaffordable : ""}>{price}</span>
+            <span className={unaffordable ? styles.unaffordable : ""}>{price}</span>
         </div>
     );
 }

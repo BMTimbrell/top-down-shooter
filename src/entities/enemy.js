@@ -6,7 +6,6 @@ import makeGunDrop from './gunDrop';
 import makeCoin from './coin';
 import { GUNS, ENEMIES, ENEMY_FACTORIES } from "../constants";
 import makeHeart from './heart';
-import { store, gameInfoAtom } from "../store";
 
 export default function makeEnemy(k, name, { pos, roomId }) {
     const enemyData = ENEMIES[name];
@@ -68,20 +67,16 @@ export default function makeEnemy(k, name, { pos, roomId }) {
             }
             const dropChance = k.randi(1, 4);
             const gunDropChance = k.randi(1, 5);
-            const gameInfo = store.get(gameInfoAtom);
             const healthDropChance = k.randi(
                 1,
-                Math.min(
-                    21 - (gameInfo.maxHealth - gameInfo.health),
-                    11
-                )
+                21
             );
 
             if (dropChance === 1 || dropChance === 2) {
                 if (healthDropChance === 1) {
                     makeHeart(k, enemy.pos);
                 } else if (gunDropChance === 3) {
-                    const guns = Object.keys(GUNS);
+                    const guns = Object.keys(GUNS).filter(gun => GUNS[gun].level <= k.get("player")[0].weapon.level);
                     const gunName = guns[k.randi(0, guns.length)];
 
                     makeGunDrop(

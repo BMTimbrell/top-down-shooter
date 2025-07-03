@@ -9,6 +9,8 @@ import shop from './scenes/shop';
 import garden from './scenes/garden';
 import gym from './scenes/Gym';
 import engineering from './scenes/engineering';
+import psiLab from './scenes/psiLab';
+import geneLab from './scenes/geneLab';
 import {
     menuAtom,
     playerInfoAtom,
@@ -52,6 +54,10 @@ export default function initGame() {
 
     engineering(k);
 
+    psiLab(k);
+
+    geneLab(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = k.make([
@@ -69,6 +75,7 @@ export default function initGame() {
 
 
             },
+            daysUntilNextMission: 5,
             reinforcements: [],
             pendingSpawns: [],
             debugTimer: 3,
@@ -297,5 +304,5 @@ export default function initGame() {
         });
     });
 
-    k.go("room", { player, gameState });
+    k.go("level1", { player, gameState });
 }

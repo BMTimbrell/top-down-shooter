@@ -89,6 +89,67 @@ export const engineeringAtom = atom({
     }
 });
 
+export const psiLabAtom = atom({
+    visible: false,
+    options: [],
+    handleClose: null,
+    skills: [
+        { 
+            name: "Psi Beam",
+            description: "Fire a concentrated beam of psionic energy at the enemy.",
+            level: 1 
+        },
+        { 
+            name: "Force Field",
+            description: "Generate a shield that protects you for a short time.",
+            level: 2 
+        },
+        { 
+            name: "Stronger Psi Beam",
+            description: "Increase damage of Psi Beam.",
+            level: 2 
+        },
+        { 
+            name: "Freeze Time", 
+            description: "Freeze time for everyone but yourself.",
+            level: 3 
+        }
+    ]
+});
+
+export const geneLabAtom = atom({
+    visible: false,
+    options: [],
+    handleClose: null,
+    skills: [
+        { 
+            name: "Faster Movement",
+            description: "Increase movement speed by 25%.",
+            level: 1 
+        },
+        { 
+            name: "Increased Slide Damage",
+            description: "Sliding into enemies deals 100% more damage.",
+            level: 2 
+        },
+        { 
+            name: "Improved Sleep",
+            description: "Wake up earlier, gaining an extra time slot.",
+            level: 2 
+        },
+        { 
+            name: "Improved Slide",
+            description: "Sliding reflects projectiles.",
+            level: 3 
+        },
+        { 
+            name: "Rapid Recovery", 
+            description: "33% chance to gain back health after clearing a room.",
+            level: 3 
+        }
+    ]
+});
+
 export const menuAtom = atom({
     visible: false,
     buttons: []
@@ -117,6 +178,7 @@ export const gameInfoAtom = atom({
         reload: 1
     },
     onMission: false,
+    daysUntilMission: 5,
     gunIndex: 0,
     maxGuns: 3,
     reloading: false,
