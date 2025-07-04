@@ -607,21 +607,23 @@ export default function makePlayer(k, posVec2) {
 
         // === J. Abilities ===
 
-        player.abilities.filter(a => a.active).forEach(ability => {
-            if (k.isKeyPressed(ability.key) && ability.cooldown === ability.baseCooldown) {
-
-                ability.action();
-                ability.cooldown = 0;
-
-                store.set(playerInfoAtom, prev => ({
-                    ...prev,
-                    data: {
-                        ...prev.data,
-                        abilities: player.abilities
-                    }
-                }));
-            }
-        });
+        if (player.onMission) {
+            player.abilities.filter(a => a.active).forEach(ability => {
+                if (k.isKeyPressed(ability.key) && ability.cooldown === ability.baseCooldown) {
+    
+                    ability.action();
+                    ability.cooldown = 0;
+    
+                    store.set(playerInfoAtom, prev => ({
+                        ...prev,
+                        data: {
+                            ...prev.data,
+                            abilities: player.abilities
+                        }
+                    }));
+                }
+            });
+        }
     });
 
     return player;

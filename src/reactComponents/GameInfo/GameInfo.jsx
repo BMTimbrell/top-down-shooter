@@ -58,10 +58,11 @@ export default function GameInfo() {
             {gameInfo.onMission && (
                 <div className={styles["bottom-container"]}>
                     <div className={styles["ability-container"]}>
-                        <Ability cooldown={cooldwns.dash} imgSrc={"./sprites/dash-icon-4.png"} />
+                        <Ability aKey={"RMB"} cooldown={cooldwns.dash} imgSrc={"./sprites/dash-icon-4.png"} />
                         {abilities.map((ability, index) => (
                             <Ability 
-                                key={index} 
+                                key={index}
+                                aKey={ability.key} 
                                 cooldown={ability.cooldown} 
                                 imgSrc={ability.imgSrc} 
                             />

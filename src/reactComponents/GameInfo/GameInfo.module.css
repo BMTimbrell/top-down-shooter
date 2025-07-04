@@ -39,13 +39,14 @@
     left: 1rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: end;
 }
 
 .ability-container {
     display: flex;
     flex-direction: column;
-    row-gap: 0.5rem;
+    row-gap: 1rem;
+    padding-bottom: 0.75rem;
 }
 
 .gun-card {
