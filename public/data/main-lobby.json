@@ -397,6 +397,11 @@
                  "name":"check exit",
                  "properties":[
                         {
+                         "name":"description",
+                         "type":"string",
+                         "value":"I'm not read to go on a mission yet."
+                        }, 
+                        {
                          "name":"destination",
                          "type":"string",
                          "value":"Exit"

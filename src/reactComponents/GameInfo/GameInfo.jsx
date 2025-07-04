@@ -4,6 +4,7 @@ import styles from './GameInfo.module.css';
 import Gun from "../Gun/Gun";
 import GunContainer from "../Gun/GunContainer";
 import ReloadBar from "../ReloadBar/ReloadBar";
+import Ability from "../Ability/Ability";
 
 export default function GameInfo() {
     const [gameInfo] = useAtom(gameInfoAtom);
@@ -11,6 +12,7 @@ export default function GameInfo() {
     const guns = playerInfo.data.guns;
     const emptySlots = new Array(gameInfo.maxGuns - guns.length).fill(0);
     const cooldwns = gameInfo.cooldwns;
+    const abilities = playerInfo.data.abilities;
     const hearts = [];
     const time = gameInfo.time === 0 ? "Morning" :
         gameInfo.time === 1 ? "Afternoon" :
@@ -56,13 +58,14 @@ export default function GameInfo() {
             {gameInfo.onMission && (
                 <div className={styles["bottom-container"]}>
                     <div className={styles["ability-container"]}>
-                        <div style={{ '--cd-percent': `${cooldwns.dash * 100}%` }} className={styles.dash}>
-                            <img
-                                src="./sprites/dash-icon-4.png"
-                                className={styles["dash-icon"]}
-                                style={{ opacity: cooldwns.dash === 1 ? 1 : 0.5 }}
+                        <Ability cooldown={cooldwns.dash} imgSrc={"./sprites/dash-icon-4.png"} />
+                        {abilities.map((ability, index) => (
+                            <Ability 
+                                key={index} 
+                                cooldown={ability.cooldown} 
+                                imgSrc={ability.imgSrc} 
                             />
-                        </div>
+                        ))}
                     </div>
                     
                     <GunContainer>

@@ -163,7 +163,8 @@ export const playerInfoAtom = atom({
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
             weapon: { level: 1, exp: 0, maxExp: 50 }
-        }
+        },
+        abilities: []
     }
 });
 
@@ -178,7 +179,7 @@ export const gameInfoAtom = atom({
         reload: 1
     },
     onMission: false,
-    daysUntilMission: 5,
+    daysUntilMission: 6,
     gunIndex: 0,
     maxGuns: 3,
     reloading: false,

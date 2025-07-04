@@ -28,11 +28,11 @@ export function hasLineOfSight(k, from, to) {
         };
 
         for (const b of blockers) {
-            const blocker = { 
-                x: b.pos.x, 
-                y: b.pos.y, 
-                width: b.area.shape.width, 
-                height: b.area.shape.height 
+            const blocker = {
+                x: b.pos.x,
+                y: b.pos.y,
+                width: b.area.shape.width,
+                height: b.area.shape.height
             };
             if (hasOverlap(projectile, blocker)) {
                 return false;
@@ -41,4 +41,37 @@ export function hasLineOfSight(k, from, to) {
     }
 
     return true;
+}
+
+export function castRay(k, start, dir, maxDist = 800, step = 4) {
+    let pos = start;
+
+    const blockers = k.get("*").filter(
+        obj => obj.has("body") && obj.has("area") && !obj.is("player") && !obj.is("enemy")
+    );
+
+    for (let d = 0; d < maxDist; d += step) {
+        pos = pos.add(dir.scale(step));
+
+        for (const b of blockers) {
+            const blocker = {
+                x: b.pos.x,
+                y: b.pos.y,
+                width: b.area.shape.width,
+                height: b.area.shape.height
+            };
+
+            const projectile = {
+                x: pos.x - 20,
+                y: pos.y - 20,
+                width: 40,
+                height: 40
+            };
+
+            if (hasOverlap(projectile, blocker)) {
+                return pos; // Hit wall
+            }
+        }
+    }
+    return start.add(dir.scale(maxDist)); // No wall hit
 }

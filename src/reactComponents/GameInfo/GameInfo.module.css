@@ -42,17 +42,10 @@
     align-items: center;
 }
 
-.dash {
-    width: 44px;
-    height: 44px;
-    border: 1px solid white;
-    border-radius: 0.25rem;
-    background: linear-gradient(to top, grey var(--cd-percent), transparent var(--cd-percent));
-}
-
-.dash-icon {
-    width: 100%;
-    opacity: 1;
+.ability-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
 }
 
 .gun-card {

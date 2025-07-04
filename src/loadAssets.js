@@ -144,6 +144,8 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("psi-beam", "./sprites/psi-beam.png");
+
     k.loadSprite("rocket", "./sprites/rocket.png", {
         sliceX: 4,
         sliceY: 1,

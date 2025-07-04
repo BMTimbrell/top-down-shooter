@@ -1,6 +1,6 @@
 import { DROP_OFFSET, GUNS, ENEMY_FACTORIES } from '../constants';
 import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, infoBoxAtom, store } from "../store";
-import { hasOverlap } from "../utils/collision";
+import { hasOverlap, castRay } from "../utils/collision";
 import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
 import makeFloatingText from '../utils/floatingText';
@@ -41,7 +41,7 @@ export default function makePlayer(k, posVec2) {
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
                 // { name: "assault rifle", ammo: GUNS["assault rifle"].maxAmmo, ...GUNS["assault rifle"], clip: GUNS["assault rifle"].clipSize },
-                // { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize }
+                { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -60,12 +60,46 @@ export default function makePlayer(k, posVec2) {
             abilities: [
                 {
                     name: "Psi Beam",
-                    available: false,
-                    cooldown: 10
+                    active: true,
+                    cooldown: 1,
+                    baseCooldown: 1,
+                    rechargeRate: 0.01,
+                    key: "space",
+                    imgSrc: "sprites/psi-beam-icon.png"
                 }
             ]
         }
     ]);
+
+    player.abilities.find(a => a.name === "Psi Beam").action = () => {
+        const dir = k.toWorld(k.mousePos()).sub(player.pos).unit();
+        const start = player.pos;
+        const end = castRay(k, start, dir);
+
+        const beamLength = end.dist(start);
+        const angle = dir.angle();
+
+        k.add([
+            k.sprite("psi-beam", { width: beamLength, height: 64 }),
+            k.pos(start),
+            k.rotate(angle),
+            k.anchor("left"),
+            k.area(),
+            k.opacity(1),
+            k.lifespan(0.5),
+            {
+                damage: 10,
+                beamHitEnemies: new Set()
+            },
+            "beam"
+        ]);
+
+        k.onCollide("beam", "enemy", (b, e) => {
+            if (b.beamHitEnemies.has(e) || e.dead) return;
+            e.hurt(b.damage);
+            b.beamHitEnemies.add(e);
+        });
+    };
 
     player.baseDashCd = player.dashCd;
 
@@ -570,6 +604,24 @@ export default function makePlayer(k, posVec2) {
             player.directionVector = player.directionVector.unit();
 
         player.move(player.directionVector.scale(player.speed));
+
+        // === J. Abilities ===
+
+        player.abilities.filter(a => a.active).forEach(ability => {
+            if (k.isKeyPressed(ability.key) && ability.cooldown === ability.baseCooldown) {
+
+                ability.action();
+                ability.cooldown = 0;
+
+                store.set(playerInfoAtom, prev => ({
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        abilities: player.abilities
+                    }
+                }));
+            }
+        });
     });
 
     return player;

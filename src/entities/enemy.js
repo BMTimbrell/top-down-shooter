@@ -49,8 +49,12 @@ export default function makeEnemy(k, name, { pos, roomId }) {
     const room = k.get("room").find(r => r.rId === enemy.roomId);
     enemy.pf = new PathfindingManager(k, room, enemy);
 
-    enemy.on("hurt", () => {
+    enemy.on("hurt", amount => {
         enemy.flash();
+
+        k.get("player")[0].abilities.filter(a => a.active).forEach(ability => {
+            ability.cooldown += Math.min(1 - ability.cooldown, ability.rechargeRate * amount);
+        });
     });
 
     enemy.on("death", () => {
@@ -66,7 +70,8 @@ export default function makeEnemy(k, name, { pos, roomId }) {
                 return;
             }
             const dropChance = k.randi(1, 4);
-            const gunDropChance = k.randi(1, 5);
+            const gunDropChance = k.randi(1, 6);
+            const coinDropChance = k.randi(0, 10);
             const healthDropChance = k.randi(
                 1,
                 21
@@ -86,7 +91,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
                         },
                         enemy.pos
                     );
-                } else {
+                } else if (coinDropChance !== 0) {
                     makeCoin(k, enemy.pos);
                 }
             }
@@ -222,15 +227,15 @@ export function checkEnemyDead(k, enemy) {
         enemy.opacity -= k.dt() * 0.5;
     }
 
-     return enemy.dead;
+    return enemy.dead;
 }
 
 export function checkEnemySight(k, enemy) {
     const player = k.get("player")[0];
     if (enemy.losTimer <= 0) {
         enemy.hasSight = hasLineOfSight(
-            k, 
-            enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)), 
+            k,
+            enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)),
             player.pos
         );
         enemy.losTimer = 0.2;

@@ -2,6 +2,7 @@ import {
     store,
     popupAtom,
     dialogueAtom,
+    gameInfoAtom
 } from '../store';
 import makeGun from "../entities/gun";
 import { MAP_SCALE, ENEMY_FACTORIES } from '../constants';
@@ -287,7 +288,17 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                         const scene = entity.properties.find(e => e.name === "scene").value;
                         gameState.reinforcements = [];
                         gameState.pendingSpawns = [];
-                        k.go(scene, { player, gameState });
+
+                        if (
+                            !scene.includes("level") || 
+                            scene.includes("level") && store.get(gameInfoAtom).daysUntilMission <= 0
+                        ) {
+                            k.go(scene, { player, gameState });
+                        } else {
+                            player.inDialogue = true;
+                            store.set(dialogueAtom, prev => ({ ...prev, text: description, visible: true, skip: false }));
+                            store.set(popupAtom, prev => ({ ...prev, visible: false }));
+                        }
                     }
                 }
             });
