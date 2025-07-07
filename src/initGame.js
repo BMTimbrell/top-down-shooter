@@ -271,7 +271,7 @@ export default function initGame() {
                             },
                             {
                                 name: "Player Info",
-                                onClick: () => store.set(playerInfoAtom, {
+                                onClick: () => store.set(playerInfoAtom, prev => ({
                                     visible: true,
                                     data: {
                                         guns: player.guns,
@@ -279,9 +279,10 @@ export default function initGame() {
                                             mind: player.mind,
                                             body: player.body,
                                             weapon: player.weapon
-                                        }
+                                        },
+                                        abilities: prev.abilities
                                     }
-                                })
+                                }))
                             },
                             { name: "Exit to Main Menu" }
                         ]

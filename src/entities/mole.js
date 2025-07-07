@@ -1,4 +1,10 @@
-import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead, checkEnemySight } from "./enemy";
+import makeEnemy, { 
+    shoot, 
+    makeEnemyPath, 
+    checkEnemyDead, 
+    checkEnemySight,
+    checkTimeFrozen 
+} from "./enemy";
 
 export default function makeMole(k, name, { pos, roomId }) {
     const mole = makeEnemy(k, name, { pos, roomId });
@@ -21,7 +27,12 @@ export default function makeMole(k, name, { pos, roomId }) {
     mole.underground = false;
 
     mole.on("hurt", () => {
-        if (mole.digFlag && mole.path.length && !mole.dead) {
+        if (
+            mole.digFlag && 
+            mole.path.length && 
+            !mole.dead && 
+            !k.get("freeze").length
+        ) {
             mole.digFlag = false;
             mole.play("rotate");
         }
@@ -45,7 +56,7 @@ export default function makeMole(k, name, { pos, roomId }) {
     });
 
     mole.onUpdate(() => {
-        if (checkEnemyDead(k, mole)) return;
+        if (checkEnemyDead(k, mole) || checkTimeFrozen(k, mole)) return;
 
         if (mole?.digging) {
             if (!mole.underground) {

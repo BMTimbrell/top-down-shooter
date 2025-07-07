@@ -1,4 +1,10 @@
-import makeEnemy, { shoot, makeEnemyPath, checkEnemyDead, checkEnemySight } from "./enemy";
+import makeEnemy, {
+    shoot,
+    makeEnemyPath,
+    checkEnemyDead,
+    checkEnemySight,
+    checkTimeFrozen
+} from "./enemy";
 
 export default function makeWisp(k, name, { pos, roomId }) {
     const wisp = makeEnemy(k, name, { pos, roomId });
@@ -18,14 +24,14 @@ export default function makeWisp(k, name, { pos, roomId }) {
     });
 
     wisp.onUpdate(() => {
-        if (checkEnemyDead(k, wisp)) return;
+        if (checkEnemyDead(k, wisp) || checkTimeFrozen(k, wisp)) return;
 
         const animName = wisp?.getCurAnim()?.name;
         if (animName === "walk") {
             checkEnemySight(k, wisp);
             makeEnemyPath(k, wisp);
             wisp.angryTimer -= k.dt();
-        } 
+        }
 
         if (wisp.angryTimer <= 0 && wisp.hasSight) {
             wisp.angryTimer = wisp.angryCd;
@@ -41,7 +47,7 @@ export default function makeWisp(k, name, { pos, roomId }) {
                 wisp.shootTimer = wisp.shootDuration;
                 wisp.play("walk");
                 wisp.shooting = false;
-            } else if (wisp.shootCd <= 0) {  
+            } else if (wisp.shootCd <= 0) {
                 const randomSpread = k.randi(20, -20);
                 shoot(k, wisp, { baseAngle: randomSpread });
             }

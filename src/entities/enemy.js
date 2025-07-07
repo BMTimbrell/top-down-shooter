@@ -60,8 +60,8 @@ export default function makeEnemy(k, name, { pos, roomId }) {
                 return;
             }
             ability.cooldown += Math.min(
-                1 - ability.cooldown, 
-                ability.rechargeRate * amount + (player.mind.level - 1) * 0.01
+                1 - ability.cooldown,
+                ability.rechargeRate * amount + (player.mind.level - 1) * 0.005
             );
         });
     });
@@ -237,6 +237,14 @@ export function checkEnemyDead(k, enemy) {
     }
 
     return enemy.dead;
+}
+
+export function checkTimeFrozen(k, enemy) {
+    if (k.get("freeze").length) {
+        if (!enemy.currentAnim) enemy.currentAnim = enemy.curAnim();
+        enemy.stop();
+        return true;
+    } else return false;
 }
 
 export function checkEnemySight(k, enemy) {

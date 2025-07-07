@@ -54,7 +54,7 @@ export default function makePlayer(k, posVec2) {
                 "Increased Slide Damage": false,
                 "Faster Movement": false,
                 "Improved Sleep": false,
-                "Improved Slide": false,
+                "Improved Slide": true,
                 "Rapid Recovery": false
             },
             abilities: [
@@ -76,15 +76,15 @@ export default function makePlayer(k, posVec2) {
                     key: "q",
                     imgSrc: "sprites/force-field-icon.png"
                 },
-                // {
-                //     name: "Freeze Time",
-                //     active: true,
-                //     cooldown: 1,
-                //     baseCooldown: 1,
-                //     rechargeRate: 0.01,
-                //     key: "q",
-                //     imgSrc: "sprites/force-field-icon.png"
-                // }
+                {
+                    name: "Freeze Time",
+                    active: true,
+                    cooldown: 1,
+                    baseCooldown: 1,
+                    rechargeRate: 0.001,
+                    key: "control",
+                    imgSrc: "sprites/clock-icon.png"
+                }
             ]
         }
     ]);
@@ -145,6 +145,22 @@ export default function makePlayer(k, posVec2) {
                 shield.lifespan = 100;
             }
         });
+    };
+
+    player.abilities.find(a => a.name === "Freeze Time").action = () => {
+
+        const freeze = k.add([
+            "freeze",
+            k.timer()
+        ]);
+
+        freeze.wait(2.5, () => {
+            k.get("enemy").forEach(e => {
+                e.play(e.currentAnim);
+            });
+            k.destroy(freeze);
+        });
+
     };
 
     player.baseDashCd = player.dashCd;

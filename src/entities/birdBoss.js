@@ -1,7 +1,7 @@
 import { useFlash } from "../utils/shader";
 import PathfindingManager from "../utils/PathfindingManager";
 import { ENEMY_FACTORIES } from "../constants";
-import { shoot, makeEnemyPath, checkEnemySight } from "./enemy";
+import { shoot, makeEnemyPath, checkEnemySight, checkTimeFrozen } from "./enemy";
 import { store, victoryScreenAtom, gameInfoAtom } from "../store";
 
 export default function makeBirdBoss(k, name, { pos, roomId }) {
@@ -165,6 +165,7 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
     }
 
     boss.onUpdate(() => {
+        if (checkTimeFrozen(k, boss)) return;
         if (boss.dead) {
             k.destroy(healthBar);
             k.destroy(healthBarBg);

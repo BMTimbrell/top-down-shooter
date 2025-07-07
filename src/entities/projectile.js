@@ -39,6 +39,13 @@ export default function makeProjectile(
     ]);
 
     projectile.onUpdate(() => {
+        // freeze projectiles if freeze time is active
+        if (!friendly && k.get("freeze").length) {
+            projectile.unuse("move");
+        } else if (!friendly && !projectile.has("move")) {
+            projectile.use(k.move(target, projectileSpeed));
+        }
+
         if (projectile.lifespan > 0) {
             projectile.lifespan -= k.dt();
         } else {
@@ -57,6 +64,7 @@ export default function makeProjectile(
             }
 
             if (obj?.dashing && obj?.passives["Improved Slide"]) {
+                friendly = true;
                 collisions = collisions.filter(e => e !== "player");
                 collisions.push("enemy");
                 projectile.use(k.move(target, -projectileSpeed))
