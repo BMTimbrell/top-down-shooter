@@ -50,6 +50,12 @@ export default function makeProjectile(
 
     projectile.onCollide(obj => {
         if (collisions.some(e => obj.is(e)) && obj.has("body")) {
+
+            if (obj.is("player") && k.get("force field").length > 0) {
+                k.destroy(projectile);
+                return;
+            }
+
             if (obj?.dashing && obj?.passives["Improved Slide"]) {
                 collisions = collisions.filter(e => e !== "player");
                 collisions.push("enemy");

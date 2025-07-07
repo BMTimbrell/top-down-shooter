@@ -41,7 +41,7 @@ export default function makePlayer(k, posVec2) {
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
                 // { name: "assault rifle", ammo: GUNS["assault rifle"].maxAmmo, ...GUNS["assault rifle"], clip: GUNS["assault rifle"].clipSize },
-                { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize }
+                // { name: "minigun", ammo: GUNS.minigun.maxAmmo, ...GUNS.minigun, clip: GUNS.minigun.clipSize }
             ],
             gunIndex: 0,
             maxGuns: 3,
@@ -66,7 +66,25 @@ export default function makePlayer(k, posVec2) {
                     rechargeRate: 0.01,
                     key: "space",
                     imgSrc: "sprites/psi-beam-icon.png"
-                }
+                },
+                {
+                    name: "Force Field",
+                    active: true,
+                    cooldown: 1,
+                    baseCooldown: 1,
+                    rechargeRate: 0.005,
+                    key: "q",
+                    imgSrc: "sprites/force-field-icon.png"
+                },
+                // {
+                //     name: "Freeze Time",
+                //     active: true,
+                //     cooldown: 1,
+                //     baseCooldown: 1,
+                //     rechargeRate: 0.01,
+                //     key: "q",
+                //     imgSrc: "sprites/force-field-icon.png"
+                // }
             ]
         }
     ]);
@@ -98,6 +116,34 @@ export default function makePlayer(k, posVec2) {
             if (b.beamHitEnemies.has(e) || e.dead) return;
             e.hurt(b.damage);
             b.beamHitEnemies.add(e);
+        });
+    };
+
+    player.abilities.find(a => a.name === "Force Field").action = () => {
+
+        const shield = k.add([
+            k.sprite("force-field", { anim: "idle" }),
+            k.pos(player.pos),
+            k.anchor("center"),
+            k.scale(5),
+            k.area(),
+            {
+                lifespan: 2.5
+            },
+            "force field"
+        ]);
+
+        shield.onAnimEnd(anim => {
+            if (anim === "fade") k.destroy(shield);
+        });
+
+        shield.onUpdate(() => {
+            shield.pos = player.pos;
+            shield.lifespan -= k.dt();
+            if (shield.lifespan <= 0) {
+                shield.play("fade");
+                shield.lifespan = 100;
+            }
         });
     };
 
@@ -550,7 +596,7 @@ export default function makePlayer(k, posVec2) {
                 ) {
                     e.hurt(player.dashDamage);
                     player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
-                    player.dashTimer += 0.2;
+                    player.dashTimer += Math.max(0.15 - player.dashHitEnemies.size * 0.75, 0.05);
                     player.dashHitEnemies.add(e);
                 }
             });
@@ -610,10 +656,10 @@ export default function makePlayer(k, posVec2) {
         if (player.onMission) {
             player.abilities.filter(a => a.active).forEach(ability => {
                 if (k.isKeyPressed(ability.key) && ability.cooldown === ability.baseCooldown) {
-    
+
                     ability.action();
                     ability.cooldown = 0;
-    
+
                     store.set(playerInfoAtom, prev => ({
                         ...prev,
                         data: {

@@ -62,10 +62,10 @@ export function castRay(k, start, dir, maxDist = 800, step = 4) {
             };
 
             const projectile = {
-                x: pos.x - 20,
-                y: pos.y - 20,
-                width: 40,
-                height: 40
+                x: pos.x - 32,
+                y: pos.y - 32,
+                width: 64,
+                height: 64
             };
 
             if (hasOverlap(projectile, blocker)) {

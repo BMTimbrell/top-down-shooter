@@ -52,8 +52,17 @@ export default function makeEnemy(k, name, { pos, roomId }) {
     enemy.on("hurt", amount => {
         enemy.flash();
 
-        k.get("player")[0].abilities.filter(a => a.active).forEach(ability => {
-            ability.cooldown += Math.min(1 - ability.cooldown, ability.rechargeRate * amount);
+        const player = k.get("player")[0];
+
+        player.abilities.filter(a => a.active).forEach(ability => {
+            // psi beam does not recharge psi beam cd
+            if (k.get("beam").length > 0 && ability.name === "Psi Beam") {
+                return;
+            }
+            ability.cooldown += Math.min(
+                1 - ability.cooldown, 
+                ability.rechargeRate * amount + (player.mind.level - 1) * 0.01
+            );
         });
     });
 

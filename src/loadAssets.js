@@ -145,6 +145,14 @@ export default function loadAssets(k) {
     });
 
     k.loadSprite("psi-beam", "./sprites/psi-beam.png");
+    k.loadSprite("force-field", "./sprites/shield.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            "fade": { from: 0, to: 3, loop: false, speed: 7 }
+        }
+    });
 
     k.loadSprite("rocket", "./sprites/rocket.png", {
         sliceX: 4,
