@@ -251,11 +251,16 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
 
                 // dialogue
                 if (k.isKeyPressed("e")) {
+                    const missionDay = store.get(gameInfoAtom).daysUntilMission <= 0;
                     const sceneName = k.getSceneName();
+
                     const tiledDescription = entity?.properties?.find(e => e.name === "description")?.value?.split("\n");
-                    let description = tiledDescription ? tiledDescription :
-                        sceneName === "room" && gameState.time === 3 ?
-                            ["It's late. I should stay inside."] : null;
+                    const missionDescription = entity?.properties?.find(e => e.name === "mission description")?.value?.split("\n");
+
+                    let description = missionDay && missionDescription ? missionDescription : 
+                        tiledDescription ? tiledDescription :
+                            sceneName === "room" && gameState.time === 3 ?
+                                ["It's late. I should stay inside."] : null;
 
                     if (player.inDialogue) {
                         if (store.get(dialogueAtom).skip) {
@@ -269,13 +274,12 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                         } else if (store.get(dialogueAtom).visible) {
                             store.set(dialogueAtom, prev => ({ ...prev, skip: true }));
                         }
-                    } else if (description && gameState.events.skillExplanations[name]) {
+                    } else if (description && (gameState.events.skillExplanations[name] || missionDay)) {
                         player.inDialogue = true;
 
-                        store.set(dialogueAtom, prev => ({ ...prev, text: description }));
+                        store.set(dialogueAtom, prev => ({ ...prev, visible: true, text: description }));
                         store.set(popupAtom, prev => ({ ...prev, visible: false }));
-                        store.set(dialogueAtom, prev => ({ ...prev, visible: true }));
-                        gameState.events.skillExplanations[name] = false;
+                        if (!missionDay) gameState.events.skillExplanations[name] = false;
                     } else if (action === "Go To") {
 
                         if (sceneName === "room" && gameState.time === 3) {
@@ -290,6 +294,13 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                         gameState.pendingSpawns = [];
 
                         if (
+                            store.get(gameInfoAtom).daysUntilMission <= 0 && 
+                            missionDescription
+                        ) {
+                            player.inDialogue = true;
+                            store.set(dialogueAtom, prev => ({ ...prev, text: description, visible: true, skip: false }));
+                            store.set(popupAtom, prev => ({ ...prev, visible: false }));
+                        } else if (
                             !scene.includes("level") || 
                             scene.includes("level") && store.get(gameInfoAtom).daysUntilMission <= 0
                         ) {

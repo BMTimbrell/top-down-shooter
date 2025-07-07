@@ -280,7 +280,7 @@ export default function initGame() {
                                             body: player.body,
                                             weapon: player.weapon
                                         },
-                                        abilities: prev.abilities
+                                        abilities: prev.data.abilities
                                     }
                                 }))
                             },

@@ -5,7 +5,15 @@ import {
     makeObjectInteractions,
     orderByY
 } from '../utils/map';
-import { store, infoBoxAtom, promptAtom, popupAtom, bookMenuAtom, gameMenuAtom } from '../store';
+import { 
+    store, 
+    infoBoxAtom, 
+    promptAtom, 
+    popupAtom, 
+    bookMenuAtom, 
+    gameMenuAtom,
+    gameInfoAtom 
+} from '../store';
 
 export default function room(k) {
     k.scene("room", async ({ player, gameState }) => {
@@ -45,6 +53,7 @@ export default function room(k) {
         }
 
         const skillExplanations = gameState.events.skillExplanations;
+        const missionDay = store.get(gameInfoAtom).daysUntilMission <= 0;
 
         if (skillExplanations.overview) {
             k.wait(0.1, () => {
@@ -63,6 +72,7 @@ export default function room(k) {
         k.onUpdate(() => {
             if (!skillExplanations["pullup bar"] &&
                 !player.inDialogue &&
+                !missionDay &&
                 player.isColliding(k.get("check pullup bar")[0]) &&
                 k.isKeyDown("e")
             ) {
@@ -99,8 +109,10 @@ export default function room(k) {
                     }
                 }));
 
-            } else if (!skillExplanations["bed"] &&
+            } else if (
+                !skillExplanations["bed"] &&
                 !player.inDialogue &&
+                !missionDay &&
                 player.isColliding(k.get("check bed")[0]) &&
                 k.isKeyDown("e")
             ) {
@@ -178,6 +190,7 @@ export default function room(k) {
                 }));
 
             } else if (!skillExplanations["desk"] &&
+                !missionDay &&
                 !player.inDialogue &&
                 player.isColliding(k.get("check desk")[0]) &&
                 k.isKeyDown("e")
@@ -208,6 +221,7 @@ export default function room(k) {
             if (
                 player.electronics.some(e => e.name === "VR Headset") &&
                 !player.inDialogue &&
+                !missionDay &&
                 player.isColliding(k.get("check VR Headset")[0]) &&
                 k.isKeyDown("e")
             ) {

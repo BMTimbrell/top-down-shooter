@@ -60,7 +60,7 @@ export default function GameInfo() {
                     <div className={styles["ability-container"]}>
                         <Ability aKey={"RMB"} cooldown={cooldwns.dash} imgSrc={"./sprites/dash-icon-4.png"} />
                         {abilities?.map((ability, index) => (
-                            <Ability 
+                            ability.active && <Ability 
                                 key={index}
                                 aKey={ability.key} 
                                 cooldown={ability.cooldown} 

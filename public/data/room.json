@@ -166,6 +166,11 @@
                          "value":"If I do pullups, I'm sure my body will grow stronger."
                         }, 
                         {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
+                        }, 
+                        {
                          "name":"name",
                          "type":"string",
                          "value":"pullup bar"
@@ -188,6 +193,11 @@
                          "value":"I can read books here.\nI'm sure there was a shop that sells them."
                         }, 
                         {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
+                        }, 
+                        {
                          "name":"name",
                          "type":"string",
                          "value":"desk"
@@ -208,6 +218,11 @@
                          "name":"description",
                          "type":"string",
                          "value":"If I go to sleep early I might recover faster.\nWho knows what dreams I may have."
+                        }, 
+                        {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
                         }, 
                         {
                          "name":"name",
@@ -257,6 +272,11 @@
                          "name":"description",
                          "type":"string",
                          "value":""
+                        }, 
+                        {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
                         }, 
                         {
                          "name":"name",

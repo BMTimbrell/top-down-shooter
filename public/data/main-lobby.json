@@ -348,6 +348,11 @@
                          "value":"Psi Lab"
                         }, 
                         {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
+                        }, 
+                        {
                          "name":"name",
                          "type":"string",
                          "value":"door"
@@ -373,6 +378,11 @@
                          "name":"destination",
                          "type":"string",
                          "value":"Gene Lab"
+                        }, 
+                        {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
                         }, 
                         {
                          "name":"name",
@@ -434,6 +444,11 @@
                          "value":"Synth-Garden"
                         }, 
                         {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
+                        }, 
+                        {
                          "name":"name",
                          "type":"string",
                          "value":"door"
@@ -461,6 +476,11 @@
                          "value":"Gym"
                         }, 
                         {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
+                        }, 
+                        {
                          "name":"name",
                          "type":"string",
                          "value":"door"
@@ -486,6 +506,11 @@
                          "name":"destination",
                          "type":"string",
                          "value":"HoloRange"
+                        }, 
+                        {
+                         "name":"mission description",
+                         "type":"string",
+                         "value":"I don't have time for this.\nI must go on my next mission."
                         }, 
                         {
                          "name":"name",

@@ -54,13 +54,13 @@ export default function makePlayer(k, posVec2) {
                 "Increased Slide Damage": false,
                 "Faster Movement": false,
                 "Improved Sleep": false,
-                "Improved Slide": true,
+                "Improved Slide": false,
                 "Rapid Recovery": false
             },
             abilities: [
                 {
                     name: "Psi Beam",
-                    active: true,
+                    active: false,
                     cooldown: 1,
                     baseCooldown: 1,
                     rechargeRate: 0.01,
@@ -69,7 +69,7 @@ export default function makePlayer(k, posVec2) {
                 },
                 {
                     name: "Force Field",
-                    active: true,
+                    active: false,
                     cooldown: 1,
                     baseCooldown: 1,
                     rechargeRate: 0.005,
@@ -78,7 +78,7 @@ export default function makePlayer(k, posVec2) {
                 },
                 {
                     name: "Freeze Time",
-                    active: true,
+                    active: false,
                     cooldown: 1,
                     baseCooldown: 1,
                     rechargeRate: 0.001,

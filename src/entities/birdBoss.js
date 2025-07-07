@@ -15,7 +15,7 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
         }),
         k.body(),
         k.pos(pos),
-        k.health(1, 200),
+        k.health(200, 200),
         k.opacity(1),
         k.offscreen({ hide: true }),
         "enemy",
