@@ -237,11 +237,11 @@ export const GUNS = {
 
     "laser sword": {
         projectile: "blaster",
-        damage: 10,
+        damage: 12,
         firingInterval: 0.5,
         animSpeed: 10,
-        clipSize: 30,
-        maxAmmo: 30,
+        clipSize: 40,
+        maxAmmo: 40,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         pelletSpread: 0,

@@ -13,8 +13,10 @@ export default function makeGun(k, player, gunObj) {
         offset
     } = gunObj;
 
+    const animation = name === "laser sword" && ammo <= 0 ? "no ammo" : "idle";
+
     const gun = k.add([
-        k.sprite(name, { anim: "idle" }),
+        k.sprite(name, { anim: animation }),
         k.anchor("center"),
         k.pos(player.pos.x + offset.x, player.pos.y + offset.y),
         ...name === "laser sword" ? [k.area({ shape: new k.Rect(k.vec2(0), 35, 10) }), { enemiesHit: new Set }] : "",
@@ -46,9 +48,12 @@ export default function makeGun(k, player, gunObj) {
             gun.firingInterval = GUNS[name].firingInterval;
             if (gun.is("laser sword")) {
                 gun.enemiesHit.clear(); // reset enemies hit after firing
-                if (gunObj.ammo <= 0) gun.play("no ammo");
+                if (gunObj.ammo <= 0) {
+                    gun.play("no ammo");
+                    return;
+                }
             }
-            else gun.play("idle");
+            gun.play("idle");
         }
     });
 
