@@ -17,6 +17,7 @@ export default function makeGun(k, player, gunObj) {
         k.sprite(name, { anim: "idle" }),
         k.anchor("center"),
         k.pos(player.pos.x + offset.x, player.pos.y + offset.y),
+        ...name === "laser sword" ? [k.area({ shape: new k.Rect(k.vec2(0), 35, 10) }), { enemiesHit: new Set }] : "",
         k.scale(3),
         k.rotate(0),
         k.opacity(1),
@@ -33,6 +34,7 @@ export default function makeGun(k, player, gunObj) {
             pulseTimer: 0,
             pulseDuration: 0.3,
             projectile,
+            firingFrame: gunObj?.firingFrame || 1,
             ...(gunObj?.pOffset ? { pOffset: gunObj.pOffset } : "")
         }
     ]);
@@ -42,9 +44,22 @@ export default function makeGun(k, player, gunObj) {
     gun.onAnimEnd(anim => {
         if (anim === "firing") {
             gun.firingInterval = GUNS[name].firingInterval;
-            gun.play("idle");
+            if (gun.is("laser sword")) {
+                gun.enemiesHit.clear(); // reset enemies hit after firing
+                if (gunObj.ammo <= 0) gun.play("no ammo");
+            }
+            else gun.play("idle");
         }
     });
+
+    if (gun.is("laser sword")) { 
+        gun.onCollideUpdate("enemy", e => {
+            if (gun.enemiesHit.has(e) || gun.curAnim() !== "firing") return; // prevent hitting the same enemy multiple times
+
+            gun.enemiesHit.add(e);
+            e.hurt(gun.damage);
+        });
+    }
 
     gun.onUpdate(() => {
         if (player.guns[player.gunIndex] !== gunObj) gun.destroy();
@@ -57,7 +72,7 @@ export default function makeGun(k, player, gunObj) {
 
         if (player.dashing) {
             // reset fire state
-            if (gun.getCurAnim().name !== "firing") {
+            if (gun.curAnim() !== "firing") {
                 gun.fireTrigger = true;
             }
 
@@ -94,7 +109,7 @@ export default function makeGun(k, player, gunObj) {
 
         if (
             k.isMouseDown() &&
-            gun.getCurAnim().name !== "firing" &&
+            gun.curAnim() !== "firing" &&
             gun.firingInterval <= 0 &&
             !player.reloading
         ) {
@@ -105,33 +120,36 @@ export default function makeGun(k, player, gunObj) {
             }
         }
 
-        if (gun.animFrame === 1 && gun.fireTrigger) {
-            const pellets = gunObj.pelletCount || 1;
-            const spread = gunObj.pelletSpread || 0;
-            const speedVariation = gunObj.pelletSpeedVariation || 0;
+        if (gun.animFrame === gun.firingFrame && gun.fireTrigger) {
+            if (!gun.is("laser sword")) {
+                const pellets = gunObj.pelletCount || 1;
+                const spread = gunObj.pelletSpread || 0;
+                const speedVariation = gunObj.pelletSpeedVariation || 0;
 
-            for (let i = 0; i < pellets; i++) {
-                const randomSpread = k.randi(-spread, spread);
-                const randomSpeedOffset = k.randi(-speedVariation, speedVariation);
 
-                makeProjectile(
-                    k,
-                    gun,
-                    {
-                        name: projectile,
-                        spread: randomSpread,
-                        speedOffset: randomSpeedOffset,
-                        lifespan: gunObj.projectileLifespan,
-                        pierce: gunObj.pierce || 0
-                    }
-                );
+                for (let i = 0; i < pellets; i++) {
+                    const randomSpread = k.randi(-spread, spread);
+                    const randomSpeedOffset = k.randi(-speedVariation, speedVariation);
+
+                    makeProjectile(
+                        k,
+                        gun,
+                        {
+                            name: projectile,
+                            spread: randomSpread,
+                            speedOffset: randomSpeedOffset,
+                            lifespan: gunObj.projectileLifespan,
+                            pierce: gunObj.pierce || 0
+                        }
+                    );
+                }
             }
 
             player.loseAmmo();
             gun.fireTrigger = false;
         }
 
-        if (gun.animFrame === 2) {
+        if (gun.animFrame === gun.firingFrame + 1) {
             gun.fireTrigger = true;
         }
 

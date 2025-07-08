@@ -127,6 +127,142 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("laser SMG", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 24,
+            "firing": { from: 24, to: 26, loop: false, speed: GUNS["laser SMG"].animSpeed }
+        }
+    });
+
+    k.loadSprite("laser rifle", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 16,
+            "firing": { from: 16, to: 18, loop: false, speed: GUNS["laser rifle"].animSpeed }
+        }
+    });
+
+    k.loadSprite("laser shotgun", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 32,
+            "firing": { from: 32, to: 37, loop: false, speed: GUNS["laser shotgun"].animSpeed }
+        }
+    });
+
+    k.loadSprite("laser sniper rifle", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 40,
+            "firing": { from: 40, to: 43, loop: false, speed: GUNS["laser sniper rifle"].animSpeed }
+        }
+    });
+
+    k.loadSprite("laser minigun", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 48,
+            "firing": { from: 48, to: 50, loop: false, speed: GUNS["laser minigun"].animSpeed }
+        }
+    });
+
+    k.loadSprite("blaster launcher", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 56,
+            "firing": { from: 56, to: 60, loop: false, speed: GUNS["blaster launcher"].animSpeed }
+        }
+    });
+
+    k.loadSprite("laser sword", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 64,
+            "firing": { from: 64, to: 67, loop: false, speed: GUNS["laser sword"].animSpeed },
+            "no ammo": 68
+        }
+    });
+
+    k.loadSprite("plasma pistol", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 72,
+            "firing": { from: 72, to: 74, loop: false, speed: GUNS["plasma pistol"].animSpeed }
+        }
+    });
+
+    k.loadSprite("plasma SMG", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 80,
+            "firing": { from: 80, to: 82, loop: false, speed: GUNS["plasma SMG"].animSpeed }
+        }
+    });
+
+    k.loadSprite("plasma rifle", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 96,
+            "firing": { from: 96, to: 98, loop: false, speed: GUNS["plasma rifle"].animSpeed }
+        }
+    });
+
+    k.loadSprite("plasma shotgun", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 104,
+            "firing": { from: 104, to: 109, loop: false, speed: GUNS["plasma shotgun"].animSpeed }
+        }
+    });
+
+    k.loadSprite("plasma sniper rifle", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 112,
+            "firing": { from: 112, to: 115, loop: false, speed: GUNS["plasma sniper rifle"].animSpeed }
+        }
+    });
+
+    k.loadSprite("plasma blaster", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 128,
+            "firing": { from: 128, to: 132, loop: false, speed: GUNS["plasma blaster"].animSpeed }
+        }
+    });
+
+    k.loadSprite("plasma minigun", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 136,
+            "firing": { from: 136, to: 138, loop: false, speed: GUNS["plasma minigun"].animSpeed }
+        }
+    });
+
+    k.loadSprite("magic sceptre", "./sprites/weapons.png", {
+        sliceX: 8,
+        sliceY: 36,
+        anims: {
+            "idle": 144,
+            "firing": { from: 144, to: 147, loop: false, speed: GUNS["magic sceptre"].animSpeed }
+        }
+    });
+
     // projectiles
     k.loadSprite("bullet", "./sprites/bullets3.png", {
         sliceX: 25,
@@ -141,6 +277,46 @@ export default function loadAssets(k) {
         sliceY: 1,
         anims: {
             "idle": 0
+        }
+    });
+
+    k.loadSprite("plasma", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 1
+        }
+    });
+
+    k.loadSprite("plasma beam", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 5
+        }
+    });
+
+    k.loadSprite("blaster", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 3
+        }
+    });
+
+    k.loadSprite("plasma orb", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 2
+        }
+    });
+
+    k.loadSprite("magic orb", "./sprites/bullets3.png", {
+        sliceX: 25,
+        sliceY: 1,
+        anims: {
+            "idle": 8
         }
     });
 
@@ -163,6 +339,22 @@ export default function loadAssets(k) {
     });
 
     k.loadSprite("explosion", "./sprites/explosion.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "explode": { from: 0, to: 3, loop: false, speed: 10 }
+        }
+    });
+
+    k.loadSprite("blast", "./sprites/blast.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "explode": { from: 0, to: 3, loop: false, speed: 10 }
+        }
+    });
+
+    k.loadSprite("plasma blast", "./sprites/plasma-blast.png", {
         sliceX: 4,
         sliceY: 1,
         anims: {

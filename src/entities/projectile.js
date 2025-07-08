@@ -34,7 +34,8 @@ export default function makeProjectile(
         k.offscreen({ hide: true }),
         {
             lifespan,
-            pierce
+            pierce,
+            enemiesHit: new Set()
         }
     ]);
 
@@ -55,7 +56,14 @@ export default function makeProjectile(
 
     let collisions = ["boulder", "boundary", friendly ? "enemy" : "player"];
 
-    projectile.onCollide(obj => {
+    projectile.onCollideUpdate(obj => {
+        if ((obj?.dashing && obj?.passives["Improved Slide"]) || (obj.is("laser sword")) && obj.curAnim() === "firing") {
+            friendly = true;
+            collisions = collisions.filter(e => e !== "player");
+            collisions.push("enemy");
+            projectile.use(k.move(target, -projectileSpeed))
+        }
+
         if (collisions.some(e => obj.is(e)) && obj.has("body")) {
 
             if (obj.is("player") && k.get("force field").length > 0) {
@@ -63,18 +71,13 @@ export default function makeProjectile(
                 return;
             }
 
-            if (obj?.dashing && obj?.passives["Improved Slide"]) {
-                friendly = true;
-                collisions = collisions.filter(e => e !== "player");
-                collisions.push("enemy");
-                projectile.use(k.move(target, -projectileSpeed))
-            }
-
             if (obj?.invincible || obj?.dead) return;
 
-            if (projectile.is("rocket")) {
+            if (projectile.is("rocket") || projectile.is("blaster") || projectile.is("plasma orb")) {
+                const sprite = projectile.is("rocket") ? "explosion" : projectile.is("blaster") ? "blast" : "plasma blast";
+
                 const explosion = k.add([
-                    k.sprite("explosion", { anim: "explode" }),
+                    k.sprite(sprite, { anim: "explode" }),
                     k.pos(projectile.pos),
                     k.anchor("center"),
                     k.scale(7),
@@ -98,7 +101,7 @@ export default function makeProjectile(
                         explosion.isColliding(player) &&
                         !player.invincible
                     ) player.hurt(1);
-                        
+
 
                     const hits = k.get("enemy").filter(e =>
                         e.has("body") &&
@@ -126,7 +129,12 @@ export default function makeProjectile(
             }
 
             if (obj.is("enemy")) {
-                obj.hurt(gun.damage);
+                if (projectile.enemiesHit.has(obj)) {
+                    return; // prevent hitting the same enemy multiple times
+                } else {
+                    obj.hurt(gun.damage);
+                    projectile.enemiesHit.add(obj);
+                }
             } else if (obj.is("player")) {
                 obj.hurt(1);
             } else {
