@@ -481,6 +481,16 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("robotnpc", "./sprites/robot.png", {
+        sliceX: 5,
+        sliceY: 1,
+        anims: {
+            "broken": 0,
+            "idle": 1,
+            "talk": { from: 2, to: 4, loop: true, speed: 5 }
+        }
+    });
+
     // enemies
     k.loadSprite("bird", "./sprites/bird-sheet2.png", {
         sliceX: 8,

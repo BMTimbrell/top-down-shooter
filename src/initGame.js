@@ -238,6 +238,10 @@ export default function initGame() {
                         }
                     }
                 ]
+            },
+            robot: {
+                broken: true,
+                fixProgress: 0
             }
         }
     ]);

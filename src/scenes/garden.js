@@ -64,7 +64,7 @@ export default function garden(k) {
                                             gold: prev.gold + 50
                                         }));
                                         const fText = makeFloatingText(k, k.vec2(0, 0), '+50');
-                                        fText.screenPos(k.vec2(220, 180));
+                                        fText.screenPos(k.vec2(220, 290));
 
                                         if (text.length > 1) player.heal(1);
 
@@ -130,7 +130,7 @@ export default function garden(k) {
                                             ...prev,
                                             harvestReady: true
                                         }));
-                                        makeFloatingText(k, k.vec2(220, 245), '+200');
+                                        makeFloatingText(k, k.vec2(220, 290), '+200');
                                     }
                                 },
                             });

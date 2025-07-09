@@ -243,6 +243,24 @@
                  "width":0,
                  "x":201.333333333333,
                  "y":77.6666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":36,
+                 "name":"robotnpc",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"dialogue",
+                         "type":"string",
+                         "value":"I'm meant to clean the ship.\nBut if you do it instead, I'll pay you extra."
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":288.333333333333,
+                 "y":78
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -590,7 +608,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":36,
+ "nextobjectid":38,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
