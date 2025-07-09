@@ -40,8 +40,8 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                // { name: "magic sceptre", ammo: GUNS["magic sceptre"].maxAmmo, ...GUNS["magic sceptre"], clip: GUNS["magic sceptre"].clipSize },
-                // { name: "plasma minigun", ammo: GUNS["plasma minigun"].maxAmmo, ...GUNS["plasma minigun"], clip: GUNS["plasma minigun"].clipSize },
+                // { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
+                // { name: "minigun", ammo: GUNS["minigun"].maxAmmo, ...GUNS["minigun"], clip: GUNS["minigun"].clipSize },
                 // { name: "laser sword", ammo: GUNS["laser sword"].maxAmmo, ...GUNS["laser sword"], clip: GUNS["laser sword"].clipSize }
             ],
             gunIndex: 0,

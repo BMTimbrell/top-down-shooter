@@ -9,7 +9,7 @@ export default function Popup({ text, pos, children }) {
                     <div className={styles.action}>{text.action}</div>
                 </div>
             }
-            <div className={styles.content}>{text?.name}{children}</div>
+            {text?.name && <div className={styles.content}>{text?.name}{children}</div>}
         </div>
     );
 }

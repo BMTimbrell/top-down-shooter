@@ -6,6 +6,7 @@ import {
 } from '../store';
 import makeGun from "../entities/gun";
 import { MAP_SCALE, ENEMY_FACTORIES } from '../constants';
+import makeNpc from '../entities/npc';
 
 export function makeMap(k, name, { gameState, spriteName, center = false }) {
     k.add(gameState);
@@ -123,6 +124,9 @@ export function spawnObjects(
                         factory(k, name, { pos: scaleToMap(k, map, entity), roomId });
                     }
 
+                } else if (entity.name.includes("npc")) {
+                    const dialogue = entity?.properties?.find(e => e.name === "dialogue")?.value.split("\n") || [];
+                    makeNpc(k, { sprite: entity.name, pos: scaleToMap(k, map, entity), dialogue });
                 } else {
                     const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
                     const roomIds = entity?.properties?.find(e => e.name === "rooms")?.value;

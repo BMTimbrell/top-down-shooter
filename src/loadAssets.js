@@ -453,6 +453,34 @@ export default function loadAssets(k) {
         }
     });
 
+    // npcs
+    k.loadSprite("npc1", "./sprites/npc1.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            "talk": { from: 1, to: 3, loop: true, speed: 5 }
+        }
+    });
+
+    k.loadSprite("npc2", "./sprites/npc2.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            "talk": { from: 1, to: 3, loop: true, speed: 5 }
+        }
+    });
+
+    k.loadSprite("npc3", "./sprites/npc3.png", {
+        sliceX: 4,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            "talk": { from: 1, to: 3, loop: true, speed: 5 }
+        }
+    });
+
     // enemies
     k.loadSprite("bird", "./sprites/bird-sheet2.png", {
         sliceX: 8,

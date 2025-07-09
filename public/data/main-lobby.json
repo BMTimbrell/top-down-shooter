@@ -189,6 +189,60 @@
                  "width":0,
                  "x":96,
                  "y":144
+                }, 
+                {
+                 "height":0,
+                 "id":33,
+                 "name":"npc1",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"dialogue",
+                         "type":"string",
+                         "value":"As your mind gets stronger, you'll find you can use your abilities more frequently."
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":112.666666666667,
+                 "y":71.3333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":34,
+                 "name":"npc2",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"dialogue",
+                         "type":"string",
+                         "value":"You should practise your aim at the HoloRange.\nI feel like I'm on another level now and I seem to have got faster at reloading."
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":64.3333333333333,
+                 "y":94.3333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":35,
+                 "name":"npc3",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"dialogue",
+                         "type":"string",
+                         "value":"You should visit the gym once in a while.\nBeing a good soldier is about mind and body.\nYou might even find your stamina increases."
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":201.333333333333,
+                 "y":77.6666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -409,7 +463,7 @@
                         {
                          "name":"description",
                          "type":"string",
-                         "value":"I'm not read to go on a mission yet."
+                         "value":"I'm not ready to go on a mission yet."
                         }, 
                         {
                          "name":"destination",
@@ -536,7 +590,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":32,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
