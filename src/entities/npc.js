@@ -55,7 +55,9 @@ export default function makeNpc(k, { sprite, pos, dialogue = [] }) {
         if (k.isKeyPressed("e")) {
 
             if (isBrokenRobot) {
-                if (player.mind.level < 2) {
+                if (store.get(gameInfoAtom).daysUntilMission <= 0) {
+                    dialogue = ["I don't have time for this right now."];
+                } else if (player.mind.level < 2) {
                     dialogue = ["I don't think I'm clever enough to fix this right now."];
                 } else {
                     player.inDialogue = true;
@@ -115,7 +117,7 @@ export default function makeNpc(k, { sprite, pos, dialogue = [] }) {
                     if (store.get(dialogueAtom).index === dialogue.length - 1) {
                         store.set(dialogueAtom, prev => ({ ...prev, visible: false, index: 0 }));
 
-                        if (npc.is("robot") && !isBrokenRobot) {
+                        if (npc.is("robot") && !isBrokenRobot && store.get(gameInfoAtom).daysUntilMission >= 1) {
                             const gameState = k.get("gameState")[0];
 
                             store.set(promptAtom, prev => ({
