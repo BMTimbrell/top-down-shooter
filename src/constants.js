@@ -2,6 +2,8 @@ import makeBird from "./entities/bird";
 import makeBirdBoss from "./entities/birdBoss";
 import makeMole from "./entities/mole";
 import makeWisp from "./entities/wisp";
+import makeBat from "./entities/bat";
+import makeTortoise from "./entities/tortoise";
 
 export const PALETTE = {
 
@@ -238,10 +240,10 @@ export const GUNS = {
     "laser sword": {
         projectile: "blaster",
         damage: 12,
-        firingInterval: 0.5,
+        firingInterval: 0.35,
         animSpeed: 10,
-        clipSize: 40,
-        maxAmmo: 40,
+        clipSize: 50,
+        maxAmmo: 50,
         projectileLifespan: 1.5,
         projectileSpeed: 700,
         pelletSpread: 0,
@@ -427,6 +429,14 @@ export const ENEMIES = {
         firingSpeed: 3,
         projectileCount: 1
     },
+    redmole: {
+        health: 22.5,
+        speed: 50,
+        damage: 5,
+        firingSpeed: 3,
+        projectileCount: 1,
+        projectileCount: 3
+    },
     wisp: {
         health: 12,
         speed: 80,
@@ -435,7 +445,21 @@ export const ENEMIES = {
         projectileCount: 1,
         shootOffset: { x: 0, y: 40 },
         hitbox: { x: 0, y: 5, width: 20, height: 15 }
-    }
+    },
+    bat: {
+        health: 12,
+        speed: 100,
+        damage: 5,
+        firingSpeed: 3,
+        projectileCount: 1,
+    },
+    tortoise: {
+        health: 18,
+        speed: 50,
+        damage: 5,
+        firingSpeed: 3,
+        projectileCount: 1,
+    },
 };
 
 export const ENEMY_FACTORIES = {
@@ -443,8 +467,11 @@ export const ENEMY_FACTORIES = {
     "bird": makeBird,
     "redbird": makeBird,
     "mole": makeMole,
+    "redmole": makeMole,
     "wisp": makeWisp,
-    "birdboss": makeBirdBoss
+    "birdboss": makeBirdBoss,
+    "bat": makeBat,
+    "tortoise": makeTortoise
 };
 
 export const DISCOUNT = 0.8;

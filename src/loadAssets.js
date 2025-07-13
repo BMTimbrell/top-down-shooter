@@ -435,6 +435,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSpriteAtlas("./sprites/cave-tileset.png", {
+        "caveBoulder": {
+            x: 48,
+            y: 96,
+            width: 32,
+            height: 32
+        }
+    });
+
     k.loadSpriteAtlas("./sprites/rocky-tileset.png", {
         "greenPlant": {
             x: 64,
@@ -450,6 +459,15 @@ export default function loadAssets(k) {
             y: 48,
             width: 32,
             height: 32
+        }
+    });
+
+    k.loadSpriteAtlas("./sprites/cave-tileset.png", {
+        "cavePlant": {
+            x: 80,
+            y: 80,
+            width: 16,
+            height: 16
         }
     });
 
@@ -541,6 +559,36 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("bat", "./sprites/bat-sheet.png", {
+        sliceX: 4,
+        sliceY: 2,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 7 },
+            "dying": { from: 4, to: 7, loop: false, speed: 4 }
+        }
+    });
+
+    k.loadSprite("redmole", "./sprites/red-Alien_mole-sheet.png", {
+        sliceX: 4,
+        sliceY: 4,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 7 },
+            "rotate": { from: 4, to: 7, loop: false, speed: 7 },
+            "dig": { from: 8, to: 11, loop: true, speed: 20 },
+            "dying": { from: 12, to: 15, loop: false, speed: 6 }
+        }
+    });
+
+    k.loadSprite("tortoise", "./sprites/tortoise-sheet.png", {
+        sliceX: 6,
+        sliceY: 3,
+        anims: {
+            "walk": { from: 0, to: 1, loop: true, speed: 3 },
+            "hide": { from: 6, to: 10, loop: false, speed: 10 },
+            "dying": { from: 12, to: 17, loop: false, speed: 6 }
+        }
+    });
+
     k.loadSprite("warning", "./sprites/warning.png", {
         sliceX: 1,
         sliceY: 1,
@@ -586,6 +634,7 @@ export default function loadAssets(k) {
     k.loadSprite("engineering", "./sprites/engineering.png");
     k.loadSprite("psi-lab", "./sprites/psi-lab.png");
     k.loadSprite("gene-lab", "./sprites/gene-lab.png");
+    k.loadSprite("level2Ground", "./sprites/level2.png");
 
     // tiles
     const rockyTiles = [
@@ -666,6 +715,50 @@ export default function loadAssets(k) {
         k.loadSprite(`ship-tileset${layer}${index}`, "./sprites/ship-tileset.png", {
             sliceX: 31,
             sliceY: 16,
+            anims: {
+                idle: index - 1, // Convert Tiled GID (starting at 1) to 0-based frame index
+            },
+        });
+    });
+
+    const caveTiles = [
+        { layer: "walls", index: 2 },
+        { layer: "walls", index: 3 },
+        { layer: "walls", index: 8 },
+        { layer: "walls", index: 9 },
+        { layer: "walls", index: 15 },
+        { layer: "walls", index: 7 },
+        { layer: "walls", index: 13 },
+        { layer: "walls", index: 14 },
+        { layer: "walls", index: 19 },
+        { layer: "walls", index: 20 },
+        { layer: "walls", index: 25 },
+        { layer: "walls", index: 29 },
+        { layer: "walls", index: 31 },
+        { layer: "walls", index: 32 },
+        { layer: "walls", index: 33 },
+        { layer: "walls", index: 34 },
+        { layer: "walls", index: 35 },
+        { layer: "props", index: 50 },
+        { layer: "props", index: 37 },
+        { layer: "props", index: 43 },
+        { layer: "props", index: 51 },
+        { layer: "props", index: 45 },
+        { layer: "props", index: 49 },
+        { layer: "props", index: 53 },
+        { layer: "props", index: 39 },
+        { layer: "props", index: 54 },
+        { layer: "props", index: 5 },
+        { layer: "props", index: 6 },
+        { layer: "props", index: 11 },
+        { layer: "props", index: 12 },
+
+    ];
+
+    caveTiles.forEach(({ layer, index }) => {
+        k.loadSprite(`cave-tileset${layer}${index}`, "./sprites/cave-tileset.png", {
+            sliceX: 6,
+            sliceY: 9,
             anims: {
                 idle: index - 1, // Convert Tiled GID (starting at 1) to 0-based frame index
             },

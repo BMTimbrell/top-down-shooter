@@ -62,7 +62,7 @@ export default function makeGun(k, player, gunObj) {
             if (gun.enemiesHit.has(e) || gun.curAnim() !== "firing") return; // prevent hitting the same enemy multiple times
 
             gun.enemiesHit.add(e);
-            e.hurt(gun.damage);
+            e.hurt(e?.hiding ? gun.damage / 4 : gun.damage);
         });
     }
 

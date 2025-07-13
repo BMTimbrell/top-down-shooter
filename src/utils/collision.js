@@ -75,3 +75,22 @@ export function castRay(k, start, dir, maxDist = 800, step = 4) {
     }
     return start.add(dir.scale(maxDist)); // No wall hit
 }
+
+export function getInterceptPoint(shooterPos, playerPos, playerVel, projectileSpeed) {
+    const displacement = playerPos.sub(shooterPos);
+    const a = playerVel.dot(playerVel) - projectileSpeed ** 2;
+    const b = 2 * displacement.dot(playerVel);
+    const c = displacement.dot(displacement);
+
+    const discriminant = b * b - 4 * a * c;
+    if (discriminant < 0 || a === 0) {
+        // Can't intercept; shoot directly
+        return playerPos;
+    }
+
+    const t1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+    const t2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+    const t = Math.max(t1, t2); // We want the future time that's positive
+
+    return playerPos.add(playerVel.scale(t));
+}

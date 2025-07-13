@@ -40,15 +40,15 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                // { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
-                // { name: "minigun", ammo: GUNS["minigun"].maxAmmo, ...GUNS["minigun"], clip: GUNS["minigun"].clipSize },
-                // { name: "laser sword", ammo: GUNS["laser sword"].maxAmmo, ...GUNS["laser sword"], clip: GUNS["laser sword"].clipSize }
+                { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
+                { name: "laser sword", ammo: GUNS["laser sword"].maxAmmo, ...GUNS["laser sword"], clip: GUNS["laser sword"].clipSize },
+
             ],
             gunIndex: 0,
             maxGuns: 3,
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
-            weapon: { level: 1, exp: 0, maxExp: 50 },
+            weapon: { level: 2, exp: 0, maxExp: 50 },
             books: [],
             electronics: [],
             passives: {
@@ -115,7 +115,7 @@ export default function makePlayer(k, posVec2) {
 
         k.onCollide("beam", "enemy", (b, e) => {
             if (b.beamHitEnemies.has(e) || e.dead) return;
-            e.hurt(b.damage);
+            e.hurt(e?.hiding ? b.damage / 4 : b.damage);
             b.beamHitEnemies.add(e);
         });
     };
@@ -155,7 +155,7 @@ export default function makePlayer(k, posVec2) {
             k.timer()
         ]);
 
-        freeze.wait(2.5, () => {
+        freeze.wait(3, () => {
             k.get("enemy").forEach(e => {
                 e.play(e.currentAnim);
             });
@@ -611,7 +611,7 @@ export default function makePlayer(k, posVec2) {
                     !player.dashHitEnemies.has(e) &&
                     !e.dead
                 ) {
-                    e.hurt(player.dashDamage);
+                    e.hurt(e?.hiding ? player.dashDamage / 4 : player.dashDamage);
                     player.dashCd = Math.max(player.dashCd - 0.5, 0.1);
                     player.dashTimer += Math.max(0.15 - player.dashHitEnemies.size * 0.75, 0.05);
                     player.dashHitEnemies.add(e);

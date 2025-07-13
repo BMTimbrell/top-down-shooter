@@ -21,6 +21,7 @@ import {
 import boss1 from './scenes/1-boss';
 import timeTransition from './scenes/timeTransition';
 import holorange from './scenes/holorange';
+import level2 from './scenes/level2';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -57,6 +58,8 @@ export default function initGame() {
     psiLab(k);
 
     geneLab(k);
+
+    level2(k);
 
     const player = makePlayer(k, k.vec2(0));
 
@@ -309,5 +312,5 @@ export default function initGame() {
         });
     });
 
-    k.go("level1", { player, gameState });
+    k.go("level2", { player, gameState });
 }

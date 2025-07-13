@@ -7,10 +7,14 @@ export default function makeProjectile(
         friendly = true,
         spread = 0,
         speedOffset = 0,
-        pierce = 0
+        pierce = 0,
+        target = null,
+        velocity = null
     }) {
+        
+    if (!target) target = k.get("player")[0].pos;
 
-    const target = (friendly ? k.toWorld(k.mousePos()) : k.get("player")[0].pos).angle(gun.pos) + spread;
+    target = (friendly ? k.toWorld(k.mousePos()) : target).angle(gun.pos) + spread;
     const projectileSpeed = gun.projectileSpeed + speedOffset;
     const pos = gun?.pOffset ? gun.pos.add(k.vec2(gun.pOffset.x, gun.pOffset.y)) : gun.pos
 
@@ -27,15 +31,16 @@ export default function makeProjectile(
         }),
         name,
         'pausable',
-        k.move(
+        !velocity ? k.move(
             target,
             projectileSpeed
-        ),
+        ) : "",
         k.offscreen({ hide: true }),
         {
             lifespan,
             pierce,
-            enemiesHit: new Set()
+            enemiesHit: new Set(),
+            velocity
         }
     ]);
 
@@ -44,11 +49,16 @@ export default function makeProjectile(
         if (!friendly && k.get("freeze").length) {
             projectile.unuse("move");
         } else if (!friendly && !projectile.has("move")) {
-            projectile.use(k.move(target, projectileSpeed));
+            if (projectile.velocity) {
+                projectile.pos = projectile.pos.add(projectile.velocity);
+            } else {
+                projectile.use(k.move(target, projectileSpeed));
+            }
         }
 
         if (projectile.lifespan > 0) {
-            projectile.lifespan -= k.dt();
+            if (!k.get("freeze").length)
+                projectile.lifespan -= k.dt();
         } else {
             k.destroy(projectile);
         }
@@ -61,7 +71,8 @@ export default function makeProjectile(
             friendly = true;
             collisions = collisions.filter(e => e !== "player");
             collisions.push("enemy");
-            projectile.use(k.move(target, -projectileSpeed))
+            projectile.velocity = null;
+            projectile.use(k.move(target, -projectileSpeed));
         }
 
         if (collisions.some(e => obj.is(e)) && obj.has("body")) {
@@ -113,7 +124,7 @@ export default function makeProjectile(
                     for (const target of hits) {
                         if (explosion.enemiesHit.has(target)) continue;
                         explosion.enemiesHit.add(target);
-                        target.hurt(gun.damage);
+                        target.hurt(target?.hiding ? gun.damage / 4 : gun.damage);
                     }
 
                     // mark as damaged so it doesn’t damage on future frames
@@ -132,7 +143,7 @@ export default function makeProjectile(
                 if (projectile.enemiesHit.has(obj)) {
                     return; // prevent hitting the same enemy multiple times
                 } else {
-                    obj.hurt(gun.damage);
+                    obj.hurt(obj?.hiding ? gun.damage / 4 : gun.damage);
                     projectile.enemiesHit.add(obj);
                 }
             } else if (obj.is("player")) {

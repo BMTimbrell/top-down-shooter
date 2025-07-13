@@ -131,6 +131,7 @@ export function spawnObjects(
                     const boundary = entity?.properties?.find(e => e.name === "boundary")?.value;
                     const roomIds = entity?.properties?.find(e => e.name === "rooms")?.value;
                     const animation = entity.name === "portal" ? "idle" : ""
+                    const isBoulder = entity.name.toLowerCase().includes("boulder");
 
                     k.add([
                         k.sprite(entity.name, { anim: animation }),
@@ -138,7 +139,7 @@ export function spawnObjects(
                         k.scale(MAP_SCALE),
                         k.pos(scaleToMap(k, map, entity)),
                         k.offscreen({ hide: true }),
-                        entity.name,
+                        isBoulder ? "boulder" : entity.name,
                         ...boundary ? [
                             k.area({
                                 shape: new k.Rect(
@@ -263,8 +264,10 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
 
                     let description = missionDay && missionDescription ? missionDescription : 
                         tiledDescription ? tiledDescription :
-                            sceneName === "room" && gameState.time === 3 ?
-                                ["It's late. I should stay inside."] : null;
+                        sceneName === "room" && gameState.time === 3 ?
+                        ["It's late. I should stay inside."] : null;
+
+                    if (entity.name === "check exit" && missionDay) description = null;
 
                     if (player.inDialogue) {
                         if (store.get(dialogueAtom).skip) {
