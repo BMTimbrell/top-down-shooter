@@ -564,7 +564,16 @@ export default function loadAssets(k) {
         sliceY: 2,
         anims: {
             "walk": { from: 0, to: 3, loop: true, speed: 7 },
-            "dying": { from: 4, to: 7, loop: false, speed: 4 }
+            "dying": { from: 4, to: 7, loop: false, speed: 6 }
+        }
+    });
+
+    k.loadSprite("redbat", "./sprites/red-bat-sheet.png", {
+        sliceX: 4,
+        sliceY: 2,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 7 },
+            "dying": { from: 4, to: 7, loop: false, speed: 6 }
         }
     });
 
@@ -743,10 +752,13 @@ export default function loadAssets(k) {
         { layer: "props", index: 37 },
         { layer: "props", index: 43 },
         { layer: "props", index: 51 },
+        { layer: "props", index: 44 },
         { layer: "props", index: 45 },
         { layer: "props", index: 49 },
         { layer: "props", index: 53 },
+        { layer: "props", index: 38 },
         { layer: "props", index: 39 },
+        { layer: "props", index: 52 },
         { layer: "props", index: 54 },
         { layer: "props", index: 5 },
         { layer: "props", index: 6 },

@@ -104,8 +104,7 @@ export default function makeMole(k, name, { pos, roomId }) {
                     }));
                     mole.play("walk");
                     mole.wait(3, () => mole.digFlag = true);
-
-                    shoot(k, mole, { shootCd: mole.firingSpeed, pCount: 8, aStep: 45 });
+                    shoot(k, mole, { shootCd: mole.firingSpeed, pCount: name === "redmole" ? 16 : 8, aStep: name === "redmole" ? 22.5 : 45 });
                 }
             }
             return;

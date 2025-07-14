@@ -40,15 +40,15 @@ export default function makePlayer(k, posVec2) {
             invincible: false,
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
-                { name: "laser sword", ammo: GUNS["laser sword"].maxAmmo, ...GUNS["laser sword"], clip: GUNS["laser sword"].clipSize },
+                // { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
+                // { name: "laser sniper rifle", ammo: GUNS["laser sniper rifle"].maxAmmo, ...GUNS["laser sniper rifle"], clip: GUNS["laser sniper rifle"].clipSize },
 
             ],
             gunIndex: 0,
             maxGuns: 3,
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
-            weapon: { level: 2, exp: 0, maxExp: 50 },
+            weapon: { level: 1, exp: 0, maxExp: 50 },
             books: [],
             electronics: [],
             passives: {
@@ -61,7 +61,7 @@ export default function makePlayer(k, posVec2) {
             abilities: [
                 {
                     name: "Psi Beam",
-                    active: false,
+                    active: true,
                     cooldown: 1,
                     baseCooldown: 1,
                     rechargeRate: 0.01,

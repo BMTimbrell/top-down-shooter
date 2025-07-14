@@ -434,8 +434,7 @@ export const ENEMIES = {
         speed: 50,
         damage: 5,
         firingSpeed: 3,
-        projectileCount: 1,
-        projectileCount: 3
+        projectileCount: 1
     },
     wisp: {
         health: 12,
@@ -451,7 +450,14 @@ export const ENEMIES = {
         speed: 100,
         damage: 5,
         firingSpeed: 3,
-        projectileCount: 1,
+        projectileCount: 1
+    },
+    redbat: {
+        health: 18,
+        speed: 100,
+        damage: 5,
+        firingSpeed: 3,
+        projectileCount: 3
     },
     tortoise: {
         health: 18,
@@ -471,6 +477,7 @@ export const ENEMY_FACTORIES = {
     "wisp": makeWisp,
     "birdboss": makeBirdBoss,
     "bat": makeBat,
+    "redbat": makeBat,
     "tortoise": makeTortoise
 };
 

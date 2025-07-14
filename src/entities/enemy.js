@@ -81,9 +81,12 @@ export default function makeEnemy(k, name, { pos, roomId }) {
             const dropChance = k.randi(1, 4);
             const gunDropChance = k.randi(1, 6);
             const coinDropChance = k.randi(0, 10);
+
+            const player = k.get("player")[0];
+
             const healthDropChance = k.randi(
                 1,
-                21
+                Math.min(16, 21 - (player.maxHP() - player.hp()))
             );
 
             if (dropChance === 1 || dropChance === 2) {

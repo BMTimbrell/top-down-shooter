@@ -312,5 +312,5 @@ export default function initGame() {
         });
     });
 
-    k.go("level2", { player, gameState });
+    k.go("level1", { player, gameState });
 }
