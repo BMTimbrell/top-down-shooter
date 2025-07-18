@@ -4,6 +4,7 @@ import makeMole from "./entities/mole";
 import makeWisp from "./entities/wisp";
 import makeBat from "./entities/bat";
 import makeTortoise from "./entities/tortoise";
+import makeMoleBoss from "./entities/moleBoss";
 
 export const PALETTE = {
 
@@ -478,7 +479,8 @@ export const ENEMY_FACTORIES = {
     "birdboss": makeBirdBoss,
     "bat": makeBat,
     "redbat": makeBat,
-    "tortoise": makeTortoise
+    "tortoise": makeTortoise,
+    "moleboss": makeMoleBoss
 };
 
 export const DISCOUNT = 0.8;

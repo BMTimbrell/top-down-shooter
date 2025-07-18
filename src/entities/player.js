@@ -41,19 +41,19 @@ export default function makePlayer(k, posVec2) {
             guns: [
                 { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
                 // { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
-                // { name: "laser sniper rifle", ammo: GUNS["laser sniper rifle"].maxAmmo, ...GUNS["laser sniper rifle"], clip: GUNS["laser sniper rifle"].clipSize },
+                // { name: "laser minigun", ammo: GUNS["laser minigun"].maxAmmo, ...GUNS["laser minigun"], clip: GUNS["laser minigun"].clipSize },
 
             ],
             gunIndex: 0,
             maxGuns: 3,
             mind: { level: 1, exp: 0, maxExp: 50 },
             body: { level: 1, exp: 0, maxExp: 50 },
-            weapon: { level: 1, exp: 0, maxExp: 50 },
+            weapon: { level: 2, exp: 0, maxExp: 50 },
             books: [],
             electronics: [],
             passives: {
                 "Increased Slide Damage": false,
-                "Faster Movement": false,
+                "Faster Movement": true,
                 "Improved Sleep": false,
                 "Improved Slide": false,
                 "Rapid Recovery": false

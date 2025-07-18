@@ -86,7 +86,7 @@ export default function makeEnemy(k, name, { pos, roomId }) {
 
             const healthDropChance = k.randi(
                 1,
-                Math.min(16, 21 - (player.maxHP() - player.hp()))
+                Math.max(16, 21 - (player.maxHP() - player.hp()))
             );
 
             if (dropChance === 1 || dropChance === 2) {

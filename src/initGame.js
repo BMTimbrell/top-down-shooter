@@ -22,6 +22,7 @@ import boss1 from './scenes/1-boss';
 import timeTransition from './scenes/timeTransition';
 import holorange from './scenes/holorange';
 import level2 from './scenes/level2';
+import boss2 from './scenes/2-boss';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -61,6 +62,8 @@ export default function initGame() {
 
     level2(k);
 
+    boss2(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = k.make([
@@ -78,7 +81,6 @@ export default function initGame() {
 
 
             },
-            daysUntilNextMission: 5,
             reinforcements: [],
             pendingSpawns: [],
             debugTimer: 3,

@@ -598,11 +598,31 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("moleboss", "./sprites/mole-boss.png", {
+        sliceX: 4,
+        sliceY: 3,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 7 },
+            "crouch": { from: 4, to: 5, loop: false, speed: 5 },
+            "dig": { from: 8, to: 9, loop: true, speed: 7 },
+            "dying": { from: 4, to: 7, loop: false, speed: 5 }
+        }
+    });
+
     k.loadSprite("warning", "./sprites/warning.png", {
         sliceX: 1,
         sliceY: 1,
         anims: {
             "idle": 0
+        }
+    });
+
+    k.loadSprite("falling boulder", "./sprites/boulder.png", {
+        sliceX: 19,
+        sliceY: 1,
+        anims: {
+            "idle": 0,
+            "fall":  { from: 0, to: 18, loop: false, speed: 50 }
         }
     });
 
@@ -644,6 +664,7 @@ export default function loadAssets(k) {
     k.loadSprite("psi-lab", "./sprites/psi-lab.png");
     k.loadSprite("gene-lab", "./sprites/gene-lab.png");
     k.loadSprite("level2Ground", "./sprites/level2.png");
+    k.loadSprite("level2BossGround", "./sprites/2-boss.png");
 
     // tiles
     const rockyTiles = [

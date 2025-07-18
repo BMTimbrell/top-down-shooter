@@ -179,7 +179,7 @@ export const gameInfoAtom = atom({
         reload: 1
     },
     onMission: false,
-    daysUntilMission: 0,
+    daysUntilMission: 6,
     gunIndex: 0,
     maxGuns: 3,
     reloading: false,
