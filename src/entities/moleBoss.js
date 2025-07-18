@@ -99,8 +99,21 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
     const room = k.get("room").find(r => r.rId === boss.roomId);
     boss.pf = new PathfindingManager(k, room, boss);
 
-    boss.on("hurt", () => {
+    boss.on("hurt", amount => {
         boss.flash();
+
+        const player = k.get("player")[0];
+
+        player.abilities.filter(a => a.active).forEach(ability => {
+            // psi beam does not recharge psi beam cd
+            if (k.get("beam").length > 0 && ability.name === "Psi Beam") {
+                return;
+            }
+            ability.cooldown += Math.min(
+                1 - ability.cooldown,
+                ability.rechargeRate * amount + (player.mind.level - 1) * 0.005
+            );
+        })
     });
 
     boss.on("death", () => {
