@@ -1,5 +1,5 @@
 import { DROP_OFFSET, GUNS, ENEMY_FACTORIES } from '../constants';
-import { popupAtom, gameInfoAtom, menuAtom, playerInfoAtom, infoBoxAtom, store } from "../store";
+import { popupAtom, gameInfoAtom, pauseMenuAtom, playerInfoAtom, infoBoxAtom, store } from "../store";
 import { hasOverlap, castRay } from "../utils/collision";
 import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
@@ -317,7 +317,7 @@ export default function makePlayer(k, posVec2) {
     let mWheel = '';
 
     document.addEventListener('wheel', event => {
-        if (player.inDialogue || store.get(menuAtom).visible) return;
+        if (player.inDialogue || store.get(pauseMenuAtom).visible) return;
         if (event.deltaY > 0) {
             mWheel = 'down';
         } else if (event.deltaY < 0) {

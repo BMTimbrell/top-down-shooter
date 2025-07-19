@@ -82,15 +82,16 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
     ]);
 
     healthBarBg.onUpdate(() => {
-
-        healthBar.opacity = boss.underground ? 0 : 1;
         healthBarBg.opacity = boss.underground ? 0 : 1;
 
         healthBarBg.pos = boss.pos.sub(k.vec2((healthBarBg.width * 4) / 2, 140));
     });
 
     healthBar.onUpdate(() => {
+        healthBar.opacity = boss.underground ? 0 : 1;
+
         healthBar.pos = boss.pos.sub(k.vec2((healthBarBg.width * 4) / 2, 140));
+
         if (!boss.underground) healthBar.updateFill(boss.hp(), boss.maxHP());
     });
 

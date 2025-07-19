@@ -12,7 +12,7 @@ import engineering from './scenes/engineering';
 import psiLab from './scenes/psiLab';
 import geneLab from './scenes/geneLab';
 import {
-    menuAtom,
+    pauseMenuAtom,
     playerInfoAtom,
     infoBoxAtom,
     victoryScreenAtom,
@@ -252,7 +252,7 @@ export default function initGame() {
     ]);
 
     gameState.onUpdate(() => {
-        const paused = store.get(menuAtom).visible ||
+        const paused = store.get(pauseMenuAtom).visible ||
             store.get(infoBoxAtom).visible ||
             store.get(victoryScreenAtom).visible;
         // gameState.debugTimer -= k.dt();
@@ -264,14 +264,14 @@ export default function initGame() {
             // set data to show in menu
             if (!paused) {
                 store.set(
-                    menuAtom,
+                    pauseMenuAtom,
                     prev => ({
                         ...prev,
                         buttons: [
                             {
                                 name: "Resume",
                                 onClick: () => {
-                                    store.set(menuAtom, prev => ({ ...prev, visible: false }));
+                                    store.set(pauseMenuAtom, prev => ({ ...prev, visible: false }));
                                     k.query({
                                         include: "*",
                                         exclude: "gameState"
@@ -306,7 +306,7 @@ export default function initGame() {
             }
 
             // toggle menu visibility
-            store.set(menuAtom, prev => ({ ...prev, visible: !store.get(menuAtom).visible && !paused }));
+            store.set(pauseMenuAtom, prev => ({ ...prev, visible: !store.get(pauseMenuAtom).visible && !paused }));
         }
 
         k.get(['pausable']).forEach(e => {

@@ -600,12 +600,12 @@ export default function loadAssets(k) {
 
     k.loadSprite("moleboss", "./sprites/mole-boss.png", {
         sliceX: 4,
-        sliceY: 3,
+        sliceY: 4,
         anims: {
             "walk": { from: 0, to: 3, loop: true, speed: 7 },
             "crouch": { from: 4, to: 5, loop: false, speed: 5 },
             "dig": { from: 8, to: 9, loop: true, speed: 7 },
-            "dying": { from: 4, to: 7, loop: false, speed: 5 }
+            "dying": { from: 12, to: 15, loop: false, speed: 5 }
         }
     });
 

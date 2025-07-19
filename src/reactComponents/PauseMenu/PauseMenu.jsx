@@ -1,4 +1,4 @@
-import styles from './MainMenu.module.css';
+import styles from './PauseMenu.module.css';
 import PrimaryButton from '../Button/PrimaryButton';
 import Gun from '../Gun/Gun';
 import GunContainer from '../Gun/GunContainer';
@@ -8,7 +8,7 @@ import BackButton from '../Button/BackButton';
 import ExpBar from '../ExpBar/ExpBar';
 import Modal from '../Modal/Modal';
 
-export default function MainMenu({ buttons }) {
+export default function PauseMenu({ buttons }) {
     const [playerInfo, setPlayerInfo] = useAtom(playerInfoAtom);
     const mind = playerInfo.data.exp.mind;
     const body = playerInfo.data.exp.body;

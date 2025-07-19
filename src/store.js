@@ -150,7 +150,7 @@ export const geneLabAtom = atom({
     ]
 });
 
-export const menuAtom = atom({
+export const pauseMenuAtom = atom({
     visible: false,
     buttons: []
 });

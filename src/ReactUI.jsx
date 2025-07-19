@@ -1,6 +1,6 @@
 import Popup from './reactComponents/Popup/Popup';
 import DialogueBox from './reactComponents/DialogueBox/DialogueBox';
-import MainMenu from './reactComponents/MainMenu/MainMenu';
+import PauseMenu from './reactComponents/PauseMenu/PauseMenu';
 import GameInfo from './reactComponents/GameInfo/GameInfo';
 import InfoBox from './reactComponents/InfoBox/InfoBox';
 import VictoryScreen from './reactComponents/VictoryScreen/VictoryScreen';
@@ -17,7 +17,7 @@ import GeneLab from './reactComponents/GeneLab/GeneLab';
 import { 
     dialogueAtom, 
     popupAtom, 
-    menuAtom, 
+    pauseMenuAtom, 
     infoBoxAtom, 
     victoryScreenAtom,
     promptAtom,
@@ -36,7 +36,7 @@ import { useAtom } from 'jotai';
 export default function ReactUI() {
     const [popup] = useAtom(popupAtom);
     const [dialogue, setDialogue] = useAtom(dialogueAtom);
-    const [menu] = useAtom(menuAtom);
+    const [pauseMenu] = useAtom(pauseMenuAtom);
     const [infoBox] = useAtom(infoBoxAtom);
     const [victoryScreen] = useAtom(victoryScreenAtom);
     const [prompt] = useAtom(promptAtom);
@@ -116,9 +116,9 @@ export default function ReactUI() {
                 <GeneLab />
              }
 
-             {menu.visible && 
-                <MainMenu
-                    buttons={menu.buttons}
+             {pauseMenu.visible && 
+                <PauseMenu
+                    buttons={pauseMenu.buttons}
                 />
             }
         </>
