@@ -189,4 +189,9 @@ export const gameInfoAtom = atom({
     }
 });
 
+export const mainMenuAtom = atom({
+    visible: true,
+    buttons: []
+});
+
 export const store = createStore();

@@ -56,7 +56,8 @@ export default function makePlayer(k, posVec2) {
                 "Faster Movement": false,
                 "Improved Sleep": false,
                 "Improved Slide": false,
-                "Rapid Recovery": false
+                "Rapid Recovery": false,
+                "Stronger Psi Beam": false
             },
             abilities: [
                 {
@@ -107,7 +108,7 @@ export default function makePlayer(k, posVec2) {
             k.opacity(1),
             k.lifespan(0.5),
             {
-                damage: 10,
+                damage: player.passives["Stronger Psi Beam"] ? 15 : 10,
                 beamHitEnemies: new Set()
             },
             "beam"
