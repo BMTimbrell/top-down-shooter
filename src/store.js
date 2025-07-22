@@ -173,7 +173,7 @@ export const gameInfoAtom = atom({
     time: 1,
     health: 4,
     maxHealth: 4,
-    gold: 0,
+    gold: 500,
     cooldwns: {
         dash: 1,
         reload: 1
@@ -190,7 +190,7 @@ export const gameInfoAtom = atom({
 });
 
 export const mainMenuAtom = atom({
-    visible: true,
+    visible: false,
     buttons: []
 });
 

@@ -5,7 +5,56 @@ import makeGun from "./gun";
 import makeGunDrop from './gunDrop';
 import makeFloatingText from '../utils/floatingText';
 
-export default function makePlayer(k, posVec2) {
+export default function makePlayer(k, posVec2, { saveData = null } = {}) {
+    const health = saveData ? saveData.health : 4;
+    const maxHealth = saveData ? saveData.health : 4;
+    const speed = saveData ? saveData.speed : 200;
+    const dashDamage = saveData ? saveData.dashDamage : 2.5;
+    const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }];
+    const mind = saveData ? saveData.mind : { level: 1, exp: 0, maxExp: 50 };
+    const body = saveData ? saveData.body : { level: 1, exp: 0, maxExp: 50 };
+    const weapon = saveData ? saveData.weapon : { level: 1, exp: 0, maxExp: 50 };
+    const books = saveData ? saveData.books : [];
+    const electronics = saveData ? saveData.electronics : [];
+    const improvedWorkouts = saveData ? saveData.improvedWorkouts : false;
+    const discount = saveData ? saveData.discount : false;
+    const abilities = saveData ? saveData.abilities : [
+        {
+            name: "Psi Beam",
+            active: false,
+            cooldown: 1,
+            baseCooldown: 1,
+            rechargeRate: 0.01,
+            key: "space",
+            imgSrc: "sprites/psi-beam-icon.png"
+        },
+        {
+            name: "Force Field",
+            active: false,
+            cooldown: 1,
+            baseCooldown: 1,
+            rechargeRate: 0.005,
+            key: "q",
+            imgSrc: "sprites/force-field-icon.png"
+        },
+        {
+            name: "Freeze Time",
+            active: false,
+            cooldown: 1,
+            baseCooldown: 1,
+            rechargeRate: 0.001,
+            key: "control",
+            imgSrc: "sprites/clock-icon.png"
+        }
+    ];
+    const passives = {
+        "Increased Slide Damage": false,
+        "Faster Movement": false,
+        "Improved Sleep": false,
+        "Improved Slide": false,
+        "Rapid Recovery": false,
+        "Stronger Psi Beam": false
+    };
 
     const player = k.make([
         k.sprite("player", { anim: "idle" }),
@@ -19,9 +68,9 @@ export default function makePlayer(k, posVec2) {
         k.timer(),
         "player",
         "pausable",
-        k.health(4, 4),
+        k.health(health, maxHealth),
         {
-            speed: 200,
+            speed,
             direction: k.vec2(0),
             directionVector: k.vec2(0),
             dashJustStarted: false,
@@ -29,7 +78,7 @@ export default function makePlayer(k, posVec2) {
             dashCd: 2.5,
             dashHitEnemies: new Set(),
             reloadCd: 1.5,
-            dashDamage: 2.5,
+            dashDamage,
             dashOnCd: false,
             dashSpeed: 500,
             dashTimer: 0,
@@ -38,56 +87,18 @@ export default function makePlayer(k, posVec2) {
             inDialogue: false,
             reloading: false,
             invincible: false,
-            guns: [
-                { name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize },
-                // { name: "laser rifle", ammo: GUNS["laser rifle"].maxAmmo, ...GUNS["laser rifle"], clip: GUNS["laser rifle"].clipSize },
-                // { name: "laser minigun", ammo: GUNS["laser minigun"].maxAmmo, ...GUNS["laser minigun"], clip: GUNS["laser minigun"].clipSize },
-
-            ],
+            guns,
             gunIndex: 0,
             maxGuns: 3,
-            mind: { level: 1, exp: 0, maxExp: 50 },
-            body: { level: 1, exp: 0, maxExp: 50 },
-            weapon: { level: 1, exp: 0, maxExp: 50 },
-            books: [],
-            electronics: [],
-            passives: {
-                "Increased Slide Damage": false,
-                "Faster Movement": false,
-                "Improved Sleep": false,
-                "Improved Slide": false,
-                "Rapid Recovery": false,
-                "Stronger Psi Beam": false
-            },
-            abilities: [
-                {
-                    name: "Psi Beam",
-                    active: false,
-                    cooldown: 1,
-                    baseCooldown: 1,
-                    rechargeRate: 0.01,
-                    key: "space",
-                    imgSrc: "sprites/psi-beam-icon.png"
-                },
-                {
-                    name: "Force Field",
-                    active: false,
-                    cooldown: 1,
-                    baseCooldown: 1,
-                    rechargeRate: 0.005,
-                    key: "q",
-                    imgSrc: "sprites/force-field-icon.png"
-                },
-                {
-                    name: "Freeze Time",
-                    active: false,
-                    cooldown: 1,
-                    baseCooldown: 1,
-                    rechargeRate: 0.001,
-                    key: "control",
-                    imgSrc: "sprites/clock-icon.png"
-                }
-            ]
+            mind,
+            body,
+            weapon,
+            books,
+            electronics,
+            passives,
+            abilities,
+            improvedWorkouts,
+            discount
         }
     ]);
 
@@ -180,7 +191,7 @@ export default function makePlayer(k, posVec2) {
     function setOnMission(onMission = false) {
         player.onMission = onMission;
         store.set(gameInfoAtom, prev => ({ ...prev, onMission: onMission }));
-        k.setCursor(onMission ? "none" : "default")
+        k.setCursor(onMission ? "none" : "default");
     }
 
     // dash

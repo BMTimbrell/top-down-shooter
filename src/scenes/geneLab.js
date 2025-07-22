@@ -57,7 +57,7 @@ export default function geneLab(k) {
                                 text: [
                                     `You learned ${skill.name}.`
                                 ],
-                                action() {
+                                action: () => {
                                     if (skill.name === "Faster Movement") {
                                         player.speed = 250;
                                     } else if (skill.name === "Increased Slide Damage") {

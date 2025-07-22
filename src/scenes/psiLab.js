@@ -57,7 +57,7 @@ export default function psiLab(k) {
                                     text: [
                                         `You learned ${skill.name}.`
                                     ],
-                                    action() {
+                                    action: () => {
                                         if (skill.name === "Stronger Psi Beam") {
                                             player.passives["Stronger Psi Beam"] = true;
                                         } else {

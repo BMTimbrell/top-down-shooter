@@ -484,3 +484,165 @@ export const ENEMY_FACTORIES = {
 };
 
 export const DISCOUNT = 0.8;
+
+export const BOOKS = [
+    {
+        title: "Tactical Precision: A Shooter's Manual",
+        description: "Learn to breathe, aim, and fire like a pro.",
+        text: [
+            [
+                "A rookie sees the target. A marksman sees the field.",
+                "The first rule of tactical shooting is awareness. Every element in the field can help or hinder your shot."
+            ],
+            [
+                "When aiming exhale slowly. A calm breath steadies the hand.",
+                "Trigger discipline is not about reaction speed. It's about control.",
+                "You finish reading the book, and feel more confident in your combat abilities."
+            ]
+        ],
+        exp: {
+            weapon: 25
+        },
+        progress: {
+            current: 0, max: 2
+        },
+        price: 100,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    },
+    {
+        title: "Epistemology",
+        description: "A book about how we know.",
+        text: [
+            [
+                "All knowledge starts with sense perception.",
+                "The senses can't make errors as they make no judgement and are just cause and effect."
+            ],
+            [
+                "We use our minds to integrate data from the senses and form concepts.",
+                "Errors can be made on the conceptual level, so make sure you have no logical fallacies.",
+                "You finished the book and gained clarity."
+            ]
+        ],
+        exp: {
+            mind: 25
+        },
+        progress: {
+            current: 0, max: 2
+        },
+        price: 120,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    },
+    {
+        title: "SWEAT",
+        description: "A book with special workouts, exercises and advanced techniques.",
+        text: [
+            [
+                "As you read, you see examples of different exercises and workout plans."
+            ],
+            [
+                "You read about different lifting techniques and the value of getting tension on the muscle when it's lengthened.",
+                "You now feel like you might be able to get more out of your workouts."
+            ]
+        ],
+        exp: null,
+        action(player) {
+            player.improvedWorkouts = true;
+        },
+        progress: {
+            current: 0, max: 2
+        },
+        price: 100,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    },
+    {
+        title: "Cognitive Warefare and You",
+        description: "A guide to defending your thoughts and outmaneuvering manipulative foes.",
+        text: [
+            [
+                "The most effective weapon is the one that convinces you it isn’t a weapon at all",
+                "Cognitive threats creep in as subtle suggestions, reframed truths, or emotional triggers designed to bypass logic."
+            ],
+            [
+                "Remember, the mind's greatest defense is intentional thought.",
+                "A sharpened mind is a secure one. Train it like you would train a weapon.",
+                "You finish the book and gain clarity."
+            ]
+        ],
+        exp: {
+            mind: 25
+        },
+        progress: {
+            current: 0, max: 2
+        },
+        price: 120,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    },
+    {
+        title: "Smiles, Lies, and Subtle Eyes",
+        description: "The Psychology of Persuasion",
+        text: [
+            [
+                'Your body speaks long before your voice enters the conversation.',
+                'A confident stance—shoulders relaxed, spine aligned, gaze steady—tells the room, "I am here, and I belong"',
+            ],
+            [
+                "Adjust your expression, your breath, your pace. Let people feel seen without a word.",
+                "Never forget: charisma isn't about overpowering the room—it's about anchoring it.",
+                "You finish the book and feel like you could use these techniques at shops."
+            ]
+        ],
+        exp: null,
+        action(player) {
+            player.discount = true;
+        },
+        progress: {
+            current: 0, max: 2
+        },
+        price: 150,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    }
+];
+
+export const ELECTRONICS = [
+    {
+        name: "VR Headset",
+        description: "Comes with a free game.",
+        price: 1000,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    },
+    {
+        name: "Echo Tactica",
+        description: "A turn-based tactics game where you command a clone squad.",
+        exp: { mind: 5 },
+        price: 100,
+        button: {
+            onClick: null,
+            disabled: false,
+            name: "Buy"
+        }
+    }
+];

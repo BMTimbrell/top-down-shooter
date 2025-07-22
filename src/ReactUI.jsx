@@ -14,6 +14,7 @@ import Holorange from './reactComponents/Holorange/Holorange';
 import Engineering from './reactComponents/Engineering/Engineering';
 import PsiLab from './reactComponents/PsiLab/PsiLab';
 import GeneLab from './reactComponents/GeneLab/GeneLab';
+import MainMenu from './reactComponents/MainMenu/MainMenu';
 import { 
     dialogueAtom, 
     popupAtom, 
@@ -29,7 +30,8 @@ import {
     holorangeAtom,
     engineeringAtom,
     psiLabAtom,
-    geneLabAtom
+    geneLabAtom,
+    mainMenuAtom
 } from './store';
 import { useAtom } from 'jotai';
 
@@ -49,10 +51,11 @@ export default function ReactUI() {
     const [engineering] = useAtom(engineeringAtom);
     const [psiLab] = useAtom(psiLabAtom);
     const [geneLab] = useAtom(geneLabAtom);
+    const [mainMenu] = useAtom(mainMenuAtom);
 
     return (
         <>
-            <GameInfo />
+            {!mainMenu.visible && <GameInfo />}
 
             {popup.visible && <Popup text={popup.text} pos={popup.pos} />}
 
@@ -120,6 +123,10 @@ export default function ReactUI() {
                 <PauseMenu
                     buttons={pauseMenu.buttons}
                 />
+            }
+
+            {mainMenu.visible &&
+               <MainMenu />
             }
         </>
     );

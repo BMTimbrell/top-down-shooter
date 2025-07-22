@@ -142,7 +142,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
                         gameInfoAtom,
                         prev => ({
                             ...prev,
-                            daysUntilMission: 8,
+                            daysUntilMission: 7,
                             time
                         })
                     );
