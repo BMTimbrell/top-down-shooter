@@ -7,7 +7,7 @@ import makeFloatingText from '../utils/floatingText';
 
 export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     const health = saveData ? saveData.health : 4;
-    const maxHealth = saveData ? saveData.health : 4;
+    const maxHealth = saveData ? saveData.maxHealth : 4;
     const speed = saveData ? saveData.speed : 200;
     const dashDamage = saveData ? saveData.dashDamage : 2.5;
     const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }];
@@ -18,6 +18,9 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     const electronics = saveData ? saveData.electronics : [];
     const improvedWorkouts = saveData ? saveData.improvedWorkouts : false;
     const discount = saveData ? saveData.discount : false;
+    const maxGuns = saveData ? saveData.maxGuns : 3;
+    const gunIndex = saveData ? saveData.gunIndex : 0;
+    const reloadCd = saveData ? saveData.reloadCd : 1.5;
     const abilities = saveData ? saveData.abilities : [
         {
             name: "Psi Beam",
@@ -47,7 +50,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
             imgSrc: "sprites/clock-icon.png"
         }
     ];
-    const passives = {
+    const passives = saveData ? saveData.passives : {
         "Increased Slide Damage": false,
         "Faster Movement": false,
         "Improved Sleep": false,
@@ -77,7 +80,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
             dashing: false,
             dashCd: 2.5,
             dashHitEnemies: new Set(),
-            reloadCd: 1.5,
+            reloadCd,
             dashDamage,
             dashOnCd: false,
             dashSpeed: 500,
@@ -88,8 +91,8 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
             reloading: false,
             invincible: false,
             guns,
-            gunIndex: 0,
-            maxGuns: 3,
+            gunIndex,
+            maxGuns,
             mind,
             body,
             weapon,
@@ -181,9 +184,14 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     store.set(playerInfoAtom, prev => ({
         ...prev,
         data: {
-            ...prev.data,
             guns: player.guns,
-            gunIndex: player.gunIndex
+            gunIndex: player.gunIndex,
+            abilities: player.abilities,
+            exp: { 
+                mind: player.mind,
+                body: player.body,
+                weapon: player.weapon
+            }
         }
     }));
 

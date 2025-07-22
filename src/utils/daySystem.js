@@ -28,6 +28,7 @@ export function spendTime(gameState, player) {
                 dashDamage: player.dashDamage,
                 guns: player.guns,
                 maxGuns: player.maxGuns,
+                gunIndex: player.gunIndex,
                 mind: player.mind,
                 body: player.body,
                 weapon: player.weapon,
