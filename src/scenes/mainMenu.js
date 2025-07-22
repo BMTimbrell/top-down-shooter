@@ -7,13 +7,19 @@ import {
     psiLabAtom,
     geneLabAtom,
     gardenAtom,
+    holorangeAtom,
+    gymAtom,
     dialogueAtom,
-    popupAtom
+    popupAtom,
+    promptAtom,
+    bookMenuAtom,
+    gameMenuAtom
 } from '../store';
 import makePlayer from '../entities/player';
 import makeGameState from '../makeGameState';
 import { makeBookReadButton, makeGamePlayButton } from '../utils/productOnClick';
 import { BOOKS } from '../constants';
+import holorange from './holorange';
 
 export default function mainMenu(k) {
     k.scene("main menu", ({ player, gameState }) => {
@@ -25,6 +31,56 @@ export default function mainMenu(k) {
         }));
 
         store.set(dialogueAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(promptAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(shopAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(engineeringAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(geneLabAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(psiLabAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(holorangeAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(gymAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(gardenAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(gameMenuAtom, prev => ({
+            ...prev,
+            visible: false
+        }));
+
+        store.set(bookMenuAtom, prev => ({
             ...prev,
             visible: false
         }));
