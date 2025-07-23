@@ -6,14 +6,20 @@ import {
     playerInfoAtom
 } from '../store';
 
+import makeFloatingText from '../utils/floatingText';
+
 import { DISCOUNT, GUNS } from '../constants';
 
 import { makeMap } from '../utils/map';
 
 function disableButtons(products) {
     products.forEach(product => {
-        product.button.disabled = product.price > store.get(gameInfoAtom).gold ||
-            store.get(playerInfoAtom).data.exp.weapon.level < product.level;
+        const gunFound = store.get(playerInfoAtom).data.guns.find(g => g.name === product.name);
+        const disabled = product.price > store.get(gameInfoAtom).gold ||
+            store.get(playerInfoAtom).data.exp.weapon.level < product.level ||
+            gunFound && gunFound.ammo === GUNS[product.name].maxAmmo;
+
+        product.button.disabled = disabled;
     });
     return products;
 }
@@ -72,87 +78,93 @@ export default function engineering(k) {
             ],
             guns: Object.keys(GUNS).map(gun => {
                 const price = player.discount ? GUNS[gun].price * DISCOUNT : GUNS[gun].price;
+
+                const gunFound = player.guns.find(g => g.name === gun);
+                const disabled = store.get(gameInfoAtom).gold < price ||
+                    store.get(playerInfoAtom).data.exp.weapon.level < GUNS[gun].level ||
+                    gunFound && gunFound.ammo === GUNS[gun].maxAmmo;
+
                 return {
-                name: gun,
-                price,
-                level: GUNS[gun].level,
-                spritePos: GUNS[gun].spritePos,
-                button: {
-                    onClick: () => {
-                        const gunFound = player.guns.find(g => g.name === gun);
-                        if (gunFound) {
-                            gunFound.ammo = GUNS[gun].maxAmmo;
+                    name: gun,
+                    price,
+                    level: GUNS[gun].level,
+                    spritePos: GUNS[gun].spritePos,
+                    button: {
+                        onClick: () => {
+                            if (gunFound) {
 
-                            store.set(gameInfoAtom, prev => ({
-                                ...prev,
-                                gold: prev.gold - price
-                            }));
+                                gunFound.ammo = GUNS[gun].maxAmmo;
 
-                            store.set(engineeringAtom, prev => ({
-                                ...prev,
-                                guns: disableButtons(store.get(engineeringAtom).guns),
-                                armour: disableButtons(store.get(engineeringAtom).armour)
-                            }));
-                        } else if (player.guns.length < player.maxGuns) {
-                            player.guns.push({
-                                name: gun,
-                                ammo: GUNS[gun].maxAmmo,
-                                ...GUNS[gun],
-                                clip: GUNS[gun].clipSize
-                            });
+                                store.set(gameInfoAtom, prev => ({
+                                    ...prev,
+                                    gold: prev.gold - price
+                                }));
 
-                            store.set(gameInfoAtom, prev => ({
-                                ...prev,
-                                gold: prev.gold - price
-                            }));
+                                store.set(engineeringAtom, prev => ({
+                                    ...prev,
+                                    guns: disableButtons(store.get(engineeringAtom).guns),
+                                    armour: disableButtons(store.get(engineeringAtom).armour)
+                                }));
+                            } else if (player.guns.length < player.maxGuns) {
+                                player.guns.push({
+                                    name: gun,
+                                    ammo: GUNS[gun].maxAmmo,
+                                    ...GUNS[gun],
+                                    clip: GUNS[gun].clipSize
+                                });
 
-                            store.set(engineeringAtom, prev => ({
-                                ...prev,
-                                guns: disableButtons(store.get(engineeringAtom).guns),
-                                armour: disableButtons(store.get(engineeringAtom).armour)
-                            }));
-                        } else {
-                            store.set(engineeringAtom, prev => ({
-                                ...prev,
-                                gunModal: true,
-                                replaceGun: index => {
-                                    player.guns[index] = {
-                                        name: gun,
-                                        ammo: GUNS[gun].maxAmmo,
-                                        ...GUNS[gun],
-                                        clip: GUNS[gun].clipSize
-                                    };
+                                store.set(gameInfoAtom, prev => ({
+                                    ...prev,
+                                    gold: prev.gold - price
+                                }));
 
-                                    store.set(gameInfoAtom, prev => ({
-                                        ...prev,
-                                        gold: prev.gold - price
-                                    }));
+                                store.set(engineeringAtom, prev => ({
+                                    ...prev,
+                                    guns: disableButtons(store.get(engineeringAtom).guns),
+                                    armour: disableButtons(store.get(engineeringAtom).armour)
+                                }));
+                            } else {
+                                store.set(engineeringAtom, prev => ({
+                                    ...prev,
+                                    gunModal: true,
+                                    replaceGun: index => {
+                                        player.guns[index] = {
+                                            name: gun,
+                                            ammo: GUNS[gun].maxAmmo,
+                                            ...GUNS[gun],
+                                            clip: GUNS[gun].clipSize
+                                        };
 
-                                    store.set(engineeringAtom, prev => ({
-                                        ...prev,
-                                        gunModal: false,
-                                        guns: disableButtons(store.get(engineeringAtom).guns),
-                                        armour: disableButtons(store.get(engineeringAtom).armour)
-                                    }));
-                                }
-                            }));
+                                        store.set(gameInfoAtom, prev => ({
+                                            ...prev,
+                                            gold: prev.gold - price
+                                        }));
 
-                            store.set(playerInfoAtom, prev => ({
-                                ...prev,
-                                data: {
-                                    ...prev.data,
-                                    guns: player.guns
-                                }
-                            }));
-                        }
+                                        store.set(engineeringAtom, prev => ({
+                                            ...prev,
+                                            gunModal: false,
+                                            guns: disableButtons(store.get(engineeringAtom).guns),
+                                            armour: disableButtons(store.get(engineeringAtom).armour)
+                                        }));
+                                    }
+                                }));
 
-                    },
-                    disabled: store.get(gameInfoAtom).gold < price ||
-                        store.get(playerInfoAtom).data.exp.weapon.level < GUNS[gun].level,
-                    name: "Buy",
-                    icon: false
+                                store.set(playerInfoAtom, prev => ({
+                                    ...prev,
+                                    data: {
+                                        ...prev.data,
+                                        guns: player.guns
+                                    }
+                                }));
+                            }
+
+                        },
+                        disabled,
+                        name: "Buy",
+                        icon: false
+                    }
                 }
-            }}),
+            }),
             armour: [
                 {
                     name: "Predator Armour",

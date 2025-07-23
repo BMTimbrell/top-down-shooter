@@ -17,6 +17,9 @@ export default function GameInfo() {
     const time = gameInfo.time === 0 ? "Morning" :
         gameInfo.time === 1 ? "Afternoon" :
         gameInfo.time === 2 ? "Evening" : "Night";
+    const timeImgSrc = time === "Afternoon" ? "sunny.png" :
+        time === "Evening" ? "sunset.png" :
+        time === "Night" ? "moon.png" : "sunrise.png"
 
     let healthCount = gameInfo.health;
     for (let i = 0; i < gameInfo.maxHealth; i++) {
@@ -32,7 +35,10 @@ export default function GameInfo() {
             <div className={styles["top-container"]}>
                 <div className={styles.time}>
                     <div>Day {gameInfo.day}</div>
-                    <div>{time}</div>
+                    <div className={styles.time2}>
+                        <img width="50px" src={`./sprites/${timeImgSrc}`}/>
+                        {time}
+                    </div>
                     {!gameInfo.onMission && 
                         <div>
                             {gameInfo.daysUntilMission > 0 && 

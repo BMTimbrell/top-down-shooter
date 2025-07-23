@@ -16,6 +16,12 @@
     row-gap: 0.5em;
 }
 
+.time2 {
+    display: flex;
+    column-gap: 0.25rem;
+    align-items: center;
+}
+
 .hearts img {
     width: 52px;
     height: 44px;
