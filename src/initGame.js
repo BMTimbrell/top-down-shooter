@@ -65,5 +65,5 @@ export default function initGame() {
 
     const gameState = makeGameState(k, { player });
 
-    k.go("room", { player, gameState });
+    k.go("main menu", { player, gameState });
 }

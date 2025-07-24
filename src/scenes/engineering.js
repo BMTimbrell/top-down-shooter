@@ -92,19 +92,30 @@ export default function engineering(k) {
                     button: {
                         onClick: () => {
                             if (gunFound) {
-
-                                gunFound.ammo = GUNS[gun].maxAmmo;
-
-                                store.set(gameInfoAtom, prev => ({
-                                    ...prev,
-                                    gold: prev.gold - price
-                                }));
-
                                 store.set(engineeringAtom, prev => ({
                                     ...prev,
-                                    guns: disableButtons(store.get(engineeringAtom).guns),
-                                    armour: disableButtons(store.get(engineeringAtom).armour)
+                                    ammoModal: {
+                                        visible: true,
+                                        selectedGun: gunFound,
+                                        purchaseAmmo: () => {
+                                            gunFound.ammo = GUNS[gun].maxAmmo;
+
+                                            store.set(gameInfoAtom, prev => ({
+                                                ...prev,
+                                                gold: prev.gold - price
+                                            }));
+
+                                            store.set(engineeringAtom, prev => ({
+                                                ...prev,
+                                                ammoModal: { visible: false, selectedGun: null },
+                                                guns: disableButtons(store.get(engineeringAtom).guns),
+                                                armour: disableButtons(store.get(engineeringAtom).armour)
+                                            }));
+                                        }
+                                    }
+
                                 }));
+
                             } else if (player.guns.length < player.maxGuns) {
                                 player.guns.push({
                                     name: gun,

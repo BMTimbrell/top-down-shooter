@@ -16,9 +16,9 @@
     row-gap: 0.5em;
 }
 
-.time2 {
+.period {
     display: flex;
-    column-gap: 0.25rem;
+    column-gap: 0.5rem;
     align-items: center;
 }
 

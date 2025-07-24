@@ -83,6 +83,11 @@ export const engineeringAtom = atom({
     armour: [],
     handleClose: null,
     gunModal: false,
+    ammoModal: {
+        visible: false,
+        selectedGun: null,
+        purchaseAmmo: null
+    },
     showArmour: {
         "Predator Armour": true,
         "Titan Armour": false

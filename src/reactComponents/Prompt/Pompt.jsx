@@ -4,6 +4,7 @@ import PrimaryButton from '../Button/PrimaryButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import styles from './Prompt.module.css';
+import ButtonContainer from '../Button/ButtonContainer';
 
 export default function Prompt() {
     const [prompt] = useAtom(promptAtom);
@@ -12,14 +13,14 @@ export default function Prompt() {
     return (
         <div className={styles.container}>
             <div>{text}</div>
-            <div className={styles["button-container"]}>
+           <ButtonContainer>
                 <PrimaryButton onClick={prompt.handleYes}>
                     Yes <FontAwesomeIcon icon={faClock} />
                 </PrimaryButton>
                 <PrimaryButton onClick={prompt.handleNo}>
                     No
                 </PrimaryButton>
-            </div>
+            </ButtonContainer>
         </div>
     );
 }

@@ -1,0 +1,13 @@
+.button-container {
+    display: flex;
+    column-gap: 0.5rem;
+    min-width: 12.5rem;
+}
+
+.button-container * {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}

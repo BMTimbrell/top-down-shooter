@@ -17,7 +17,7 @@ export default function GameInfo() {
     const time = gameInfo.time === 0 ? "Morning" :
         gameInfo.time === 1 ? "Afternoon" :
         gameInfo.time === 2 ? "Evening" : "Night";
-    const timeImgSrc = time === "Afternoon" ? "sunny.png" :
+    const timeImgSrc = time === "Afternoon" ? "sun.png" :
         time === "Evening" ? "sunset.png" :
         time === "Night" ? "moon.png" : "sunrise.png"
 
@@ -35,8 +35,8 @@ export default function GameInfo() {
             <div className={styles["top-container"]}>
                 <div className={styles.time}>
                     <div>Day {gameInfo.day}</div>
-                    <div className={styles.time2}>
-                        <img width="50px" src={`./sprites/${timeImgSrc}`}/>
+                    <div className={styles.period}>
+                        <img width="64px" src={`./sprites/${timeImgSrc}`}/>
                         {time}
                     </div>
                     {!gameInfo.onMission && 

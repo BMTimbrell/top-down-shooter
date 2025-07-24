@@ -141,6 +141,11 @@ export default function makeEnemy(k, name, { pos, roomId }) {
                         b.opacity = 0;
                         b.unuse("body");
                     });
+
+                    if (player.passives["Rapid Recovery"]) {
+                        const regenChance = k.randi(0, 4);
+                        if (regenChance === 0) player.heal();
+                    }
                 }
             }
             k.destroy(enemy);

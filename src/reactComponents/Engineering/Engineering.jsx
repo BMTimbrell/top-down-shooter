@@ -10,11 +10,13 @@ import Modal from "../Modal/Modal";
 import BackButton from "../Button/BackButton";
 import styles from "./Engineering.module.css";
 import LevelReq from "../LevelReq/LevelReq";
+import ButtonContainer from '../Button/ButtonContainer';
 
 export default function Engineering() {
     const [engineering, setEngineering] = useAtom(engineeringAtom);
     const [playerInfo] = useAtom(playerInfoAtom);
     const screen = engineering.screen || "main";
+    const selectedGun = engineering.ammoModal.selectedGun;
 
     return (
         <Menu>
@@ -57,15 +59,15 @@ export default function Engineering() {
                     </MenuContainer> :
                     <MenuContainer>
                         {engineering.armour.map((e, index) => (
-                            engineering.showArmour[e.name] && 
-                                <MenuItem key={index} button={e.button}>
-                                    <MenuItemHeader>
-                                        <h2>{e.name}</h2>
-                                        <div>{e.description}</div>
-                                    </MenuItemHeader>
+                            engineering.showArmour[e.name] &&
+                            <MenuItem key={index} button={e.button}>
+                                <MenuItemHeader>
+                                    <h2>{e.name}</h2>
+                                    <div>{e.description}</div>
+                                </MenuItemHeader>
 
-                                    <Price price={e.price} />
-                                </MenuItem>
+                                <Price price={e.price} />
+                            </MenuItem>
                         ))}
                     </MenuContainer>
             }
@@ -91,6 +93,41 @@ export default function Engineering() {
                     </GunContainer>
 
                     <BackButton onClick={() => setEngineering(prev => ({ ...prev, gunModal: false }))} />
+                </Modal>
+            }
+
+            {engineering.ammoModal.visible &&
+                <Modal>
+                    <div
+                        onClick={() => engineering.ammoModal.purchaseAmmo}
+                        className={styles["ammo-modal"]}
+                    >
+                        <h3>Buy Ammo</h3>
+                        
+                        <Gun
+                            spritePos={selectedGun.spritePos}
+                        />
+
+                        <div className={styles.ammo}>
+                            {`${selectedGun.ammo}/${selectedGun.maxAmmo}`}
+                        </div>
+                        <div className={styles["ammo-gained"]}>
+                            +{selectedGun.maxAmmo - selectedGun.ammo}
+                        </div>
+
+                        <ButtonContainer>
+                            <PrimaryButton onClick={engineering.ammoModal.purchaseAmmo}>
+                                Yes
+                            </PrimaryButton>
+
+                            <PrimaryButton 
+                                onClick={() => setEngineering(prev => ({ ...prev, ammoModal: { visible: false, selectedGun: null } }))} 
+                            >
+                                No
+                            </PrimaryButton>
+                        </ButtonContainer>
+                    </div>
+
                 </Modal>
             }
 

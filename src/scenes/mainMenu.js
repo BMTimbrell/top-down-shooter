@@ -19,7 +19,6 @@ import makePlayer from '../entities/player';
 import makeGameState from '../makeGameState';
 import { makeBookReadButton, makeGamePlayButton } from '../utils/productOnClick';
 import { BOOKS } from '../constants';
-import holorange from './holorange';
 
 export default function mainMenu(k) {
     k.scene("main menu", ({ player, gameState }) => {

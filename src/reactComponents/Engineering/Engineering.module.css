@@ -30,3 +30,17 @@
     font-size: 1.125rem;
     margin-bottom: 0.75em;
 }
+
+.ammo-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 0.5rem;
+}
+
+.ammo-gained {
+    font-size: 0.75rem;
+    color: rgb(0, 255, 0);
+    margin-bottom: 1rem;
+}
