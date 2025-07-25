@@ -187,7 +187,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
             guns: player.guns,
             gunIndex: player.gunIndex,
             abilities: player.abilities,
-            exp: { 
+            exp: {
                 mind: player.mind,
                 body: player.body,
                 weapon: player.weapon
@@ -363,6 +363,23 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
 
     player.on("heal", () => {
         store.set(gameInfoAtom, prev => ({ ...prev, health: player.hp() }));
+
+        if (player.onMission) {
+            const healEffect = k.add([
+                k.pos(player.pos),
+                k.sprite("healing", { anim: "heal" }),
+                k.scale(4),
+                k.anchor("center")
+            ]);
+
+            healEffect.onAnimEnd(anim => {
+                if (anim === "heal") k.destroy(healEffect);
+            });
+
+            healEffect.onUpdate(() => {
+                healEffect.pos = player.pos
+            });
+        }
     });
 
     player.onAnimEnd(anim => {

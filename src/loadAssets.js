@@ -617,6 +617,14 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("healing", "./sprites/healing.png", {
+        sliceX: 7,
+        sliceY: 1,
+        anims: {
+            "heal": { from: 0, to: 6, loop: false, speed: 10 }
+        }
+    });
+
     k.loadSprite("falling boulder", "./sprites/boulder.png", {
         sliceX: 19,
         sliceY: 1,
