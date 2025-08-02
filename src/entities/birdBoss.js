@@ -35,6 +35,8 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
             damage: 1,
             shootOffset: { x: 0, y: 0 },
             hasSight: false,
+            minRange: 100,
+            maxRange: 500,
             losTimer: 0.2,
             phase: 1
         }

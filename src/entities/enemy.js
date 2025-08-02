@@ -7,14 +7,14 @@ import makeCoin from './coin';
 import { GUNS, ENEMIES, ENEMY_FACTORIES } from "../constants";
 import makeHeart from './heart';
 
-export default function makeEnemy(k, name, { pos, roomId }) {
+export default function makeEnemy(k, name, { pos, roomId, maxRange = 500, minRange = 100 }) {
     const enemyData = ENEMIES[name];
-    const hitbox = enemyData.hitbox ?? { x: 0, y: 0, width: 20, height: 20 };
+    const hitbox = enemyData?.hitbox ?? { x: 0, y: 0, width: 20, height: 20 };
 
     const enemy = k.add([
         k.sprite(name, { anim: "walk" }),
         k.scale(4),
-        k.anchor("center"),
+        k.anchor(k.vec2(hitbox.x / 2, hitbox.y / 2)),
         k.area({
             shape: new k.Rect(k.vec2(hitbox.x, hitbox.y), hitbox.width, hitbox.height),
             collisionIgnore: ["enemy"]
@@ -35,12 +35,14 @@ export default function makeEnemy(k, name, { pos, roomId }) {
             dead: false,
             roomId,
             pathTimer: 0,
-            shootDistance: k.randi(100, 500),
+            shootDistance: k.randi(minRange, maxRange),
             shootCd: 0.5,
             damage: enemyData.damage,
             shootOffset: enemyData.shootOffset ?? { x: 0, y: 0 },
             hasSight: false,
-            losTimer: 0.2
+            losTimer: 0.2,
+            maxRange,
+            minRange
         }
     ]);
 
@@ -201,7 +203,7 @@ export function makeEnemyPath(k, enemy) {
     ) {
         enemy.path = enemy.pf.findPath(enemy.path?.length ? enemy.path[0] : enemy.pos, player.pos);
         enemy.pathTimer = k.rand(0.5, 1.5);
-        enemy.shootDistance = k.randi(100, 500);
+        enemy.shootDistance = k.randi(enemy.minRange, enemy.maxRange);
 
         // k.add([
         //     k.pos(0, 0),

@@ -49,7 +49,7 @@ export default function makeWisp(k, name, { pos, roomId }) {
                 wisp.shooting = false;
             } else if (wisp.shootCd <= 0) {
                 const randomSpread = k.randi(20, -20);
-                shoot(k, wisp, { baseAngle: randomSpread });
+                shoot(k, wisp, { baseAngle: randomSpread, aStep: 60 });
             }
         }
 

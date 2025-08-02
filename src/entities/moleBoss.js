@@ -35,6 +35,8 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
             shootDistance: k.randi(100, 500),
             shootCd: 0.5,
             damage: 1,
+            minRange: 100,
+            maxRange: 500,
             shootOffset: { x: 0, y: 0 },
             boulderTimer: 0,
             boulderInterval: 0.25,

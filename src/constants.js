@@ -5,6 +5,7 @@ import makeWisp from "./entities/wisp";
 import makeBat from "./entities/bat";
 import makeTortoise from "./entities/tortoise";
 import makeMoleBoss from "./entities/moleBoss";
+import makeWolf from "./entities/wolf";
 
 export const PALETTE = {
 
@@ -313,7 +314,7 @@ export const GUNS = {
         maxAmmo: 60,
         pelletCount: 5,
         pelletSpread: 17,
-        pelletSpeedVariation: 480,
+        pelletSpeedVariation: 100,
         projectileLifespan: 0.75,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 480 },
@@ -444,7 +445,16 @@ export const ENEMIES = {
         firingSpeed: 0.25,
         projectileCount: 1,
         shootOffset: { x: 0, y: 40 },
-        hitbox: { x: 0, y: 5, width: 20, height: 15 }
+        hitbox: { x: 0, y: 0.5, width: 20, height: 15 }
+    },
+    bluewisp: {
+        health: 18,
+        speed: 80,
+        damage: 5,
+        firingSpeed: 0.25,
+        projectileCount: 6,
+        shootOffset: { x: 0, y: 40 },
+        hitbox: { x: 0, y: 0.5, width: 20, height: 15 }
     },
     bat: {
         health: 12,
@@ -467,6 +477,27 @@ export const ENEMIES = {
         firingSpeed: 3,
         projectileCount: 1,
     },
+    bluetortoise: {
+        health: 27,
+        speed: 50,
+        damage: 5,
+        firingSpeed: 3,
+        projectileCount: 1,
+    },
+    wolf: {
+        health: 15,
+        speed: 275,
+        damage: 5,
+        firingSpeed: 0.25,
+        projectileCount: 1,
+    },
+    bluewolf: {
+        health: 22.5,
+        speed: 275,
+        damage: 5,
+        firingSpeed: 0.25,
+        projectileCount: 6,
+    }
 };
 
 export const ENEMY_FACTORIES = {
@@ -476,11 +507,15 @@ export const ENEMY_FACTORIES = {
     "mole": makeMole,
     "redmole": makeMole,
     "wisp": makeWisp,
+    "bluewisp": makeWisp,
     "birdboss": makeBirdBoss,
     "bat": makeBat,
     "redbat": makeBat,
     "tortoise": makeTortoise,
-    "moleboss": makeMoleBoss
+    "bluetortoise": makeTortoise,
+    "moleboss": makeMoleBoss,
+    "wolf": makeWolf,
+    "bluewolf": makeWolf
 };
 
 export const DISCOUNT = 0.8;

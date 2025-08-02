@@ -444,6 +444,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSpriteAtlas("./sprites/forest-tileset.png", {
+        "mossyBoulder": {
+            x: 16,
+            y: 32,
+            width: 32,
+            height: 32
+        }
+    });
+
     k.loadSpriteAtlas("./sprites/rocky-tileset.png", {
         "greenPlant": {
             x: 64,
@@ -468,6 +477,15 @@ export default function loadAssets(k) {
             y: 80,
             width: 16,
             height: 16
+        }
+    });
+
+    k.loadSpriteAtlas("./sprites/forest-tileset.png", {
+        "tree": {
+            x: 32,
+            y: 0,
+            width: 32,
+            height: 32
         }
     });
 
@@ -550,6 +568,17 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("bluewisp", "./sprites/blue-wisp.png", {
+        sliceX: 11,
+        sliceY: 4,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 6 },
+            "angry": { from: 11, to: 17, loop: false, speed: 6 },
+            "attack": { from: 22, to: 23, loop: true, speed: 8 },
+            "dying": { from: 33, to: 43, loop: false, speed: 9 }
+        }
+    });
+
     k.loadSprite("birdboss", "./sprites/bird-boss.png", {
         sliceX: 4,
         sliceY: 2,
@@ -598,6 +627,16 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("bluetortoise", "./sprites/blue-tortoise-sheet.png", {
+        sliceX: 6,
+        sliceY: 3,
+        anims: {
+            "walk": { from: 0, to: 1, loop: true, speed: 3 },
+            "hide": { from: 6, to: 10, loop: false, speed: 10 },
+            "dying": { from: 12, to: 17, loop: false, speed: 6 }
+        }
+    });
+
     k.loadSprite("moleboss", "./sprites/mole-boss.png", {
         sliceX: 4,
         sliceY: 4,
@@ -606,6 +645,26 @@ export default function loadAssets(k) {
             "crouch": { from: 4, to: 5, loop: false, speed: 5 },
             "dig": { from: 8, to: 9, loop: true, speed: 7 },
             "dying": { from: 12, to: 15, loop: false, speed: 5 }
+        }
+    });
+
+    k.loadSprite("wolf", "./sprites/wolf-sheet.png", {
+        sliceX: 4,
+        sliceY: 3,
+        anims: {
+            "walk": { from: 0, to: 2, loop: true, speed: 6 },
+            "attack": 8,
+            "dying": { from: 4, to: 7, loop: false, speed: 6 }
+        }
+    });
+
+    k.loadSprite("bluewolf", "./sprites/blue-wolf-sheet.png", {
+        sliceX: 4,
+        sliceY: 3,
+        anims: {
+            "walk": { from: 0, to: 2, loop: true, speed: 6 },
+            "attack": 8,
+            "dying": { from: 4, to: 7, loop: false, speed: 6 }
         }
     });
 
@@ -673,6 +732,7 @@ export default function loadAssets(k) {
     k.loadSprite("gene-lab", "./sprites/gene-lab.png");
     k.loadSprite("level2Ground", "./sprites/level2.png");
     k.loadSprite("level2BossGround", "./sprites/2-boss.png");
+    k.loadSprite("level3Ground", "./sprites/level3.png");
 
     // tiles
     const rockyTiles = [
@@ -805,5 +865,23 @@ export default function loadAssets(k) {
             },
         });
     });
+
+    const forestTiles = [
+        { layer: "walls", index: 5 },
+        { layer: "walls", index: 6 },
+        { layer: "walls", index: 8 }
+    ];
+
+    forestTiles.forEach(({ layer, index }) => {
+        k.loadSprite(`forest-tileset${layer}${index}`, "./sprites/forest-tileset.png", {
+            sliceX: 4,
+            sliceY: 4,
+            anims: {
+                idle: index - 1, // Convert Tiled GID (starting at 1) to 0-based frame index
+            },
+        });
+    });
+
+
 }
 

@@ -74,7 +74,7 @@ export default function makeTortoise(k, name, { pos, roomId }) {
             // shoot(k, tortoise, { pSpeed: 160 });
 
             const playerDir = player.pos.sub(tortoise.pos).unit();
-            const numProjectiles = 4;
+            const numProjectiles = name === "bluetortoise" ? 8 : 4;
             const radius = 10; // Starting circle radius
             const ringSpeed = 2.5; // How fast the center of the ring moves
             const spreadSpeed = 0.5; // How fast the bullets move outward from center

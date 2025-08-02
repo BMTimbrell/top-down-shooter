@@ -16,6 +16,7 @@ import timeTransition from './scenes/timeTransition';
 import holorange from './scenes/holorange';
 import level2 from './scenes/level2';
 import boss2 from './scenes/2-boss';
+import level3 from './scenes/level3';
 import makeGameState from './makeGameState';
 import mainMenu from './scenes/mainMenu';
 
@@ -61,9 +62,11 @@ export default function initGame() {
 
     boss2(k);
 
+    level3(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = makeGameState(k, { player });
 
-    k.go("main menu", { player, gameState });
+    k.go("level3", { player, gameState });
 }

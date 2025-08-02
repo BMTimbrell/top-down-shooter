@@ -8,12 +8,12 @@ import makeFloatingText from '../utils/floatingText';
 export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     const health = saveData ? saveData.health : 4;
     const maxHealth = saveData ? saveData.maxHealth : 4;
-    const speed = saveData ? saveData.speed : 200;
+    const speed = saveData ? saveData.speed : 250;
     const dashDamage = saveData ? saveData.dashDamage : 2.5;
-    const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }];
+    const guns = saveData ? saveData.guns : [{ name: "plasma rifle", ammo: GUNS["plasma rifle"].maxAmmo, ...GUNS["plasma rifle"], clip: GUNS["plasma rifle"].clipSize }];
     const mind = saveData ? saveData.mind : { level: 1, exp: 0, maxExp: 50 };
     const body = saveData ? saveData.body : { level: 1, exp: 0, maxExp: 50 };
-    const weapon = saveData ? saveData.weapon : { level: 1, exp: 0, maxExp: 50 };
+    const weapon = saveData ? saveData.weapon : { level: 3, exp: 0, maxExp: 50 };
     const books = saveData ? saveData.books : [];
     const electronics = saveData ? saveData.electronics : [];
     const improvedWorkouts = saveData ? saveData.improvedWorkouts : false;
@@ -524,8 +524,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
         toSpawn.forEach(e => {
             const factory = ENEMY_FACTORIES[e.name] || ENEMY_FACTORIES["default"];
             factory(k, e.name, { pos: e.pos, roomId: e.roomId })
-        }
-        );
+        });
 
         // Remove them from the pending list so they don't respawn
         gameState.pendingSpawns = gameState.pendingSpawns.filter(e => e.roomId !== roomId);
