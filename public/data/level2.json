@@ -2218,7 +2218,7 @@
                         {
                          "name":"rooms",
                          "type":"string",
-                         "value":"2-6,2-8"
+                         "value":"2-6"
                         }],
                  "rotation":0,
                  "type":"",
