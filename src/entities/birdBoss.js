@@ -54,6 +54,8 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
         k.scale(4),
         k.rect(boss.area.shape.width, 5),
         k.color(k.rgb(0, 202, 0)),
+        "healthBar",
+        k.z(999999999999),
         {
             updateFill(current, max) {
                 this.width = boss.area.shape.width * (current / max);

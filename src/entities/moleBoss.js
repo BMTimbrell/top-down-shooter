@@ -34,7 +34,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
             attack1Count: 0,
             shootDistance: k.randi(100, 500),
             shootCd: 0.5,
-            damage: 1,
+            damage: 5,
             minRange: 100,
             maxRange: 500,
             shootOffset: { x: 0, y: 0 },
@@ -75,6 +75,8 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
         k.scale(4),
         k.rect(boss.area.shape.width, 5),
         k.color(k.rgb(0, 202, 0)),
+        "healthBar",
+        k.z(999999999999),
         {
             updateFill(current, max) {
                 this.width = boss.area.shape.width * (current / max);
@@ -128,6 +130,8 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
     boss.onAnimEnd(anim => {
         if (anim === "dying") {
             k.destroy(boss);
+
+            k.get("gameState")[0].nextLevel = "level3";
 
             store.set(victoryScreenAtom, prev => ({
                 ...prev,
@@ -304,7 +308,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
                     for (let r = 1; r <= numRings; r++) {
                         const ringAngle = ringSpacing * r;
 
-                        const dir = boss.pos.add(k.Vec2.fromAngle(ringAngle)).sub(boss.pos).unit();
+                        const dir = k.Vec2.fromAngle(ringAngle);
                         const centerVelocity = dir.scale(ringSpeed);
 
                         for (let i = 0; i < numProjectiles; i++) {

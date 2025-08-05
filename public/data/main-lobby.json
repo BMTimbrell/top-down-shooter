@@ -492,11 +492,6 @@
                          "name":"name",
                          "type":"string",
                          "value":"door"
-                        }, 
-                        {
-                         "name":"scene",
-                         "type":"string",
-                         "value":"level2"
                         }],
                  "rotation":0,
                  "type":"door",

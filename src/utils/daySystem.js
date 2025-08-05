@@ -44,7 +44,8 @@ export function spendTime(gameState, player) {
                 robot: gameState.robot,
                 day: gameState.day,
                 time: gameState.time,
-                events: gameState.events
+                events: gameState.events,
+                nextLevel: gameState.nextLevel
             },
             gameInfo: store.get(gameInfoAtom),
             shop: store.get(shopAtom),

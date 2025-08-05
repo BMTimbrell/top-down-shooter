@@ -1,4 +1,3 @@
-import { infoBoxAtom, store } from '../store';
 import {
     makeMap,
     spawnObjects,
@@ -9,15 +8,13 @@ import {
     orderByY
 } from '../utils/map';
 
-export default function level3(k) {
-    k.scene("level3", async ({ player, gameState }) => {
-
+export default function boss2(k) {
+    k.scene("3-boss", async ({ player, gameState }) => {
         player.setOnMission(true);
-
-        const roomData = await (await fetch("../data/level3.json")).json();
+        const roomData = await (await fetch("../data/3-boss.json")).json();
         const layers = roomData.layers;
 
-        const map = makeMap(k, "level3", { gameState, spriteName: "level3Ground" });
+        const map = makeMap(k, "3-boss", { gameState, spriteName: "level3BossGround" });
 
         for (const layer of layers) {
             if (layer.name === "boundaries") {
@@ -52,6 +49,5 @@ export default function level3(k) {
 
         // draw in order of y coordinate
         orderByY(k);
-
     });
 }

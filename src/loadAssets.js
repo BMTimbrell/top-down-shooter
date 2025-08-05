@@ -370,6 +370,16 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("woolProjectile", "./sprites/wool-projectile.png", {
+        sliceX: 1,
+        slicey: 1,
+        anims: {
+            "idle": 0
+        }
+    });
+
+    k.loadSprite("wool", "./sprites/wool.png");
+
     k.loadSprite("crosshair", "./sprites/crosshairs.png", {
         sliceX: 12,
         sliceY: 1,
@@ -668,6 +678,33 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("sheepboss", "./sprites/sheep-boss.png", {
+        sliceX: 5,
+        sliceY: 6,
+        anims: {
+            "walk": { from: 0, to: 1, loop: true, speed: 6 }
+        }
+    });
+
+    k.loadSprite("sheepbossDamaged", "./sprites/sheep-boss.png", {
+        sliceX: 5,
+        sliceY: 6,
+        anims: {
+            "walk": { from: 5, to: 6, loop: true, speed: 6 },
+            "remove clothes": { from: 10, to: 14, loop: false, speed: 6 }
+        }
+    });
+
+    k.loadSprite("wolfBoss", "./sprites/sheep-boss.png", {
+        sliceX: 5,
+        sliceY: 6,
+        anims: {
+            "idle": { from: 15, to: 16, loop: true, speed: 3 },
+            "run": { from: 20, to: 21, loop: true, speed: 6 },
+            "dying": { from: 25, to: 28, loop: false, speed: 6 }
+        }
+    });
+
     k.loadSprite("warning", "./sprites/warning.png", {
         sliceX: 1,
         sliceY: 1,
@@ -733,6 +770,7 @@ export default function loadAssets(k) {
     k.loadSprite("level2Ground", "./sprites/level2.png");
     k.loadSprite("level2BossGround", "./sprites/2-boss.png");
     k.loadSprite("level3Ground", "./sprites/level3.png");
+    k.loadSprite("level3BossGround", "./sprites/3-boss.png");
 
     // tiles
     const rockyTiles = [
@@ -866,21 +904,22 @@ export default function loadAssets(k) {
         });
     });
 
-    const forestTiles = [
-        { layer: "walls", index: 5 },
-        { layer: "walls", index: 6 },
-        { layer: "walls", index: 8 }
-    ];
+    // const forestTiles = [
+    //     { layer: "walls", index: 3 },
+    //     { layer: "walls", index: 4 },
+    //     { layer: "walls", index: 7 },
+    //     { layer: "walls", index: 8 }
+    // ];
 
-    forestTiles.forEach(({ layer, index }) => {
-        k.loadSprite(`forest-tileset${layer}${index}`, "./sprites/forest-tileset.png", {
-            sliceX: 4,
-            sliceY: 4,
-            anims: {
-                idle: index - 1, // Convert Tiled GID (starting at 1) to 0-based frame index
-            },
-        });
-    });
+    // forestTiles.forEach(({ layer, index }) => {
+    //     k.loadSprite(`forest-tileset${layer}${index}`, "./sprites/forest-tileset.png", {
+    //         sliceX: 4,
+    //         sliceY: 4,
+    //         anims: {
+    //             idle: index - 1, // Convert Tiled GID (starting at 1) to 0-based frame index
+    //         },
+    //     });
+    // });
 
 
 }

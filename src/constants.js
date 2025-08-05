@@ -6,6 +6,7 @@ import makeBat from "./entities/bat";
 import makeTortoise from "./entities/tortoise";
 import makeMoleBoss from "./entities/moleBoss";
 import makeWolf from "./entities/wolf";
+import makeWolfBoss from "./entities/wolfBoss";
 
 export const PALETTE = {
 
@@ -515,7 +516,8 @@ export const ENEMY_FACTORIES = {
     "bluetortoise": makeTortoise,
     "moleboss": makeMoleBoss,
     "wolf": makeWolf,
-    "bluewolf": makeWolf
+    "bluewolf": makeWolf,
+    "wolfboss": makeWolfBoss
 };
 
 export const DISCOUNT = 0.8;

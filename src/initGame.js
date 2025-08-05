@@ -19,6 +19,7 @@ import boss2 from './scenes/2-boss';
 import level3 from './scenes/level3';
 import makeGameState from './makeGameState';
 import mainMenu from './scenes/mainMenu';
+import boss3 from './scenes/3-boss';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -64,9 +65,11 @@ export default function initGame() {
 
     level3(k);
 
+    boss3(k);
+
     const player = makePlayer(k, k.vec2(0));
 
     const gameState = makeGameState(k, { player });
 
-    k.go("level3", { player, gameState });
+    k.go("level1", { player, gameState });
 }

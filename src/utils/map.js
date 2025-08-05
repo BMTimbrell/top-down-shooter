@@ -49,7 +49,7 @@ export function spawnObjects(
     {
         layers,
         player,
-        tileset,
+        tileset = null,
         gameState = null,
         prevRoom = null
     }
@@ -65,7 +65,7 @@ export function spawnObjects(
 
     for (const layer of layers) {
         // draw all tiles
-        if (layer.name !== "Ground" && layer?.data) {
+        if (layer.name !== "Ground" && layer?.data && tileset) {
             layer.data.forEach((e, index) => {
                 if (e === 0) return;
                 const spriteName = tileset + layer.name + e;
@@ -296,7 +296,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
                             return;
                         }
 
-                        const scene = entity.properties.find(e => e.name === "scene").value;
+                        const scene = entity.name === "check exit" ? gameState.nextLevel : entity.properties.find(e => e.name === "scene").value;
                         gameState.reinforcements = [];
                         gameState.pendingSpawns = [];
 
@@ -329,7 +329,7 @@ export function makeObjectInteractions(k, map, { layer, player, gameState }) {
 }
 
 export function orderByY(k) {
-    const exclude = ["Ground", "crosshair", "text", "explosion"];
+    const exclude = ["Ground", "crosshair", "text", "explosion", "healthBar"];
 
     k.onUpdate(() => {
         k.get('*').filter(e => !exclude.some(e2 => e.is(e2)) && Object.hasOwn(e, "pos")).

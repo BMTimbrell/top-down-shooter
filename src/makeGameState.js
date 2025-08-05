@@ -19,6 +19,7 @@ export default function makeGameState(k, { saveData = null, player }) {
             desk: true
         }
     };
+    const nextLevel = saveData ? saveData.nextLevel : "level2";
 
     const shop = saveData ? saveData.shop : {
         books: BOOKS.map(book => {
@@ -45,7 +46,8 @@ export default function makeGameState(k, { saveData = null, player }) {
             pendingSpawns: [],
             debugTimer: 3,
             shop,
-            robot
+            robot,
+            nextLevel
         }
     ]);
 

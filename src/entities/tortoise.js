@@ -62,16 +62,6 @@ export default function makeTortoise(k, name, { pos, roomId }) {
 
         /*  shooting  */
         if (tortoise.shootCd <= 0 && tortoise.hasSight) {
-            // shoot(k, tortoise);
-
-            // const playerPos = player.pos.clone();
-
-
-            // shoot(k, tortoise, { target: playerPos.add(k.vec2(0, 50)), pSpeed: 180 });
-            // shoot(k, tortoise, { target: playerPos.add(k.vec2(0, -50)), pSpeed: 180 });
-
-
-            // shoot(k, tortoise, { pSpeed: 160 });
 
             const playerDir = player.pos.sub(tortoise.pos).unit();
             const numProjectiles = name === "bluetortoise" ? 8 : 4;
@@ -79,7 +69,6 @@ export default function makeTortoise(k, name, { pos, roomId }) {
             const ringSpeed = 2.5; // How fast the center of the ring moves
             const spreadSpeed = 0.5; // How fast the bullets move outward from center
 
-            const ringCenter = tortoise.pos.clone();
             const centerVelocity = playerDir.scale(ringSpeed);
 
             for (let i = 0; i < numProjectiles; i++) {
@@ -92,6 +81,35 @@ export default function makeTortoise(k, name, { pos, roomId }) {
                     velocity: bulletVelocity
                 });
             }
+
+            // const patternPoints = [];
+
+            // // Eyes
+            // patternPoints.push(k.vec2(-5, -5)); // Left eye
+            // patternPoints.push(k.vec2(5, -5));  // Right eye
+
+            // // Mouth (a semi-circle of points)
+            // const mouthRadius = 6;
+            // const mouthPoints = 6; // More points = smoother arc
+
+            // for (let i = 0; i < mouthPoints; i++) {
+            //     const angle = Math.PI * (i / (mouthPoints - 1)); // 0 to PI
+            //     const x = Math.cos(angle) * mouthRadius;
+            //     const y = Math.sin(angle) * mouthRadius + 4; // Shift downward
+            //     patternPoints.push(k.vec2(x, y));
+            // }
+
+            // const playerDir = player.pos.sub(tortoise.pos).unit();
+            // const centerVelocity = playerDir.scale(2.5);
+            // const spreadSpeed = 0.5;
+
+            // for (const offset of patternPoints) {
+            //     const bulletVelocity = centerVelocity.add(offset.unit().scale(spreadSpeed));
+
+            //     shoot(k, tortoise, {
+            //         velocity: bulletVelocity,
+            //     });
+            // }
 
         }
 
