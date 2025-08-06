@@ -705,6 +705,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("floatingrock", "./sprites/floatingRock.png", {
+        sliceX: 7,
+        sliceY: 2,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 6 },
+            "dying": { from: 7, to: 13, loop: false, speed: 10 }
+        }
+    });
+
     k.loadSprite("warning", "./sprites/warning.png", {
         sliceX: 1,
         sliceY: 1,
@@ -771,6 +780,7 @@ export default function loadAssets(k) {
     k.loadSprite("level2BossGround", "./sprites/2-boss.png");
     k.loadSprite("level3Ground", "./sprites/level3.png");
     k.loadSprite("level3BossGround", "./sprites/3-boss.png");
+    k.loadSprite("level4Ground", "./sprites/level4.png");
 
     // tiles
     const rockyTiles = [

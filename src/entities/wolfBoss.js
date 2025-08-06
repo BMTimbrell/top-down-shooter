@@ -115,6 +115,8 @@ export default function makeWolfBoss(k, name, { pos, roomId }) {
         if (anim === "dying") {
             k.destroy(boss);
 
+            k.get("gameState")[0].nextLevel = "level4";
+
             store.set(victoryScreenAtom, prev => ({
                 ...prev,
                 visible: true,

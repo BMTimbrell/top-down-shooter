@@ -157,7 +157,7 @@ export default function makeEnemy(k, name, { pos, roomId, maxRange = 500, minRan
     return enemy;
 }
 
-export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0, target = null, velocity = null, type = "default" } = {}) {
+export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0, target = null, velocity = null, type = "default", pos = null } = {}) {
     const enemyData = ENEMIES[enemy.name];
 
     const projectileCount = pCount ?? enemyData?.projectileCount ?? 1;
@@ -171,7 +171,7 @@ export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0, target = nu
         const angle = baseAngle + offset;
 
         makeProjectile(k, {
-            pos: enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)),
+            pos: pos ? pos : enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)),
             damage: enemy.damage,
             projectileSpeed: 200
         }, {

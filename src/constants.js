@@ -7,6 +7,7 @@ import makeTortoise from "./entities/tortoise";
 import makeMoleBoss from "./entities/moleBoss";
 import makeWolf from "./entities/wolf";
 import makeWolfBoss from "./entities/wolfBoss";
+import makeFloatingRock from "./entities/floatingRock";
 
 export const PALETTE = {
 
@@ -498,6 +499,13 @@ export const ENEMIES = {
         damage: 5,
         firingSpeed: 0.25,
         projectileCount: 6,
+    },
+    floatingrock: {
+        health: 30,
+        speed: 80,
+        damage: 5,
+        firingSpeed: 2.5,
+        projectileCount: 1
     }
 };
 
@@ -517,7 +525,8 @@ export const ENEMY_FACTORIES = {
     "moleboss": makeMoleBoss,
     "wolf": makeWolf,
     "bluewolf": makeWolf,
-    "wolfboss": makeWolfBoss
+    "wolfboss": makeWolfBoss,
+    "floatingrock": makeFloatingRock
 };
 
 export const DISCOUNT = 0.8;
