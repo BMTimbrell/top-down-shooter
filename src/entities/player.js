@@ -10,8 +10,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     const maxHealth = saveData ? saveData.maxHealth : 4;
     const speed = saveData ? saveData.speed : 200;
     const dashDamage = saveData ? saveData.dashDamage : 2.5;
-    const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }
-    ];
+    const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }];
     const mind = saveData ? saveData.mind : { level: 1, exp: 0, maxExp: 50 };
     const body = saveData ? saveData.body : { level: 1, exp: 0, maxExp: 50 };
     const weapon = saveData ? saveData.weapon : { level: 1, exp: 0, maxExp: 50 };
