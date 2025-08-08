@@ -10,7 +10,8 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     const maxHealth = saveData ? saveData.maxHealth : 4;
     const speed = saveData ? saveData.speed : 200;
     const dashDamage = saveData ? saveData.dashDamage : 2.5;
-    const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }];
+    const guns = saveData ? saveData.guns : [{ name: "pistol", ammo: GUNS.pistol.maxAmmo, ...GUNS.pistol, clip: GUNS.pistol.clipSize }
+    ];
     const mind = saveData ? saveData.mind : { level: 1, exp: 0, maxExp: 50 };
     const body = saveData ? saveData.body : { level: 1, exp: 0, maxExp: 50 };
     const weapon = saveData ? saveData.weapon : { level: 1, exp: 0, maxExp: 50 };
@@ -46,7 +47,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
             cooldown: 1,
             baseCooldown: 1,
             rechargeRate: 0.001,
-            key: "control",
+            key: "shift",
             imgSrc: "sprites/clock-icon.png"
         }
     ];
@@ -349,7 +350,7 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     player.on("hurt", async () => {
         store.set(gameInfoAtom, prev => ({ ...prev, health: player.hp() }));
 
-        const maxFlickers = 20;
+        const maxFlickers = 35;
         const interval = 0.05;
         player.invincible = true;
 

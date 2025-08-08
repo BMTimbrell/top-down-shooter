@@ -144,6 +144,7 @@ export default function makeBirdBoss(k, name, { pos, roomId }) {
                     k.sprite("warning", { anim: "idle" }),
                     k.scale(4),
                     "warning",
+                    "pausable",
                     k.timer()
                 ]);
 

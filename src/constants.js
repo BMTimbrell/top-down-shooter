@@ -8,6 +8,7 @@ import makeMoleBoss from "./entities/moleBoss";
 import makeWolf from "./entities/wolf";
 import makeWolfBoss from "./entities/wolfBoss";
 import makeFloatingRock from "./entities/floatingRock";
+import makeFloatingRockBoss from "./entities/floatingRockBoss";
 
 export const PALETTE = {
 
@@ -64,7 +65,7 @@ export const GUNS = {
         pelletCount: 5,
         pelletSpread: 17,
         pelletSpeedVariation: 100,
-        projectileLifespan: 0.75,
+        projectileLifespan: 0.6,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 1728 },
         offset: { x: 0, y: 5 },
@@ -182,7 +183,7 @@ export const GUNS = {
         pelletCount: 5,
         pelletSpread: 17,
         pelletSpeedVariation: 100,
-        projectileLifespan: 0.75,
+        projectileLifespan: 0.6,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 1248 },
         offset: { x: 0, y: 5 },
@@ -243,7 +244,7 @@ export const GUNS = {
 
     "laser sword": {
         projectile: "blaster",
-        damage: 12,
+        damage: 14,
         firingInterval: 0.35,
         animSpeed: 10,
         clipSize: 50,
@@ -317,7 +318,7 @@ export const GUNS = {
         pelletCount: 5,
         pelletSpread: 17,
         pelletSpeedVariation: 100,
-        projectileLifespan: 0.75,
+        projectileLifespan: 0.6,
         projectileSpeed: 700,
         spritePos: { x: 0, y: 480 },
         offset: { x: 0, y: 5 },
@@ -526,7 +527,8 @@ export const ENEMY_FACTORIES = {
     "wolf": makeWolf,
     "bluewolf": makeWolf,
     "wolfboss": makeWolfBoss,
-    "floatingrock": makeFloatingRock
+    "floatingrock": makeFloatingRock,
+    "floatingrockboss": makeFloatingRockBoss
 };
 
 export const DISCOUNT = 0.8;

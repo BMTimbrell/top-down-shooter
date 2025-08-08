@@ -1,8 +1,9 @@
 import { useFlash } from "../utils/shader";
 import PathfindingManager from "../utils/PathfindingManager";
-import { ENEMY_FACTORIES, CELL_SIZE } from "../constants";
+import { ENEMY_FACTORIES } from "../constants";
 import { shoot, makeEnemyPath, checkTimeFrozen } from "./enemy";
 import { store, victoryScreenAtom, gameInfoAtom } from "../store";
+import makeProjectile from "./projectile";
 
 export default function makeWolfBoss(k, name, { pos, roomId }) {
     const boss = k.add([
@@ -194,6 +195,7 @@ export default function makeWolfBoss(k, name, { pos, roomId }) {
                     k.sprite("warning", { anim: "idle" }),
                     k.scale(4),
                     "warning",
+                    "pausable",
                     k.timer()
                 ]);
 
@@ -249,7 +251,28 @@ export default function makeWolfBoss(k, name, { pos, roomId }) {
         });
 
         wool.on("death", () => {
-            shoot(k, wool, { pCount: 8, aStep: 45, type: "woolProjectile", baseAngle: 22.5 });
+            const projectileCount = 8;
+            const angleStep = 45;
+            const totalSpread = (projectileCount - 1) * angleStep;
+            const baseAngle = 22.5;
+
+            for (let i = 0; i < projectileCount; i++) {
+                const offset = -totalSpread / 2 + i * angleStep;
+                const angle = baseAngle + offset;
+
+                makeProjectile(k, {
+                    pos: wool.pos,
+                    damage: 5,
+                    projectileSpeed: 200
+                }, {
+                    name: "woolProjectile",
+                    spread: angle,
+                    friendly: false,
+                    lifespan: 5
+                });
+
+            }
+
             k.destroy(wool);
         });
 

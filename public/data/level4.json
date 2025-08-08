@@ -2025,6 +2025,29 @@
                  "width":0,
                  "x":416,
                  "y":240
+                }, 
+                {
+                 "height":0,
+                 "id":107,
+                 "name":"enemyFloatingRock reinforcement",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"room",
+                         "type":"string",
+                         "value":"4-4"
+                        }, 
+                        {
+                         "name":"spawned",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":336,
+                 "y":608
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2132,12 +2155,12 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":107,
+ "nextobjectid":108,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

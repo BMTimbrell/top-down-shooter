@@ -380,6 +380,8 @@ export default function loadAssets(k) {
 
     k.loadSprite("wool", "./sprites/wool.png");
 
+    k.loadSprite("sunProjectile", "./sprites/sunProjectile.png");
+
     k.loadSprite("crosshair", "./sprites/crosshairs.png", {
         sliceX: 12,
         sliceY: 1,
@@ -714,6 +716,15 @@ export default function loadAssets(k) {
         }
     });
 
+    k.loadSprite("floatingrockboss", "./sprites/floatingRock-boss.png", {
+        sliceX: 6,
+        sliceY: 2,
+        anims: {
+            "walk": { from: 0, to: 3, loop: true, speed: 6 },
+            "dying": { from: 6, to: 11, loop: false, speed: 10 }
+        }
+    });
+
     k.loadSprite("warning", "./sprites/warning.png", {
         sliceX: 1,
         sliceY: 1,
@@ -736,6 +747,15 @@ export default function loadAssets(k) {
         anims: {
             "idle": 0,
             "fall":  { from: 0, to: 18, loop: false, speed: 50 }
+        }
+    });
+
+    k.loadSprite("purple orb", "./sprites/purple-orb.png", {
+        sliceX: 13,
+        sliceY: 2,
+        anims: {
+            "rise": { from: 0, to: 10, loop: false, speed: 15 },
+            "fall":  { from: 13, to: 25, loop: false, speed: 15 }
         }
     });
 
@@ -781,6 +801,7 @@ export default function loadAssets(k) {
     k.loadSprite("level3Ground", "./sprites/level3.png");
     k.loadSprite("level3BossGround", "./sprites/3-boss.png");
     k.loadSprite("level4Ground", "./sprites/level4.png");
+    k.loadSprite("level4BossGround", "./sprites/4-boss.png");
 
     // tiles
     const rockyTiles = [

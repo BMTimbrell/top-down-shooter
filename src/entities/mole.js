@@ -17,7 +17,8 @@ export default function makeMole(k, name, { pos, roomId }) {
         k.anchor("center"),
         k.scale(6),
         k.z(99999),
-        "dirtPuff"
+        "dirtPuff",
+        "pausable"
     ]);
 
     mole.use(k.timer());

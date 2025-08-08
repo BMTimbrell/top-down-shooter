@@ -33,7 +33,7 @@ export default function makeFloatingRock(k, name, { pos, roomId }) {
 
             // Mouth (a semi-circle of points)
             const mouthRadius = 6;
-            const mouthPoints = 6; // More points = smoother arc
+            const mouthPoints = 6;
 
             for (let i = 0; i < mouthPoints; i++) {
                 const t = i / (mouthPoints - 1); // 0 to 1

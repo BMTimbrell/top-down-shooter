@@ -54,7 +54,8 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
         k.anchor("center"),
         k.scale(6),
         k.z(99999),
-        "dirtPuff"
+        "dirtPuff",
+        "pausable"
     ]);
 
     boss.use(k.timer());
@@ -192,6 +193,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
                     k.sprite("warning", { anim: "idle" }),
                     k.scale(4),
                     "warning",
+                    "pausable",
                     k.timer()
                 ]);
 
@@ -238,7 +240,12 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
     }
 
     boss.onUpdate(() => {
-        if (checkTimeFrozen(k, boss)) return;
+        if (checkTimeFrozen(k, boss)) {
+            k.get("fallingBoulder").forEach(b => {
+                b.paused = true;
+            });
+            return;
+        }
 
         if (boss.dead) {
             k.destroy(healthBar);
@@ -348,7 +355,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
                 const playerVel = player.pos.sub(oldPlayerPos).scale(1 / k.dt()).scale(boss.boulderInterval + 0.5);
                 const playerPos = k.get("player")[0].pos.add(playerVel);
                 oldPlayerPos = k.get("player")[0].pos;
-                const boulderPos = { 
+                const boulderPos = {
                     x: hitPlayer ? playerPos.x : k.randi(room.pos.x + CELL_SIZE, room.pos.x + room.area.shape.width - CELL_SIZE),
                     y: hitPlayer ? playerPos.y : k.randi(room.pos.y + CELL_SIZE, room.pos.y + room.area.shape.height - CELL_SIZE)
                 }
@@ -360,6 +367,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
                         k.area({
                             shape: new k.Rect(k.vec2(0, 15), 20, 20)
                         }),
+                        "fallingBoulder",
                         "pausable",
                         k.anchor("center"),
                         k.pos(k.vec2(boulderPos.x, boulderPos.y).add(k.vec2(0, -15).scale(4))),
@@ -370,8 +378,8 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
                         const player = k.get("player")[0];
 
                         if (
-                            boulder.animFrame > 16 && 
-                            !player.invincible && 
+                            boulder.animFrame > 16 &&
+                            !player.invincible &&
                             !k.get("force field")?.length &&
                             !player.dashing
                         ) {

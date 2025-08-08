@@ -121,6 +121,7 @@ export default function makeEnemy(k, name, { pos, roomId, maxRange = 500, minRan
                             k.sprite("warning", { anim: "idle" }),
                             k.scale(4),
                             "warning",
+                            "pausable",
                             k.timer()
                         ]);
 
@@ -157,25 +158,35 @@ export default function makeEnemy(k, name, { pos, roomId, maxRange = 500, minRan
     return enemy;
 }
 
-export function shoot(k, enemy, { pCount, aStep = 15, baseAngle = 0, target = null, velocity = null, type = "default", pos = null } = {}) {
+export function shoot(
+    k, 
+    enemy, 
+    { 
+        pCount, 
+        aStep = 15, 
+        baseAngle = 0, 
+        target = null, 
+        velocity = null, 
+        pos = null,
+        pSpeed = 200
+    } = {}
+) {
     const enemyData = ENEMIES[enemy.name];
 
     const projectileCount = pCount ?? enemyData?.projectileCount ?? 1;
 
-    const angleStep = aStep;
-
-    const totalSpread = (projectileCount - 1) * angleStep;
+    const totalSpread = (projectileCount - 1) * aStep;
  
     for (let i = 0; i < projectileCount; i++) {
-        const offset = -totalSpread / 2 + i * angleStep;
+        const offset = -totalSpread / 2 + i * aStep;
         const angle = baseAngle + offset;
 
         makeProjectile(k, {
             pos: pos ? pos : enemy.pos.add(k.vec2(enemy.shootOffset.x, enemy.shootOffset.y)),
             damage: enemy.damage,
-            projectileSpeed: 200
+            projectileSpeed: pSpeed
         }, {
-            name: type === "default" ? "enemyProjectile" : type,
+            name: "enemyProjectile",
             spread: angle,
             friendly: false,
             lifespan: 5,
