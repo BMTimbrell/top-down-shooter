@@ -45,44 +45,44 @@ export default function psiLab(k) {
                 level: skill.level,
                 button: {
                     onClick: () => {
-                            store.set(psiLabAtom, prev => ({
-                                ...prev,
-                                visible: false
-                            }));
+                        store.set(psiLabAtom, prev => ({
+                            ...prev,
+                            visible: false
+                        }));
 
-                            k.go("timeTransition", {
-                                player,
-                                gameState,
-                                event: {
-                                    text: [
-                                        `You learned ${skill.name}.`
-                                    ],
-                                    action: () => {
-                                        if (skill.name === "Stronger Psi Beam") {
-                                            player.passives["Stronger Psi Beam"] = true;
-                                        } else {
-                                            player.abilities.find(a => a.name === skill.name).active = true;
-                                            store.set(psiLabAtom, prev => ({
-                                                ...prev,
-                                                skills: prev.skills.filter(s => s.name !== skill.name)
-                                            }));
-                                            store.set(playerInfoAtom, prev => ({
-                                                ...prev,
-                                                data: {
-                                                    ...prev.data,
-                                                    abilities: player.abilities.filter(a => a.active)
-                                                }
-                                            }));
-                                        }
+                        k.go("timeTransition", {
+                            player,
+                            gameState,
+                            event: {
+                                text: [
+                                    `You learned ${skill.name}.`
+                                ],
+                                action: () => {
+                                    if (skill.name === "Stronger Psi Beam") {
+                                        player.passives["Stronger Psi Beam"] = true;
+                                    } else {
+                                        player.abilities.find(a => a.name === skill.name).active = true;
+                                        store.set(playerInfoAtom, prev => ({
+                                            ...prev,
+                                            data: {
+                                                ...prev.data,
+                                                abilities: player.abilities.filter(a => a.active)
+                                            }
+                                        }));
                                     }
+                                    store.set(psiLabAtom, prev => ({
+                                        ...prev,
+                                        skills: prev.skills.filter(s => s.name !== skill.name)
+                                    }));
                                 }
-                            });
+                            }
+                        });
 
-                        },
-                        disabled: player.mind.level < skill.level,
-                        name: "Learn",
-                        icon: true
-                    }
+                    },
+                    disabled: player.mind.level < skill.level,
+                    name: "Learn",
+                    icon: true
+                }
             }))
         }));
     });
