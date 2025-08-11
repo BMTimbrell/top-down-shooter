@@ -601,9 +601,7 @@ export const BOOKS = [
             ]
         ],
         exp: null,
-        action(player) {
-            player.improvedWorkouts = true;
-        },
+        actionKey: "improvedWorkouts",
         progress: {
             current: 0, max: 2
         },
@@ -656,9 +654,7 @@ export const BOOKS = [
             ]
         ],
         exp: null,
-        action(player) {
-            player.discount = true;
-        },
+        actionKey: "discount",
         progress: {
             current: 0, max: 2
         },

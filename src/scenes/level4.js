@@ -13,7 +13,7 @@ export default function level4(k) {
 
         player.setOnMission(true);
 
-        const roomData = await (await fetch("../data/level4.json")).json();
+        const roomData = await (await fetch("data/level4.json")).json();
         const layers = roomData.layers;
 
         const map = makeMap(k, "level4", { gameState, spriteName: "level4Ground" });

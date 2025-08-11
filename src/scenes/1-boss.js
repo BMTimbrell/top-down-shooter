@@ -12,7 +12,7 @@ import {
 export default function boss1(k) {
     k.scene("1-boss", async ({ player, gameState }) => {
         player.setOnMission(true);
-        const roomData = await (await fetch("../data/1-boss.json")).json();
+        const roomData = await (await fetch("data/1-boss.json")).json();
         const layers = roomData.layers;
 
         const map = makeMap(k, "1-boss", { gameState, spriteName: "level1BossGround" });

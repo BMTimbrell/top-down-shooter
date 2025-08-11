@@ -69,7 +69,7 @@ export default function timeTransition(k) {
                         }
                     }
 
-                    event?.action && event.action();
+                    event?.action && event.action(player);
 
                     k.wait(0.75, () => {
                         spendTime(gameState, player);

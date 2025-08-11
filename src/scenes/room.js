@@ -17,7 +17,7 @@ import {
 
 export default function room(k) {
     k.scene("room", async ({ player, gameState }) => {
-        const roomData = await (await fetch("./data/room.json")).json();
+        const roomData = await (await fetch("data/room.json")).json();
         const layers = roomData.layers;
 
         const map = makeMap(k, "room", { gameState, spriteName: "room" });

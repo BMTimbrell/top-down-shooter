@@ -9,7 +9,7 @@ import {
 export default function mainLobby(k) {
     k.scene("main lobby", async ({ player, gameState, prevRoom = null }) => {
 
-        const roomData = await (await fetch("./data/main-lobby.json")).json();
+        const roomData = await (await fetch("data/main-lobby.json")).json();
         const layers = roomData.layers;
 
         const map = makeMap(k, "main lobby", { gameState, spriteName: "mainLobby" }); 

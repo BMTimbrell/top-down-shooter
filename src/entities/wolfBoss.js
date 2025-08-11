@@ -147,6 +147,7 @@ export default function makeWolfBoss(k, name, { pos, roomId }) {
             }));
 
             const player = k.get("player")[0];
+            player.abilities.forEach(ability => ability.cooldown = ability.baseCooldown);
 
             player.weapon.exp += 20;
             const playerExp = player.weapon.exp;

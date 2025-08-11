@@ -163,6 +163,7 @@ export default function makeMoleBoss(k, name, { pos, roomId }) {
             }));
 
             const player = k.get("player")[0];
+            player.abilities.forEach(ability => ability.cooldown = ability.baseCooldown);
             player.weapon.exp += 15;
             store.set(
                 gameInfoAtom,

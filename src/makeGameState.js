@@ -24,8 +24,7 @@ export default function makeGameState(k, { saveData = null, player }) {
     const shop = saveData ? saveData.shop : {
         books: BOOKS.map(book => {
             return {
-                ...book,
-                ...(book?.action && { action: () => book.action(player) })
+                ...book
             };
         }),
         electronics: ELECTRONICS

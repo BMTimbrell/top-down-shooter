@@ -3,8 +3,7 @@ import {
     store,
     shopAtom,
     popupAtom,
-    gameInfoAtom,
-    gameMenuAtom
+    gameInfoAtom
 } from '../store';
 
 import { makeBookReadButton, makeGamePlayButton } from '../utils/productOnClick';

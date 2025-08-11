@@ -4,6 +4,11 @@ import {
     gameMenuAtom
 } from '../store';
 
+const actionKeys = {
+    "improvedWorkouts": player => player.improvedWorkouts = true,
+    "discount": player => player.discount = true
+}
+
 export function makeBookReadButton(k, { book, player, gameState }) {
 
     book.button = {
@@ -18,13 +23,14 @@ export function makeBookReadButton(k, { book, player, gameState }) {
 
             let exp = null
             let action = null
-            if (book.progress.current === book.progress.max && !book.action) {
+
+            if (book.progress.current === book.progress.max && !book.actionKey) {
                 exp = {
                     type: Object.keys(book.exp)[0],
                     amount: book.exp[Object.keys(book.exp)[0]]
                 };
             } else if (book.progress.current === book.progress.max) {
-                action = book.action;
+                action = actionKeys[book.actionKey];
             }
             k.go("timeTransition", {
                 player,
