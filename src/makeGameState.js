@@ -55,11 +55,7 @@ export default function makeGameState(k, { saveData = null, player }) {
         const paused = store.get(pauseMenuAtom).visible ||
             store.get(infoBoxAtom).visible ||
             store.get(victoryScreenAtom).visible;
-        // gameState.debugTimer -= k.dt();
-        // if (gameState.debugTimer <= 0) {
-        //     gameState.debugTimer = 3;
-        //     console.log(k.get("*").length);
-        // }
+
         if (k.isKeyPressed("escape")) {
             // set data to show in menu
             if (!paused) {

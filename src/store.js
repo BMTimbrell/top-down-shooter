@@ -27,7 +27,14 @@ export const infoBoxAtom = atom({
 
 export const victoryScreenAtom = atom({
     visible: false,
+    onClick: null,
+    finalMission: false,
     rewards: []
+});
+
+export const gameOverScreenAtom = atom({
+    visible: false,
+    buttons: []
 });
 
 export const promptAtom = atom({

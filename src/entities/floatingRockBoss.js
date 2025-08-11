@@ -118,15 +118,16 @@ export default function makeFloatingRockBoss(k, name, { pos, roomId }) {
             store.set(victoryScreenAtom, prev => ({
                 ...prev,
                 visible: true,
+                finalMission: true,
                 onClick: () => {
                     store.set(victoryScreenAtom, prev => ({
                         ...prev,
                         visible: false
                     }));
 
-                    k.go("main menu", { plaer: k.get("player")[0], gameState: k.get("gameState")[0] });
+                    k.go("main menu", { player: k.get("player")[0], gameState: k.get("gameState")[0] });
                 },
-                rewards: ["1000", "+25 weapon xp"]
+                rewards: ["1000", "+25 weapon xp", "Saving humanity"]
             }));
         }
     });
@@ -238,7 +239,7 @@ export default function makeFloatingRockBoss(k, name, { pos, roomId }) {
                 const pCount = 8;
                 const speed = 3.5;
                 const outerRadius1 = 50;
-                const outerRadius2 = 100
+                const outerRadius2 = 100;
                 const center = sunProjectile.pos;
 
                 for (let i = 0; i < pCount; i++) {

@@ -349,6 +349,10 @@ export default function makePlayer(k, posVec2, { saveData = null } = {}) {
     player.on("hurt", async () => {
         store.set(gameInfoAtom, prev => ({ ...prev, health: player.hp() }));
 
+        if (player.hp() <= 0) {
+            k.go("gameOver", { player, gameState: k.get("gameState")[0] });
+        }
+
         const maxFlickers = 35;
         const interval = 0.05;
         player.invincible = true;

@@ -9,6 +9,7 @@ export default function MainMenu() {
 
     return (
         <div className={styles.container}>
+            <h1>Super Cosmic Earth</h1>
             {buttons.map((button, index) => (
                 <PrimaryButton key={index} disabled={button.disabled} onClick={button.onClick}>
                     {button.name}

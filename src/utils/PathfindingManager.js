@@ -91,23 +91,6 @@ export default class PathfindingManager {
                     }
                 ));
 
-                // if (blocked) {
-                //     k.add([
-                //         k.pos(0, 0),
-                //         {
-                //             draw() {
-                //                 k.drawRect({
-                //                     pos: k.vec2(cell.x, cell.y),
-                //                     width: CELL_SIZE,
-                //                     height: CELL_SIZE,
-                //                     color: k.rgb(255, 0, 0, 0.5)
-                //                 });
-                //             }
-                //         }
-                //     ]);
-        
-                // }
-
                 grid[i][j] = new GridPoint(i, j, !blocked, { cols, rows });
 
             }

@@ -4,7 +4,7 @@ export default function makeKaplayCtx() {
     return kaplay({
         global: false,
         pixelDensity: 2,
-        debug: true, //TODO: set to false in production
+        debug: false,
         canvas: document.getElementById("game")
     });
 }

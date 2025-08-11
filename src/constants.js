@@ -567,11 +567,11 @@ export const BOOKS = [
         text: [
             [
                 "All knowledge starts with sense perception.",
-                "The senses can't make errors as they make no judgement and are just cause and effect."
+                "The senses can't be wrong as they can't be right either. They just percieve what is there and make no judgements."
             ],
             [
-                "We use our minds to integrate data from the senses and form concepts.",
-                "Errors can be made on the conceptual level, so make sure you have no logical fallacies.",
+                "We use our minds to process information we get from our senses and form concepts.",
+                "Concepts allow us to simplify life by reducing the number of units with which we deal.",
                 "You finished the book and gained clarity."
             ]
         ],
@@ -615,7 +615,7 @@ export const BOOKS = [
         }
     },
     {
-        title: "Cognitive Warefare and You",
+        title: "Cognitive Warfare and You",
         description: "A guide to defending your thoughts and outmaneuvering manipulative foes.",
         text: [
             [

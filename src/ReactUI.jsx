@@ -15,6 +15,7 @@ import Engineering from './reactComponents/Engineering/Engineering';
 import PsiLab from './reactComponents/PsiLab/PsiLab';
 import GeneLab from './reactComponents/GeneLab/GeneLab';
 import MainMenu from './reactComponents/MainMenu/MainMenu';
+import GameOverScreen from './reactComponents/GameOverScreen/GameOverScreen';
 import { 
     dialogueAtom, 
     popupAtom, 
@@ -31,7 +32,8 @@ import {
     engineeringAtom,
     psiLabAtom,
     geneLabAtom,
-    mainMenuAtom
+    mainMenuAtom,
+    gameOverScreenAtom
 } from './store';
 import { useAtom } from 'jotai';
 
@@ -52,10 +54,11 @@ export default function ReactUI() {
     const [psiLab] = useAtom(psiLabAtom);
     const [geneLab] = useAtom(geneLabAtom);
     const [mainMenu] = useAtom(mainMenuAtom);
+    const [gameOverScreen] = useAtom(gameOverScreenAtom);
 
     return (
         <>
-            {!mainMenu.visible && <GameInfo />}
+            {!mainMenu.visible && !gameOverScreen.visible && <GameInfo />}
 
             {popup.visible && <Popup text={popup.text} pos={popup.pos} />}
 
@@ -127,6 +130,10 @@ export default function ReactUI() {
 
             {mainMenu.visible &&
                <MainMenu />
+            }
+
+            {gameOverScreen.visible &&
+                <GameOverScreen />
             }
         </>
     );

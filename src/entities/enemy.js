@@ -215,21 +215,6 @@ export function makeEnemyPath(k, enemy) {
         enemy.path = enemy.pf.findPath(enemy.path?.length ? enemy.path[0] : enemy.pos, player.pos);
         enemy.pathTimer = k.rand(0.5, 1.5);
         enemy.shootDistance = k.randi(enemy.minRange, enemy.maxRange);
-
-        // k.add([
-        //     k.pos(0, 0),
-        //     {
-        //         draw() {
-        //             for (const p of enemy.path ?? []) {
-        //                 k.drawCircle({
-        //                     pos: p,
-        //                     radius: 3,
-        //                     color: k.rgb(0, 255, 0)
-        //                 });
-        //             }
-        //         }
-        //     }
-        // ]);
     }
 
     if (

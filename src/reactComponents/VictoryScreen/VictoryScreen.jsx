@@ -1,4 +1,3 @@
-
 import Modal from '../Modal/Modal';
 import { victoryScreenAtom } from '../../store';
 import { useAtom } from 'jotai';
@@ -6,13 +5,13 @@ import PrimaryButton from '../Button/PrimaryButton';
 import styles from './VictoryScreen.module.css';
 
 export default function VictoryScreen() {
-    const [victoryScreen, setVictoryScreen] = useAtom(victoryScreenAtom);
+    const [victoryScreen] = useAtom(victoryScreenAtom);
     const rewards = victoryScreen.rewards;
 
     return (
         <Modal color={"ui-transparent"}>
             <div className={styles.container}>
-                <h1>Mission Complete</h1>
+                <h1>{victoryScreen.finalMission ? "Game" : "Mission"} Complete</h1>
                 <h2>Rewards</h2>
                 {rewards.map((reward, index) => (
                     <div className={styles.rewards} key={index}>
@@ -23,7 +22,7 @@ export default function VictoryScreen() {
             </div>
             
             <PrimaryButton onClick={victoryScreen.onClick}>
-                Continue
+                {victoryScreen.finalMission ? "Main Menu" : "Continue"}
             </PrimaryButton>
 
         </Modal>

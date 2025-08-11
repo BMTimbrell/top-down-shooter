@@ -22,6 +22,7 @@ import mainMenu from './scenes/mainMenu';
 import boss3 from './scenes/3-boss';
 import level4 from './scenes/level4';
 import boss4 from './scenes/4-boss';
+import gameOver from './scenes/gameOver';
 
 export default function initGame() {
     // focus back on canvas when clicking on html elements
@@ -72,6 +73,8 @@ export default function initGame() {
     level4(k);
 
     boss4(k);
+
+    gameOver(k);
 
     const player = makePlayer(k, k.vec2(0));
 
